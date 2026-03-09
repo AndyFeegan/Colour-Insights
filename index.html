@@ -197,7 +197,7 @@ body::after{
     </div>
 
     <div class="eyebrow">Communication Profile Assessment</div>
-    <h1 class="hero-title">Know how<br>you <em>Communicate.</em></h1>
+    <h1 class="hero-title">Your Insight<br>Discovery <em>Style.</em></h1>
     <p class="hero-sub">A 20-question assessment revealing your natural communication style, leadership tendencies, and the conditions in which you do your most effective work.</p>
 
     <div class="legend">
@@ -323,7 +323,7 @@ body::after{
 
 </div>
 <script>
-const questions=[
+const baseQuestions=[
   {text:"When you're given a new project, your first instinct is to…",options:[
     {text:"Dive straight in — figure it out as you go.",c:'R'},
     {text:"Gather everyone together and brainstorm ideas excitedly.",c:'Y'},
@@ -726,7 +726,16 @@ const profiles={
 
 // ── ENGINE ──
 const letters=['A','B','C','D'];
-let currentQ=0,answers=[],userName='';
+let questions=[],currentQ=0,answers=[],userName='';
+
+function shuffleArray(arr){
+  const copy=[...arr];
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+  return copy;
+}
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -736,6 +745,10 @@ function showScreen(id){
 
 function startQuiz(){
   userName=document.getElementById('user-name').value.trim()||'Participant';
+  questions=shuffleArray(baseQuestions.map(q=>({
+    ...q,
+    options:shuffleArray(q.options.map(opt=>({...opt})))
+  })));
   answers=[];currentQ=0;
   showScreen('quiz-screen');renderQuestion();
 }
@@ -852,12 +865,16 @@ function setReportLink(){
   const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
   const dom=sorted[0],sec=sorted[1];
   const params=new URLSearchParams({name:userName,dom,sec,R:scores.R,Y:scores.Y,G:scores.G,B:scores.B});
-  document.getElementById('btn-open').href=window.location.href.split('?')[0]+'?report=1&'+params.toString();
+  const reportUrl=new URL(window.location.href);
+  reportUrl.search='';
+  reportUrl.hash='';
+  reportUrl.search='?report=1&'+params.toString();
+  document.getElementById('btn-open').href=reportUrl.toString();
 }
 
 function checkReportMode(){
   const params=new URLSearchParams(window.location.search);
-  if(params.get('report')!=='1') return false;
+  if(params.get('report')!=='1' && !params.get('dom')) return false;
   const name=params.get('name')||'Participant';
   const dom=params.get('dom')||'R';
   const sec=params.get('sec')||'Y';
@@ -881,7 +898,28 @@ function renderStandaloneReport(name,dom,sec,scores){
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Inter',sans-serif;background:#0A0C0F;color:#F0EDE8;-webkit-font-smoothing:antialiased;}
     .page{max-width:720px;margin:0 auto;padding:56px 40px 80px;}
-    .no-print{} @media print{.no-print{display:none!important;}body{background:#fff;color:#111;}.page{padding:20px;}}
+    .no-print{}
+    @media print{
+      .no-print{display:none!important;}
+      body{background:#fff !important;color:#111 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+      .page{padding:20px;}
+      *{
+        text-shadow:none !important;
+        box-shadow:none !important;
+      }
+      div, span, p, li, ul{
+        color:#111 !important;
+      }
+      [style*="background:#111318"], [style*="background:#0A0C0F"]{
+        background:#fff !important;
+      }
+      [style*="color:#9BA3B4"], [style*="color:#5C6478"], [style*="color:#F0EDE8"]{
+        color:#111 !important;
+      }
+      [style*="border:1px solid #1E2330"], [style*="border-top:1px solid #1E2330"], [style*="border-bottom:1px solid #1E2330"]{
+        border-color:#ccc !important;
+      }
+    }
   </style>
   <div class="page">
     <div style="display:flex;gap:3px;margin-bottom:48px;">
