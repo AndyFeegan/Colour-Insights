@@ -6,10 +6,7 @@
 <title>Colour Insights — Communication Style Questionnaire</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red:#E8341C; --yellow:#F5C518; --green:#3A8C5C; --blue:#1C5FA8;
-    --bg:#F5F0E8; --ink:#1A1612; --card:#FDFAF4; --muted:#8C8275; --border:#E0D8CC;
-  }
+  :root{--red:#E8341C;--yellow:#F5C518;--green:#3A8C5C;--blue:#1C5FA8;--bg:#F5F0E8;--ink:#1A1612;--card:#FDFAF4;--muted:#8C8275;--border:#E0D8CC;}
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
@@ -21,17 +18,12 @@
   .orb-blue{width:280px;height:280px;background:var(--blue);top:30%;left:-60px;animation-delay:-4s;}
   @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,30px) scale(0.95)}}
   .wrapper{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:60px 24px 100px;}
-  .screen{display:none;}
-  .screen.active{display:block;animation:fadeUp 0.5s ease;}
+  .screen{display:none;}.screen.active{display:block;animation:fadeUp 0.5s ease;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-  /* INTRO */
   .logo-row{display:flex;gap:8px;margin-bottom:48px;}
   .dot{width:14px;height:14px;border-radius:50%;animation:pulse 3s ease-in-out infinite;}
-  .dot-red{background:var(--red);animation-delay:0s;}
-  .dot-yellow{background:var(--yellow);animation-delay:0.3s;}
-  .dot-green{background:var(--green);animation-delay:0.6s;}
-  .dot-blue{background:var(--blue);animation-delay:0.9s;}
+  .dot-red{background:var(--red);animation-delay:0s;}.dot-yellow{background:var(--yellow);animation-delay:0.3s;}
+  .dot-green{background:var(--green);animation-delay:0.6s;}.dot-blue{background:var(--blue);animation-delay:0.9s;}
   @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
   h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,6vw,3.8rem);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;}
   h1 em{font-style:italic;color:var(--muted);}
@@ -39,20 +31,17 @@
   .colour-pills{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:48px;}
   .pill{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;font-size:0.82rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;border:1.5px solid currentColor;}
   .pill-dot{width:8px;height:8px;border-radius:50%;}
-  .pill-red{color:var(--red);}
-  .pill-yellow{color:#B89010;}
-  .pill-green{color:var(--green);}
-  .pill-blue{color:var(--blue);}
+  .pill-red{color:var(--red);}.pill-yellow{color:#B89010;}.pill-green{color:var(--green);}.pill-blue{color:var(--blue);}
   .name-block{margin-bottom:36px;}
   .name-block label{display:block;font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
   .name-block input{width:100%;padding:14px 18px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:1.05rem;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color 0.2s;}
   .name-block input:focus{border-color:var(--ink);}
   .btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--ink);color:var(--bg);border:none;border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,22,18,0.2);}
+  .btn-secondary{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--card);color:var(--ink);border:1.5px solid var(--border);border-radius:12px;font-size:0.95rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,border-color 0.2s;}
+  .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,22,18,0.12);border-color:var(--ink);}
   .btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--ink);padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:border-color 0.2s;}
   .btn-ghost:hover{border-color:var(--ink);}
-
-  /* QUIZ */
   .progress-bar-wrap{margin-bottom:40px;}
   .progress-meta{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;}
   .progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
@@ -65,8 +54,6 @@
   .option-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--bg);}
   .option-letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;margin-top:1px;}
   .option-text{font-size:0.97rem;line-height:1.5;}
-
-  /* REPORT */
   .report-header{margin-bottom:48px;}
   .report-greeting{font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
   .report-name{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);margin-bottom:20px;}
@@ -98,8 +85,19 @@
   .growth-name{font-size:0.85rem;width:130px;flex-shrink:0;font-weight:500;}
   .growth-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
   .growth-fill{height:100%;border-radius:2px;}
-  .restart-row{display:flex;justify-content:center;margin-top:48px;}
+  .action-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:48px;}
   @media(max-width:480px){.wrapper{padding:40px 16px 80px;}.report-card{padding:24px;}}
+
+  /* PRINT STYLES */
+  @media print{
+    .orbs,.btn-primary,.btn-secondary,.btn-ghost,.action-row{display:none!important;}
+    body{background:#fff;}
+    .wrapper{padding:20px;}
+    .report-card{break-inside:avoid;border:1px solid #ddd;box-shadow:none;}
+    .screen{display:block!important;}
+    #intro-screen,#quiz-screen{display:none!important;}
+    #report-screen{display:block!important;}
+  }
 </style>
 </head>
 <body>
@@ -116,7 +114,7 @@
       <div class="dot dot-green"></div><div class="dot dot-blue"></div>
     </div>
     <h1>Discover your<br><em>communication</em><br>colour</h1>
-    <p class="intro-desc">Answer 15 questions about how you naturally think, communicate, and work. You'll receive a detailed personalised report revealing your unique communication style and colour blend.</p>
+    <p class="intro-desc">Answer 20 questions about how you naturally think, communicate, and work. You'll receive a detailed personalised report revealing your unique communication style and colour blend — and you can download it to keep.</p>
     <div class="colour-pills">
       <div class="pill pill-red"><div class="pill-dot" style="background:var(--red)"></div>Fiery Red</div>
       <div class="pill pill-yellow"><div class="pill-dot" style="background:var(--yellow)"></div>Sunshine Yellow</div>
@@ -136,12 +134,12 @@
   <div id="quiz-screen" class="screen">
     <div class="progress-bar-wrap">
       <div class="progress-meta">
-        <span id="q-progress-label">Question 1 of 15</span>
+        <span id="q-progress-label">Question 1 of 20</span>
         <span id="q-progress-pct">0%</span>
       </div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <div class="q-number" id="q-number">01 / 15</div>
+    <div class="q-number" id="q-number">01 / 20</div>
     <div class="q-text" id="q-text"></div>
     <div class="options-grid" id="options-grid"></div>
   </div>
@@ -162,87 +160,125 @@
       <div class="score-row"><div class="score-label" style="color:var(--blue)">Cool Blue</div><div class="score-track"><div class="score-fill" id="bar-blue" style="background:var(--blue);width:0%"></div></div><div class="score-num" id="num-blue">0%</div></div>
     </div>
     <div id="report-content"></div>
-    <div class="restart-row"><button class="btn-ghost" onclick="restart()">↩ Take the quiz again</button></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="downloadReport()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download report
+      </button>
+      <button class="btn-secondary" onclick="printReport()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="5" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V3h6v2M5 10h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Print / Save as PDF
+      </button>
+      <button class="btn-ghost" onclick="restart()">↩ Start again</button>
+    </div>
   </div>
 
 </div>
 <script>
 const questions=[
+  // ── ORIGINAL 15 ──
   {text:"When you're given a new project, your first instinct is to…",options:[
-    {text:"Dive straight in — figure it out as you go.",colour:'R'},
-    {text:"Gather everyone together and brainstorm ideas excitedly.",colour:'Y'},
-    {text:"Check in with the team and make sure everyone's on board.",colour:'G'},
-    {text:"Research thoroughly and build a detailed plan first.",colour:'B'}]},
+    {text:"Dive straight in — figure it out as you go.",c:'R'},
+    {text:"Gather everyone together and brainstorm ideas excitedly.",c:'Y'},
+    {text:"Check in with the team and make sure everyone's on board.",c:'G'},
+    {text:"Research thoroughly and build a detailed plan first.",c:'B'}]},
   {text:"In a meeting, people would describe your communication style as…",options:[
-    {text:"Direct and to the point — you get to outcomes fast.",colour:'R'},
-    {text:"Enthusiastic and expressive — you energise the room.",colour:'Y'},
-    {text:"Warm and supportive — you make sure everyone's heard.",colour:'G'},
-    {text:"Measured and precise — you ask the right questions.",colour:'B'}]},
+    {text:"Direct and to the point — you get to outcomes fast.",c:'R'},
+    {text:"Enthusiastic and expressive — you energise the room.",c:'Y'},
+    {text:"Warm and supportive — you make sure everyone's heard.",c:'G'},
+    {text:"Measured and precise — you ask the right questions.",c:'B'}]},
   {text:"When facing a conflict with a colleague, you tend to…",options:[
-    {text:"Address it head-on and resolve it quickly.",colour:'R'},
-    {text:"Talk it through and look for a positive spin.",colour:'Y'},
-    {text:"Try to understand all perspectives and find harmony.",colour:'G'},
-    {text:"Think it through calmly and approach it logically.",colour:'B'}]},
+    {text:"Address it head-on and resolve it quickly.",c:'R'},
+    {text:"Talk it through and look for a positive spin.",c:'Y'},
+    {text:"Try to understand all perspectives and find harmony.",c:'G'},
+    {text:"Think it through calmly and approach it logically.",c:'B'}]},
   {text:"Your colleagues come to you most often for…",options:[
-    {text:"Quick decisions and cutting through ambiguity.",colour:'R'},
-    {text:"Creative ideas and keeping morale high.",colour:'Y'},
-    {text:"Emotional support and thoughtful advice.",colour:'G'},
-    {text:"Accurate information and careful analysis.",colour:'B'}]},
+    {text:"Quick decisions and cutting through ambiguity.",c:'R'},
+    {text:"Creative ideas and keeping morale high.",c:'Y'},
+    {text:"Emotional support and thoughtful advice.",c:'G'},
+    {text:"Accurate information and careful analysis.",c:'B'}]},
   {text:"How do you feel about following rules and processes?",options:[
-    {text:"I'll follow them if they're efficient — otherwise I challenge them.",colour:'R'},
-    {text:"I like flexibility — rigid rules stifle creativity.",colour:'Y'},
-    {text:"I respect them; they keep things fair for everyone.",colour:'G'},
-    {text:"I follow them carefully — they exist for good reason.",colour:'B'}]},
+    {text:"I'll follow them if they're efficient — otherwise I challenge them.",c:'R'},
+    {text:"I like flexibility — rigid rules stifle creativity.",c:'Y'},
+    {text:"I respect them; they keep things fair for everyone.",c:'G'},
+    {text:"I follow them carefully — they exist for good reason.",c:'B'}]},
   {text:"What motivates you most at work?",options:[
-    {text:"Winning, achieving results, and being number one.",colour:'R'},
-    {text:"Being recognised, having fun, and inspiring others.",colour:'Y'},
-    {text:"Contributing to something meaningful and helping the team.",colour:'G'},
-    {text:"Getting things right, learning, and doing quality work.",colour:'B'}]},
+    {text:"Winning, achieving results, and being number one.",c:'R'},
+    {text:"Being recognised, having fun, and inspiring others.",c:'Y'},
+    {text:"Contributing to something meaningful and helping the team.",c:'G'},
+    {text:"Getting things right, learning, and doing quality work.",c:'B'}]},
   {text:"When making an important decision, you rely most on…",options:[
-    {text:"Your gut instinct — you trust your own judgement.",colour:'R'},
-    {text:"Talking to others and reading the energy in the room.",colour:'Y'},
-    {text:"Consensus — what feels right for everyone involved.",colour:'G'},
-    {text:"Data, evidence, and logical reasoning.",colour:'B'}]},
+    {text:"Your gut instinct — you trust your own judgement.",c:'R'},
+    {text:"Talking to others and reading the energy in the room.",c:'Y'},
+    {text:"Consensus — what feels right for everyone involved.",c:'G'},
+    {text:"Data, evidence, and logical reasoning.",c:'B'}]},
   {text:"In a fast-changing environment, you typically…",options:[
-    {text:"Thrive — you love the pace and push even harder.",colour:'R'},
-    {text:"Adapt quickly and find it exciting.",colour:'Y'},
-    {text:"Stay steady and focus on keeping the team grounded.",colour:'G'},
-    {text:"Need time to re-evaluate — change needs careful thought.",colour:'B'}]},
+    {text:"Thrive — you love the pace and push even harder.",c:'R'},
+    {text:"Adapt quickly and find it exciting.",c:'Y'},
+    {text:"Stay steady and focus on keeping the team grounded.",c:'G'},
+    {text:"Need time to re-evaluate — change needs careful thought.",c:'B'}]},
   {text:"When under pressure, others might notice you become…",options:[
-    {text:"More demanding and controlling.",colour:'R'},
-    {text:"Frantic or over-optimistic.",colour:'Y'},
-    {text:"Over-accommodating or reluctant to speak up.",colour:'G'},
-    {text:"Withdrawn and overly critical.",colour:'B'}]},
+    {text:"More demanding and controlling.",c:'R'},
+    {text:"Frantic or over-optimistic.",c:'Y'},
+    {text:"Over-accommodating or reluctant to speak up.",c:'G'},
+    {text:"Withdrawn and overly critical.",c:'B'}]},
   {text:"How do you prefer to receive feedback?",options:[
-    {text:"Short, direct, and actionable — no sugar-coating.",colour:'R'},
-    {text:"Positive first, framed encouragingly.",colour:'Y'},
-    {text:"Gently and with care for how it lands.",colour:'G'},
-    {text:"Specific, evidence-based, and well-thought-out.",colour:'B'}]},
+    {text:"Short, direct, and actionable — no sugar-coating.",c:'R'},
+    {text:"Positive first, framed encouragingly.",c:'Y'},
+    {text:"Gently and with care for how it lands.",c:'G'},
+    {text:"Specific, evidence-based, and well-thought-out.",c:'B'}]},
   {text:"When someone presents an idea to you, you mostly want to know…",options:[
-    {text:"What's the outcome? Is it worth my time?",colour:'R'},
-    {text:"How exciting is this? What's the big picture?",colour:'Y'},
-    {text:"How does this affect the team? Is everyone considered?",colour:'G'},
-    {text:"What's the evidence? What are the risks?",colour:'B'}]},
+    {text:"What's the outcome? Is it worth my time?",c:'R'},
+    {text:"How exciting is this? What's the big picture?",c:'Y'},
+    {text:"How does this affect the team? Is everyone considered?",c:'G'},
+    {text:"What's the evidence? What are the risks?",c:'B'}]},
   {text:"Your ideal working environment is…",options:[
-    {text:"Competitive, fast, and results-driven.",colour:'R'},
-    {text:"Creative, social, and full of energy.",colour:'Y'},
-    {text:"Collaborative, supportive, and harmonious.",colour:'G'},
-    {text:"Structured, quiet, and organised.",colour:'B'}]},
+    {text:"Competitive, fast, and results-driven.",c:'R'},
+    {text:"Creative, social, and full of energy.",c:'Y'},
+    {text:"Collaborative, supportive, and harmonious.",c:'G'},
+    {text:"Structured, quiet, and organised.",c:'B'}]},
   {text:"How do you build trust with people?",options:[
-    {text:"By delivering on promises and being reliable under pressure.",colour:'R'},
-    {text:"By being open, likeable, and making things enjoyable.",colour:'Y'},
-    {text:"By being genuine, consistent, and showing I care.",colour:'G'},
-    {text:"By being accurate, thorough, and following through.",colour:'B'}]},
+    {text:"By delivering on promises and being reliable under pressure.",c:'R'},
+    {text:"By being open, likeable, and making things enjoyable.",c:'Y'},
+    {text:"By being genuine, consistent, and showing I care.",c:'G'},
+    {text:"By being accurate, thorough, and following through.",c:'B'}]},
   {text:"When working in a group, your natural role is usually…",options:[
-    {text:"The one who drives things forward and keeps people accountable.",colour:'R'},
-    {text:"The one who generates ideas and keeps spirits up.",colour:'Y'},
-    {text:"The one who keeps the peace and makes sure everyone's included.",colour:'G'},
-    {text:"The one who spots problems and ensures quality.",colour:'B'}]},
+    {text:"The one who drives things forward and keeps people accountable.",c:'R'},
+    {text:"The one who generates ideas and keeps spirits up.",c:'Y'},
+    {text:"The one who keeps the peace and makes sure everyone's included.",c:'G'},
+    {text:"The one who spots problems and ensures quality.",c:'B'}]},
   {text:"At the end of a challenging week, you feel most satisfied when…",options:[
-    {text:"You hit your targets and pushed through obstacles.",colour:'R'},
-    {text:"You had great conversations and made things fun for people.",colour:'Y'},
-    {text:"Your team felt supported and things ran smoothly.",colour:'G'},
-    {text:"You produced something accurate, thorough, and high quality.",colour:'B'}]},
+    {text:"You hit your targets and pushed through obstacles.",c:'R'},
+    {text:"You had great conversations and made things fun for people.",c:'Y'},
+    {text:"Your team felt supported and things ran smoothly.",c:'G'},
+    {text:"You produced something accurate, thorough, and high quality.",c:'B'}]},
+
+  // ── 5 NEW QUESTIONS ──
+  {text:"When you have to give someone difficult news, you…",options:[
+    {text:"Deliver it clearly and immediately — waiting only makes it worse.",c:'R'},
+    {text:"Try to frame it as positively as possible and focus on what comes next.",c:'Y'},
+    {text:"Find a quiet moment, choose your words carefully, and check in after.",c:'G'},
+    {text:"Prepare exactly what you want to say, anticipate questions, and stick to the facts.",c:'B'}]},
+  {text:"In your personal life, friends would most likely describe you as…",options:[
+    {text:"The one who makes things happen and gets everyone off the sofa.",c:'R'},
+    {text:"The fun one — always up for something and full of energy.",c:'Y'},
+    {text:"The loyal one — always there when it matters, without being asked.",c:'G'},
+    {text:"The thoughtful one — considered, reliable, and always well-prepared.",c:'B'}]},
+  {text:"When you're learning something new, you prefer to…",options:[
+    {text:"Try it straight away and learn by doing, even if you make mistakes.",c:'R'},
+    {text:"Discuss it with others, share ideas, and explore it together.",c:'Y'},
+    {text:"Take your time, ask questions, and make sure you fully understand before moving on.",c:'G'},
+    {text:"Read the manual, study the detail, and build a thorough understanding first.",c:'B'}]},
+  {text:"Which of these phrases feels most like you?",options:[
+    {text:"\"Just get it done.\"",c:'R'},
+    {text:"\"Let's make this fun.\"",c:'Y'},
+    {text:"\"Let's make sure everyone's okay.\"",c:'G'},
+    {text:"\"Let's make sure we're doing it right.\"",c:'B'}]},
+  {text:"When a project you care about gets cancelled or changed without warning, you…",options:[
+    {text:"Push back hard and make sure your objections are heard — then move on fast.",c:'R'},
+    {text:"Feel deflated briefly, then start looking for the next exciting opportunity.",c:'Y'},
+    {text:"Worry most about how the people involved are feeling and check in with them.",c:'G'},
+    {text:"Want to understand exactly why the decision was made before you can accept it.",c:'B'}]},
 ];
 
 const colourMeta={
@@ -558,7 +594,7 @@ const profiles={
     growthColours:{R:50,Y:55,G:35}},
 };
 
-// QUIZ ENGINE
+// ── ENGINE ──
 const letters=['A','B','C','D'];
 let currentQ=0,answers=[],userName='';
 
@@ -571,8 +607,7 @@ function showScreen(id){
 function startQuiz(){
   userName=document.getElementById('user-name').value.trim()||'Friend';
   answers=[];currentQ=0;
-  showScreen('quiz-screen');
-  renderQuestion();
+  showScreen('quiz-screen');renderQuestion();
 }
 
 function renderQuestion(){
@@ -589,7 +624,7 @@ function renderQuestion(){
     const btn=document.createElement('button');
     btn.className='option-btn';
     btn.innerHTML=`<div class="option-letter">${letters[i]}</div><div class="option-text">${opt.text}</div>`;
-    btn.onclick=()=>selectAnswer(opt.colour,btn);
+    btn.onclick=()=>selectAnswer(opt.c,btn);
     grid.appendChild(btn);
   });
 }
@@ -608,62 +643,36 @@ function selectAnswer(colour,btn){
 function computeScores(){
   const counts={R:0,Y:0,G:0,B:0};
   answers.forEach(a=>counts[a]++);
-  const total=answers.length;
-  return{
-    R:Math.round((counts.R/total)*100),
-    Y:Math.round((counts.Y/total)*100),
-    G:Math.round((counts.G/total)*100),
-    B:Math.round((counts.B/total)*100),
-  };
+  const t=answers.length;
+  return{R:Math.round(counts.R/t*100),Y:Math.round(counts.Y/t*100),G:Math.round(counts.G/t*100),B:Math.round(counts.B/t*100)};
 }
 
 function buildReport(){
   const scores=computeScores();
   const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
   const dom=sorted[0],sec=sorted[1];
-  const key=dom+sec;
-  const profile=profiles[key]||profiles[dom+dom];
+  const profile=profiles[dom+sec]||profiles[dom+dom];
   const meta=colourMeta[dom],secMeta=colourMeta[sec];
 
   document.getElementById('report-name').textContent=`${userName}'s Report`;
   document.getElementById('badge-label').textContent=meta.name;
   document.getElementById('badge-dot').style.background=meta.hex;
   const badge=document.getElementById('colour-badge');
-  badge.style.background=meta.light;
-  badge.style.color=meta.hex;
-  badge.style.border=`1.5px solid ${meta.hex}`;
-  document.getElementById('colour-combo').textContent=
-    `${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}`;
+  badge.style.background=meta.light;badge.style.color=meta.hex;badge.style.border=`1.5px solid ${meta.hex}`;
+  document.getElementById('colour-combo').textContent=`${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}`;
 
   showScreen('report-screen');
-  setTimeout(()=>{
-    setBar('red',scores.R);setBar('yellow',scores.Y);
-    setBar('green',scores.G);setBar('blue',scores.B);
-  },200);
+  setTimeout(()=>{setBar('red',scores.R);setBar('yellow',scores.Y);setBar('green',scores.G);setBar('blue',scores.B);},200);
 
   const container=document.getElementById('report-content');
   container.innerHTML='';
-
-  container.appendChild(makeCard('🎨','Overview',
-    `<p>${profile.overview.replace('{name}',userName)}</p>`));
-
-  container.appendChild(makeCard('💬','Your Communication Style',
-    `<p>${profile.style}</p><div class="trait-tags">${profile.traits.map(t=>`<span class="trait-tag">${t}</span>`).join('')}</div>`));
-
-  container.appendChild(makeCard('⚡','What Energises You',
-    `<ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul>`));
-
-  container.appendChild(makeCard('🔍','Your Blind Spots',
-    `<div class="tip-grid">${profile.blindspots.map(b=>`<div class="tip-card"><div class="tip-icon">${b.icon}</div><div class="tip-text">${b.text}</div></div>`).join('')}</div>`));
-
-  container.appendChild(makeCard('🤝','How to Get the Best From You',
-    `<div class="tip-grid">${profile.tips.map(t=>`<div class="tip-card"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>`));
-
-  const growthBars=Object.entries(profile.growthColours).map(([c,v])=>
-    `<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`
-  ).join('');
-  container.appendChild(makeCard('🌱','Your Growth Edge',
-    `<p>${profile.growth}</p><div class="growth-section"><div class="growth-label">Colours to stretch into</div>${growthBars}</div>`));
+  container.appendChild(makeCard('🎨','Overview',`<p>${profile.overview.replace('{name}',userName)}</p>`));
+  container.appendChild(makeCard('💬','Your Communication Style',`<p>${profile.style}</p><div class="trait-tags">${profile.traits.map(t=>`<span class="trait-tag">${t}</span>`).join('')}</div>`));
+  container.appendChild(makeCard('⚡','What Energises You',`<ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul>`));
+  container.appendChild(makeCard('🔍','Your Blind Spots',`<div class="tip-grid">${profile.blindspots.map(b=>`<div class="tip-card"><div class="tip-icon">${b.icon}</div><div class="tip-text">${b.text}</div></div>`).join('')}</div>`));
+  container.appendChild(makeCard('🤝','How to Get the Best From You',`<div class="tip-grid">${profile.tips.map(t=>`<div class="tip-card"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>`));
+  const growthBars=Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('');
+  container.appendChild(makeCard('🌱','Your Growth Edge',`<p>${profile.growth}</p><div class="growth-section"><div class="growth-label">Colours to stretch into</div>${growthBars}</div>`));
 }
 
 function makeCard(icon,title,bodyHTML){
@@ -678,6 +687,98 @@ function setBar(colour,pct){
   document.getElementById('num-'+colour).textContent=pct+'%';
 }
 
+// ── DOWNLOAD ──
+function downloadReport(){
+  const scores=computeScores();
+  const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
+  const dom=sorted[0],sec=sorted[1];
+  const profile=profiles[dom+sec]||profiles[dom+dom];
+  const meta=colourMeta[dom],secMeta=colourMeta[sec];
+  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+  const sections=[
+    {icon:'🎨',title:'Overview',body:profile.overview.replace('{name}',userName)},
+    {icon:'💬',title:'Your Communication Style',body:profile.style+'\n\nKey traits: '+profile.traits.join(' · ')},
+    {icon:'⚡',title:'What Energises You',body:profile.energisers.map(e=>'• '+e).join('\n')},
+    {icon:'🔍',title:'Your Blind Spots',body:profile.blindspots.map(b=>'• '+b.text).join('\n\n')},
+    {icon:'🤝',title:'How to Get the Best From You',body:profile.tips.map(t=>'• '+t.text).join('\n\n')},
+    {icon:'🌱',title:'Your Growth Edge',body:profile.growth},
+  ];
+
+  const html=`<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Colour Insights Report — ${userName}</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'DM Sans',sans-serif;max-width:750px;margin:0 auto;padding:40px 32px 60px;background:#F5F0E8;color:#1A1612;}
+  .header{margin-bottom:40px;padding-bottom:32px;border-bottom:2px solid #E0D8CC;}
+  .dots{display:flex;gap:8px;margin-bottom:24px;}
+  .dot{width:12px;height:12px;border-radius:50%;}
+  h1{font-family:'Playfair Display',serif;font-size:2.4rem;margin-bottom:8px;line-height:1.2;}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:8px;}
+  .badge-dot{width:8px;height:8px;border-radius:50%;background:${meta.hex};}
+  .combo{font-size:0.85rem;color:#8C8275;margin-bottom:24px;}
+  .scores{margin-bottom:32px;}
+  .scores-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:12px;}
+  .score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .score-label{width:130px;font-size:0.82rem;font-weight:500;}
+  .score-bar{flex:1;height:5px;background:#E0D8CC;border-radius:3px;overflow:hidden;}
+  .score-fill{height:100%;border-radius:3px;}
+  .score-pct{width:28px;text-align:right;font-size:0.8rem;color:#8C8275;}
+  .card{background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:28px;margin-bottom:16px;page-break-inside:avoid;}
+  .card h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;}
+  .card p,.card li{font-size:0.95rem;line-height:1.8;color:#3A342C;}
+  .card ul{padding-left:18px;}
+  .card li{margin-bottom:6px;}
+  .traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .trait{padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:500;border:1.5px solid #E0D8CC;color:#8C8275;}
+  .footer{margin-top:40px;padding-top:20px;border-top:1px solid #E0D8CC;font-size:0.78rem;color:#8C8275;text-align:center;}
+  @media print{body{background:#fff;padding:20px;}.card{box-shadow:none;}}
+</style></head><body>
+<div class="header">
+  <div class="dots">
+    <div class="dot" style="background:#E8341C"></div>
+    <div class="dot" style="background:#F5C518"></div>
+    <div class="dot" style="background:#3A8C5C"></div>
+    <div class="dot" style="background:#1C5FA8"></div>
+  </div>
+  <h1>${userName}'s Colour Insights Report</h1>
+  <div class="badge"><div class="badge-dot"></div>${meta.name}</div>
+  <div class="combo">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
+  <div class="scores">
+    <div class="scores-title">Colour profile breakdown</div>
+    ${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([name,hex,pct])=>
+      `<div class="score-row"><div class="score-label" style="color:${hex}">${name}</div><div class="score-bar"><div class="score-fill" style="background:${hex};width:${pct}%"></div></div><div class="score-pct">${pct}%</div></div>`
+    ).join('')}
+  </div>
+</div>
+${sections.map(s=>`
+<div class="card">
+  <h2>${s.icon} ${s.title}</h2>
+  ${s.title==='Your Communication Style'
+    ? `<p>${profile.style}</p><div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div>`
+    : s.title==='What Energises You'
+    ? `<ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul>`
+    : s.title==='Your Blind Spots'
+    ? profile.blindspots.map(b=>`<p><strong>${b.icon}</strong> ${b.text}</p>`).join('')
+    : s.title==='How to Get the Best From You'
+    ? profile.tips.map(t=>`<p><strong>${t.icon}</strong> ${t.text}</p>`).join('')
+    : `<p>${s.body}</p>`
+  }
+</div>`).join('')}
+<div class="footer">Colour Insights Report · ${userName} · ${date}</div>
+</body></html>`;
+
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function printReport(){window.print();}
 function restart(){answers=[];currentQ=0;showScreen('intro-screen');}
 </script>
 </body>
