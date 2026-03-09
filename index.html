@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colour Insights — Communication Style Questionnaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E8341C;
+    --yellow: #F5C518;
+    --green: #3A8C5C;
+    --blue: #1C5FA8;
+    --bg: #F5F0E8;
+    --ink: #1A1612;
+    --card: #FDFAF4;
+    --muted: #8C8275;
+    --border: #E0D8CC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── COLOUR ORBS ── */
+  .orbs {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.12;
+    animation: drift 18s ease-in-out infinite;
+  }
+  .orb-red   { width: 400px; height: 400px; background: var(--red);    top: -100px; right: -100px; animation-delay: 0s; }
+  .orb-yellow{ width: 300px; height: 300px; background: var(--yellow);  bottom: 10%; left: -80px;  animation-delay: -6s; }
+  .orb-green { width: 350px; height: 350px; background: var(--green);   bottom: -80px; right: 20%; animation-delay: -12s; }
+  .orb-blue  { width: 280px; height: 280px; background: var(--blue);    top: 30%; left: -60px;    animation-delay: -4s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%       { transform: translate(30px, -20px) scale(1.05); }
+    66%       { transform: translate(-20px, 30px) scale(0.95); }
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp 0.5s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INTRO SCREEN ── */
+  .logo-row {
+    display: flex; gap: 8px; margin-bottom: 48px;
+  }
+  .dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  .dot-red    { background: var(--red);    animation-delay: 0s; }
+  .dot-yellow { background: var(--yellow); animation-delay: 0.3s; }
+  .dot-green  { background: var(--green);  animation-delay: 0.6s; }
+  .dot-blue   { background: var(--blue);   animation-delay: 0.9s; }
+  @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.3)} }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  h1 em { font-style: italic; color: var(--muted); }
+
+  .intro-desc {
+    font-size: 1.05rem; line-height: 1.7;
+    color: #4A4238; max-width: 520px;
+    margin-bottom: 48px;
+  }
+
+  .colour-pills {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 48px;
+  }
+  .pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    border: 1.5px solid currentColor;
+  }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pill-red    { color: var(--red);    border-color: var(--red); }
+  .pill-yellow { color: #B89010; border-color: #B89010; }
+  .pill-green  { color: var(--green);  border-color: var(--green); }
+  .pill-blue   { color: var(--blue);   border-color: var(--blue); }
+
+  /* ── NAME INPUT ── */
+  .name-block { margin-bottom: 36px; }
+  .name-block label {
+    display: block; font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .name-block input {
+    width: 100%; padding: 14px 18px;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 12px; font-size: 1.05rem;
+    font-family: 'DM Sans', sans-serif; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .name-block input:focus { border-color: var(--ink); }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 32px; background: var(--ink); color: var(--bg);
+    border: none; border-radius: 12px; font-size: 1rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,22,18,0.2); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-ghost {
+    background: transparent; border: 1.5px solid var(--border);
+    color: var(--ink); padding: 12px 24px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    margin-bottom: 40px;
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between;
+    font-size: 0.78rem; color: var(--muted);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .progress-track {
+    height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--ink); border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* ── QUESTION ── */
+  .q-number {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+    line-height: 1.4; margin-bottom: 36px;
+  }
+
+  /* ── OPTIONS ── */
+  .options-grid {
+    display: grid; gap: 12px;
+  }
+  .option-btn {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 18px 20px; background: var(--card);
+    border: 1.5px solid var(--border); border-radius: 14px;
+    cursor: pointer; text-align: left;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .option-btn:hover {
+    border-color: var(--ink);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(26,22,18,0.08);
+  }
+  .option-btn.selected {
+    border-color: var(--ink); background: var(--ink);
+    color: var(--bg);
+  }
+  .option-letter {
+    flex-shrink: 0; width: 28px; height: 28px;
+    border-radius: 50%; border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+    margin-top: 1px;
+  }
+  .option-text { font-size: 0.97rem; line-height: 1.5; }
+
+  /* ── LOADING ── */
+  #loading-screen {
+    text-align: center; padding: 80px 24px;
+  }
+  .spinner-wrap { margin-bottom: 32px; }
+  .colour-spinner {
+    width: 64px; height: 64px; margin: 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--red) 0deg 90deg,
+      var(--yellow) 90deg 180deg,
+      var(--green) 180deg 270deg,
+      var(--blue) 270deg 360deg
+    );
+    animation: spin 1.2s linear infinite;
+  }
+  .spinner-inner {
+    position: absolute; top: 50%; left: 50%;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--bg); transform: translate(-50%,-50%);
+  }
+  .spinner-wrap { position: relative; width: 64px; height: 64px; margin: 0 auto 32px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; margin-bottom: 12px;
+  }
+  .loading-subtitle { color: var(--muted); font-size: 0.95rem; }
+
+  /* ── REPORT ── */
+  .report-header { margin-bottom: 48px; }
+  .report-greeting {
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .report-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 20px;
+  }
+
+  .colour-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 20px; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Colour score bar */
+  .scores-section { margin-bottom: 40px; }
+  .scores-title {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .score-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .score-label {
+    width: 110px; font-size: 0.82rem; font-weight: 500; flex-shrink: 0;
+  }
+  .score-track {
+    flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .score-fill {
+    height: 100%; border-radius: 3px;
+    transition: width 1.2s ease;
+  }
+  .score-num { width: 28px; text-align: right; font-size: 0.82rem; color: var(--muted); }
+
+  /* Report body */
+  .report-card {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 36px; margin-bottom: 20px;
+  }
+  .report-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-icon { font-size: 1.1rem; }
+  .report-card p, .report-card li {
+    font-size: 0.97rem; line-height: 1.75; color: #3A342C;
+  }
+  .report-card ul { padding-left: 20px; }
+  .report-card li { margin-bottom: 6px; }
+
+  .report-body-text {
+    font-size: 0.97rem; line-height: 1.8; color: #3A342C;
+    white-space: pre-wrap;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px; background: var(--border); margin: 36px 0;
+  }
+
+  /* Restart */
+  .restart-row {
+    display: flex; justify-content: center; margin-top: 48px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 480px) {
+    .wrapper { padding: 40px 16px 80px; }
+    .report-card { padding: 24px; }
+  }
+
+  /* Streaming cursor */
+  .cursor::after {
+    content: '▋'; animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+</style>
+</head>
+<body>
+
+<div class="orbs">
+  <div class="orb orb-red"></div>
+  <div class="orb orb-yellow"></div>
+  <div class="orb orb-green"></div>
+  <div class="orb orb-blue"></div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ══ SCREEN 1: INTRO ══ -->
+  <div id="intro-screen" class="screen active">
+    <div class="logo-row">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <div class="dot dot-blue"></div>
+    </div>
+
+    <h1>Discover your<br><em>communication</em><br>colour</h1>
+
+    <p class="intro-desc">
+      Answer 15 questions about how you naturally think, communicate, and work.
+      Our AI will generate a detailed, personalised report revealing your unique communication style.
+    </p>
+
+    <div class="colour-pills">
+      <div class="pill pill-red">
+        <div class="pill-dot" style="background:var(--red)"></div> Fiery Red
+      </div>
+      <div class="pill pill-yellow">
+        <div class="pill-dot" style="background:var(--yellow)"></div> Sunshine Yellow
+      </div>
+      <div class="pill pill-green">
+        <div class="pill-dot" style="background:var(--green)"></div> Earth Green
+      </div>
+      <div class="pill pill-blue">
+        <div class="pill-dot" style="background:var(--blue)"></div> Cool Blue
+      </div>
+    </div>
+
+    <div class="name-block">
+      <label for="user-name">Your first name</label>
+      <input type="text" id="user-name" placeholder="e.g. Sarah" autocomplete="given-name" />
+    </div>
+
+    <button class="btn-primary" onclick="startQuiz()">
+      Begin questionnaire
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ══ SCREEN 2: QUIZ ══ -->
+  <div id="quiz-screen" class="screen">
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span id="q-progress-label">Question 1 of 15</span>
+        <span id="q-progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="q-number" id="q-number">01 / 15</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options-grid" id="options-grid"></div>
+  </div>
+
+  <!-- ══ SCREEN 3: LOADING ══ -->
+  <div id="loading-screen" class="screen">
+    <div class="spinner-wrap">
+      <div class="colour-spinner"></div>
+      <div class="spinner-inner"></div>
+    </div>
+    <div class="loading-title">Analysing your colours…</div>
+    <div class="loading-subtitle">Generating your personalised communication report</div>
+  </div>
+
+  <!-- ══ SCREEN 4: REPORT ══ -->
+  <div id="report-screen" class="screen">
+    <div class="report-header">
+      <div class="report-greeting">Your Colour Insights Report</div>
+      <div class="report-name" id="report-name"></div>
+      <div class="colour-badge" id="colour-badge">
+        <div class="badge-dot" id="badge-dot"></div>
+        <span id="badge-label"></span>
+      </div>
+    </div>
+
+    <div class="scores-section">
+      <div class="scores-title">Your colour profile breakdown</div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--red)">Fiery Red</div>
+        <div class="score-track"><div class="score-fill" id="bar-red" style="background:var(--red);width:0%"></div></div>
+        <div class="score-num" id="num-red">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label" style="color:#B89010">Sunshine Yellow</div>
+        <div class="score-track"><div class="score-fill" id="bar-yellow" style="background:var(--yellow);width:0%"></div></div>
+        <div class="score-num" id="num-yellow">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--green)">Earth Green</div>
+        <div class="score-track"><div class="score-fill" id="bar-green" style="background:var(--green);width:0%"></div></div>
+        <div class="score-num" id="num-green">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--blue)">Cool Blue</div>
+        <div class="score-track"><div class="score-fill" id="bar-blue" style="background:var(--blue);width:0%"></div></div>
+        <div class="score-num" id="num-blue">0%</div>
+      </div>
+    </div>
+
+    <div id="report-content"></div>
+
+    <div class="restart-row">
+      <button class="btn-ghost" onclick="restart()">↩ Take the quiz again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// QUESTIONS  (R=Red, Y=Yellow, G=Green, B=Blue)
+// ══════════════════════════════════════════════
+const questions = [
+  {
+    text: "When you're given a new project at work, your first instinct is to…",
+    options: [
+      { text: "Dive straight in — figure it out as you go.", colour: 'R' },
+      { text: "Gather everyone together and brainstorm ideas excitedly.", colour: 'Y' },
+      { text: "Check in with the team and make sure everyone's on board.", colour: 'G' },
+      { text: "Research thoroughly and build a detailed plan first.", colour: 'B' },
+    ]
+  },
+  {
+    text: "In a team meeting, people would most likely describe your communication style as…",
+    options: [
+      { text: "Direct and to the point — you get to the outcome fast.", colour: 'R' },
+      { text: "Enthusiastic and expressive — you energise the room.", colour: 'Y' },
+      { text: "Warm and supportive — you make sure everyone's heard.", colour: 'G' },
+      { text: "Measured and precise — you ask the right questions.", colour: 'B' },
+    ]
+  },
+  {
+    text: "When facing a conflict with a colleague, you tend to…",
+    options: [
+      { text: "Address it head-on and resolve it quickly.", colour: 'R' },
+      { text: "Talk it through and look for a positive spin.", colour: 'Y' },
+      { text: "Try to understand everyone's perspective and find harmony.", colour: 'G' },
+      { text: "Think it through calmly and approach it logically.", colour: 'B' },
+    ]
+  },
+  {
+    text: "Your colleagues come to you most often for…",
+    options: [
+      { text: "Quick decisions and cutting through ambiguity.", colour: 'R' },
+      { text: "Creative ideas and keeping morale high.", colour: 'Y' },
+      { text: "Emotional support and thoughtful advice.", colour: 'G' },
+      { text: "Accurate information and careful analysis.", colour: 'B' },
+    ]
+  },
+  {
+    text: "How do you feel about following rules and processes?",
+    options: [
+      { text: "I'll follow them if they're efficient — otherwise I challenge them.", colour: 'R' },
+      { text: "I like flexibility — rigid rules stifle creativity.", colour: 'Y' },
+      { text: "I respect them; they keep things fair for everyone.", colour: 'G' },
+      { text: "I follow them carefully — they exist for good reason.", colour: 'B' },
+    ]
+  },
+  {
+    text: "What motivates you most at work?",
+    options: [
+      { text: "Winning, achieving results, and being number one.", colour: 'R' },
+      { text: "Being recognised, having fun, and inspiring others.", colour: 'Y' },
+      { text: "Contributing to something meaningful and helping the team.", colour: 'G' },
+      { text: "Getting things right, learning, and doing quality work.", colour: 'B' },
+    ]
+  },
+  {
+    text: "When making an important decision, you rely most on…",
+    options: [
+      { text: "Your gut instinct — you trust your own judgement.", colour: 'R' },
+      { text: "Talking to others and reading the energy in the room.", colour: 'Y' },
+      { text: "Consensus — what feels right for everyone involved.", colour: 'G' },
+      { text: "Data, evidence, and logical reasoning.", colour: 'B' },
+    ]
+  },
+  {
+    text: "In a fast-paced, changing environment, you typically…",
+    options: [
+      { text: "Thrive — you love the pace and push even harder.", colour: 'R' },
+      { text: "Adapt quickly and find it exciting.", colour: 'Y' },
+      { text: "Stay steady and focus on keeping the team grounded.", colour: 'G' },
+      { text: "Need time to re-evaluate — change needs careful thought.", colour: 'B' },
+    ]
+  },
+  {
+    text: "When you're under pressure, others might notice you become…",
+    options: [
+      { text: "More demanding and controlling.", colour: 'R' },
+      { text: "Frantic or over-optimistic.", colour: 'Y' },
+      { text: "Over-accommodating or reluctant to speak up.", colour: 'G' },
+      { text: "Withdrawn and overly critical.", colour: 'B' },
+    ]
+  },
+  {
+    text: "How do you prefer to receive feedback?",
+    options: [
+      { text: "Short, direct, and actionable — no sugar-coating.", colour: 'R' },
+      { text: "Positive first, framed encouragingly.", colour: 'Y' },
+      { text: "Gently and with care for how it lands.", colour: 'G' },
+      { text: "Specific, evidence-based, and well-thought-out.", colour: 'B' },
+    ]
+  },
+  {
+    text: "When someone is presenting an idea to you, you mostly want to know…",
+    options: [
+      { text: "What's the outcome? Is it worth my time?", colour: 'R' },
+      { text: "How exciting is this? What's the big picture?", colour: 'Y' },
+      { text: "How does this affect the team? Is everyone considered?", colour: 'G' },
+      { text: "What's the evidence? What are the risks?", colour: 'B' },
+    ]
+  },
+  {
+    text: "Your ideal working environment is…",
+    options: [
+      { text: "Competitive, fast, and results-driven.", colour: 'R' },
+      { text: "Creative, social, and full of energy.", colour: 'Y' },
+      { text: "Collaborative, supportive, and harmonious.", colour: 'G' },
+      { text: "Structured, quiet, and organised.", colour: 'B' },
+    ]
+  },
+  {
+    text: "How do you build trust with people?",
+    options: [
+      { text: "By delivering on promises and being reliable under pressure.", colour: 'R' },
+      { text: "By being open, likeable, and making things enjoyable.", colour: 'Y' },
+      { text: "By being genuine, consistent, and showing I care.", colour: 'G' },
+      { text: "By being accurate, thorough, and following through.", colour: 'B' },
+    ]
+  },
+  {
+    text: "When working in a group, your natural role is usually…",
+    options: [
+      { text: "The one who drives things forward and keeps people accountable.", colour: 'R' },
+      { text: "The one who generates ideas and keeps spirits up.", colour: 'Y' },
+      { text: "The one who keeps the peace and makes sure everyone's included.", colour: 'G' },
+      { text: "The one who spots problems and ensures quality.", colour: 'B' },
+    ]
+  },
+  {
+    text: "At the end of a long, challenging week, you feel most satisfied when…",
+    options: [
+      { text: "You hit your targets and pushed through obstacles.", colour: 'R' },
+      { text: "You had great conversations and made things fun for people.", colour: 'Y' },
+      { text: "Your team felt supported and things ran smoothly.", colour: 'G' },
+      { text: "You produced something accurate, thorough, and high quality.", colour: 'B' },
+    ]
+  },
+];
+
+const letters = ['A','B','C','D'];
+let currentQ = 0;
+let answers = [];
+let userName = '';
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz() {
+  userName = document.getElementById('user-name').value.trim() || 'Friend';
+  answers = [];
+  currentQ = 0;
+  showScreen('quiz-screen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+  const pct = Math.round((currentQ / total) * 100);
+
+  document.getElementById('q-progress-label').textContent = `Question ${currentQ+1} of ${total}`;
+  document.getElementById('q-progress-pct').textContent = `${pct}%`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-number').textContent = String(currentQ+1).padStart(2,'0') + ' / ' + total;
+  document.getElementById('q-text').textContent = q.text;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+
+  // Shuffle options per question for fairness
+  const opts = [...q.options].map((o,i) => ({...o, origIdx:i}));
+
+  opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `
+      <div class="option-letter">${letters[i]}</div>
+      <div class="option-text">${opt.text}</div>
+    `;
+    btn.onclick = () => selectAnswer(opt.colour, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function selectAnswer(colour, btn) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers.push(colour);
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      generateReport();
+    }
+  }, 380);
+}
+
+function computeScores() {
+  const counts = { R: 0, Y: 0, G: 0, B: 0 };
+  answers.forEach(a => counts[a]++);
+  const total = answers.length;
+  return {
+    R: Math.round((counts.R / total) * 100),
+    Y: Math.round((counts.Y / total) * 100),
+    G: Math.round((counts.G / total) * 100),
+    B: Math.round((counts.B / total) * 100),
+    raw: counts
+  };
+}
+
+function dominantColour(scores) {
+  const map = { R: scores.R, Y: scores.Y, G: scores.G, B: scores.B };
+  return Object.entries(map).sort((a,b)=>b[1]-a[1])[0][0];
+}
+
+const colourMeta = {
+  R: { name: 'Fiery Red', hex: '#E8341C', bg: '#FFF0EE' },
+  Y: { name: 'Sunshine Yellow', hex: '#F5C518', bg: '#FFFBEE' },
+  G: { name: 'Earth Green', hex: '#3A8C5C', bg: '#EDFAF3' },
+  B: { name: 'Cool Blue', hex: '#1C5FA8', bg: '#EEF4FF' },
+};
+
+async function generateReport() {
+  showScreen('loading-screen');
+
+  const scores = computeScores();
+  const dominant = dominantColour(scores);
+  const meta = colourMeta[dominant];
+
+  // Build second colour
+  const sorted = ['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
+  const second = sorted[1];
+
+  const prompt = `You are an expert in the Insights Discovery colour personality model. You have just analysed a questionnaire completed by ${userName}.
+
+Their colour profile scores are:
+- Fiery Red: ${scores.R}%
+- Sunshine Yellow: ${scores.Y}%
+- Earth Green: ${scores.G}%
+- Cool Blue: ${scores.B}%
+
+Their dominant colour is ${meta.name}, with ${colourMeta[second].name} as their secondary.
+
+Write a detailed, personalised communication style report for ${userName}. The report should feel warm, insightful, and specific to their unique blend. Structure your response EXACTLY as follows (use these exact headings):
+
+## Overview
+A 3-4 sentence overview of ${userName}'s communication personality based on their dominant and secondary colours. Make it feel personal and affirming.
+
+## Your Communication Style
+Describe specifically how they communicate — their natural strengths, tendencies, and what others typically experience when they interact with ${userName}. 3-4 sentences.
+
+## What Energises You
+List 4-5 specific things that energise and motivate ${userName} based on their colour blend. Use bullet points (- ).
+
+## Your Blind Spots
+2-3 honest but compassionate insights about tendencies or patterns ${userName} might not be fully aware of. These should feel like coaching observations, not criticisms.
+
+## How to Get the Best From You
+3-4 practical tips for colleagues and managers on how to communicate with, motivate, and work with ${userName} most effectively.
+
+## Your Growth Edge
+A single paragraph on one key area where ${userName} can stretch and grow. Make it inspiring, not critical.
+
+Keep the entire report under 600 words. Write directly to ${userName} using "you" and "your". Do not include any preamble or meta-commentary — just the report sections.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const reportText = data.content.map(i => i.text || '').join('\n');
+
+    showReport(userName, scores, dominant, reportText);
+
+  } catch(err) {
+    // Fallback if API fails
+    showReport(userName, scores, dominant, getFallbackReport(userName, dominant, scores));
+  }
+}
+
+function getFallbackReport(name, dominant, scores) {
+  const meta = colourMeta[dominant];
+  return `## Overview\nYour dominant colour is ${meta.name}. This tells us a lot about how you naturally show up in the world — your energy, your instincts, and the way you connect with others.\n\n## Your Communication Style\nBased on your responses, you have a distinctive way of engaging with people and ideas that reflects the core traits of ${meta.name}.\n\n## What Energises You\n- Environments where your natural strengths are valued\n- Clear goals and meaningful work\n- Connecting with people authentically\n- Making a genuine difference\n\n## Your Blind Spots\nLike all colour types, your strengths can sometimes become overplayed. Being aware of this is the first step to continued growth.\n\n## How to Get the Best From You\nBe direct and clear. Respect your communication preferences. Give you space to operate in your natural style.\n\n## Your Growth Edge\nYour greatest opportunity lies in stretching into the qualities of your lesser colours — not to change who you are, but to expand your range as a communicator and leader.`;
+}
+
+function showReport(name, scores, dominant, reportText) {
+  showScreen('report-screen');
+
+  const meta = colourMeta[dominant];
+
+  document.getElementById('report-name').textContent = name + '\'s Report';
+  document.getElementById('badge-label').textContent = meta.name;
+  document.getElementById('badge-dot').style.background = meta.hex;
+
+  const badge = document.getElementById('colour-badge');
+  badge.style.background = meta.bg;
+  badge.style.color = meta.hex;
+  badge.style.border = `1.5px solid ${meta.hex}`;
+
+  // Animate score bars
+  setTimeout(() => {
+    setBar('red', scores.R);
+    setBar('yellow', scores.Y);
+    setBar('green', scores.G);
+    setBar('blue', scores.B);
+  }, 200);
+
+  // Parse and render report
+  const container = document.getElementById('report-content');
+  container.innerHTML = '';
+
+  const sectionIcons = {
+    'Overview': '🎨',
+    'Your Communication Style': '💬',
+    'What Energises You': '⚡',
+    'Your Blind Spots': '🔍',
+    'How to Get the Best From You': '🤝',
+    'Your Growth Edge': '🌱',
+  };
+
+  const sections = reportText.split(/\n## /).filter(Boolean);
+  sections.forEach(section => {
+    const lines = section.replace(/^## /, '').split('\n');
+    const title = lines[0].trim();
+    const body = lines.slice(1).join('\n').trim();
+
+    const card = document.createElement('div');
+    card.className = 'report-card';
+
+    const icon = sectionIcons[title] || '📌';
+    card.innerHTML = `<h3><span class="section-icon">${icon}</span>${title}</h3>`;
+
+    // Render bullet points as <ul> or paragraph
+    if (body.includes('\n- ') || body.startsWith('- ')) {
+      const parts = body.split('\n');
+      let html = '';
+      let inList = false;
+      parts.forEach(p => {
+        if (p.startsWith('- ')) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += `<li>${p.slice(2)}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          if (p.trim()) html += `<p>${p}</p>`;
+        }
+      });
+      if (inList) html += '</ul>';
+      card.innerHTML += html;
+    } else {
+      card.innerHTML += `<p>${body.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</p>`;
+    }
+
+    container.appendChild(card);
+  });
+}
+
+function setBar(colour, pct) {
+  document.getElementById('bar-' + colour).style.width = pct + '%';
+  document.getElementById('num-' + colour).textContent = pct + '%';
+}
+
+function restart() {
+  currentQ = 0; answers = [];
+  showScreen('intro-screen');
+}
+</script>
+</body>
+</html>
