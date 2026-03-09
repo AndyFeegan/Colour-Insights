@@ -687,8 +687,8 @@ function setBar(colour,pct){
   document.getElementById('num-'+colour).textContent=pct+'%';
 }
 
-// ── DOWNLOAD ──
-function downloadReport(){
+// ── BUILD REPORT HTML (shared by download + print) ──
+function buildReportHTML(forPrint){
   const scores=computeScores();
   const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
   const dom=sorted[0],sec=sorted[1];
@@ -696,89 +696,135 @@ function downloadReport(){
   const meta=colourMeta[dom],secMeta=colourMeta[sec];
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
-  const sections=[
-    {icon:'🎨',title:'Overview',body:profile.overview.replace('{name}',userName)},
-    {icon:'💬',title:'Your Communication Style',body:profile.style+'\n\nKey traits: '+profile.traits.join(' · ')},
-    {icon:'⚡',title:'What Energises You',body:profile.energisers.map(e=>'• '+e).join('\n')},
-    {icon:'🔍',title:'Your Blind Spots',body:profile.blindspots.map(b=>'• '+b.text).join('\n\n')},
-    {icon:'🤝',title:'How to Get the Best From You',body:profile.tips.map(t=>'• '+t.text).join('\n\n')},
-    {icon:'🌱',title:'Your Growth Edge',body:profile.growth},
-  ];
+  const printBtn=forPrint?`<div style="text-align:center;margin-bottom:32px;">
+    <button onclick="window.print()" style="padding:12px 28px;background:#1A1612;color:#F5F0E8;border:none;border-radius:10px;font-size:1rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-right:10px;">🖨 Print / Save as PDF</button>
+    <button onclick="window.close()" style="padding:12px 24px;background:transparent;color:#8C8275;border:1.5px solid #E0D8CC;border-radius:10px;font-size:0.9rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Close</button>
+  </div>`:'';
 
-  const html=`<!DOCTYPE html>
+  return`<!DOCTYPE html>
 <html><head><meta charset="UTF-8">
-<title>Colour Insights Report — ${userName}</title>
+<title>Colour Insights — ${userName}</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'DM Sans',sans-serif;max-width:750px;margin:0 auto;padding:40px 32px 60px;background:#F5F0E8;color:#1A1612;}
-  .header{margin-bottom:40px;padding-bottom:32px;border-bottom:2px solid #E0D8CC;}
-  .dots{display:flex;gap:8px;margin-bottom:24px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;max-width:760px;margin:0 auto;padding:48px 32px 80px;background:#F5F0E8;color:#1A1612;}
+  .dots{display:flex;gap:8px;margin-bottom:28px;}
   .dot{width:12px;height:12px;border-radius:50%;}
-  h1{font-family:'Playfair Display',serif;font-size:2.4rem;margin-bottom:8px;line-height:1.2;}
-  .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:8px;}
+  .greeting{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:8px;}
+  h1{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:16px;line-height:1.15;}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:6px;}
   .badge-dot{width:8px;height:8px;border-radius:50%;background:${meta.hex};}
-  .combo{font-size:0.85rem;color:#8C8275;margin-bottom:24px;}
-  .scores{margin-bottom:32px;}
-  .scores-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:12px;}
-  .score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .score-label{width:130px;font-size:0.82rem;font-weight:500;}
-  .score-bar{flex:1;height:5px;background:#E0D8CC;border-radius:3px;overflow:hidden;}
+  .combo{font-size:0.85rem;color:#8C8275;margin-bottom:28px;}
+  .divider{height:1px;background:#E0D8CC;margin:28px 0;}
+  .scores-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:14px;}
+  .score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .score-label{width:135px;font-size:0.82rem;font-weight:500;flex-shrink:0;}
+  .score-bar{flex:1;height:6px;background:#E0D8CC;border-radius:3px;overflow:hidden;}
   .score-fill{height:100%;border-radius:3px;}
-  .score-pct{width:28px;text-align:right;font-size:0.8rem;color:#8C8275;}
-  .card{background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:28px;margin-bottom:16px;page-break-inside:avoid;}
+  .score-pct{width:30px;text-align:right;font-size:0.8rem;color:#8C8275;}
+  .card{background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:30px;margin-bottom:16px;page-break-inside:avoid;}
   .card h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;}
-  .card p,.card li{font-size:0.95rem;line-height:1.8;color:#3A342C;}
-  .card ul{padding-left:18px;}
-  .card li{margin-bottom:6px;}
-  .traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .card p{font-size:0.96rem;line-height:1.8;color:#3A342C;margin-bottom:10px;}
+  .card p:last-child{margin-bottom:0;}
+  .card ul{padding-left:20px;}
+  .card li{font-size:0.96rem;line-height:1.7;color:#3A342C;margin-bottom:7px;}
+  .tip{background:#F5F0E8;border:1.5px solid #E0D8CC;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;}
+  .tip-icon{font-size:1.05rem;flex-shrink:0;margin-top:1px;}
+  .tip-text{font-size:0.92rem;line-height:1.6;color:#3A342C;}
+  .traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
   .trait{padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:500;border:1.5px solid #E0D8CC;color:#8C8275;}
+  .growth-label{font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8C8275;margin:16px 0 10px;}
+  .growth-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .growth-name{font-size:0.85rem;width:135px;flex-shrink:0;font-weight:500;}
+  .growth-track{flex:1;height:4px;background:#E0D8CC;border-radius:2px;overflow:hidden;}
+  .growth-fill{height:100%;border-radius:2px;}
   .footer{margin-top:40px;padding-top:20px;border-top:1px solid #E0D8CC;font-size:0.78rem;color:#8C8275;text-align:center;}
-  @media print{body{background:#fff;padding:20px;}.card{box-shadow:none;}}
-</style></head><body>
-<div class="header">
-  <div class="dots">
-    <div class="dot" style="background:#E8341C"></div>
-    <div class="dot" style="background:#F5C518"></div>
-    <div class="dot" style="background:#3A8C5C"></div>
-    <div class="dot" style="background:#1C5FA8"></div>
-  </div>
-  <h1>${userName}'s Colour Insights Report</h1>
-  <div class="badge"><div class="badge-dot"></div>${meta.name}</div>
-  <div class="combo">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
-  <div class="scores">
-    <div class="scores-title">Colour profile breakdown</div>
-    ${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([name,hex,pct])=>
-      `<div class="score-row"><div class="score-label" style="color:${hex}">${name}</div><div class="score-bar"><div class="score-fill" style="background:${hex};width:${pct}%"></div></div><div class="score-pct">${pct}%</div></div>`
-    ).join('')}
-  </div>
-</div>
-${sections.map(s=>`
-<div class="card">
-  <h2>${s.icon} ${s.title}</h2>
-  ${s.title==='Your Communication Style'
-    ? `<p>${profile.style}</p><div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div>`
-    : s.title==='What Energises You'
-    ? `<ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul>`
-    : s.title==='Your Blind Spots'
-    ? profile.blindspots.map(b=>`<p><strong>${b.icon}</strong> ${b.text}</p>`).join('')
-    : s.title==='How to Get the Best From You'
-    ? profile.tips.map(t=>`<p><strong>${t.icon}</strong> ${t.text}</p>`).join('')
-    : `<p>${s.body}</p>`
+  @media print{
+    body{background:#fff;padding:20px;}
+    .no-print{display:none!important;}
+    .card{box-shadow:none;border-color:#ddd;}
   }
-</div>`).join('')}
+</style></head>
+<body>
+${printBtn}
+<div class="dots">
+  <div class="dot" style="background:#E8341C"></div>
+  <div class="dot" style="background:#F5C518"></div>
+  <div class="dot" style="background:#3A8C5C"></div>
+  <div class="dot" style="background:#1C5FA8"></div>
+</div>
+<div class="greeting">Colour Insights Report</div>
+<h1>${userName}'s Report</h1>
+<div class="badge"><div class="badge-dot"></div>${meta.name}</div>
+<div class="combo">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
+<div class="divider"></div>
+<div class="scores-title">Your colour profile breakdown</div>
+${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([n,h,p])=>
+  `<div class="score-row"><div class="score-label" style="color:${h}">${n}</div><div class="score-bar"><div class="score-fill" style="background:${h};width:${p}%"></div></div><div class="score-pct">${p}%</div></div>`
+).join('')}
+<div class="divider"></div>
+
+<div class="card"><h2>🎨 Overview</h2><p>${profile.overview.replace('{name}',userName)}</p></div>
+
+<div class="card"><h2>💬 Your Communication Style</h2><p>${profile.style}</p>
+<div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div></div>
+
+<div class="card"><h2>⚡ What Energises You</h2><ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul></div>
+
+<div class="card"><h2>🔍 Your Blind Spots</h2>${profile.blindspots.map(b=>`<div class="tip"><div class="tip-icon">${b.icon}</div><div class="tip-text">${b.text}</div></div>`).join('')}</div>
+
+<div class="card"><h2>🤝 How to Get the Best From You</h2>${profile.tips.map(t=>`<div class="tip"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>
+
+<div class="card"><h2>🌱 Your Growth Edge</h2><p>${profile.growth}</p>
+<div class="growth-label">Colours to stretch into</div>
+${Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}
+</div>
+
 <div class="footer">Colour Insights Report · ${userName} · ${date}</div>
 </body></html>`;
-
-  const blob=new Blob([html],{type:'text/html'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
-function printReport(){window.print();}
+function downloadReport(){
+  const html=buildReportHTML(false);
+  // Open in new tab — works in iframes and all browsers
+  const newTab=window.open('','_blank');
+  if(newTab){
+    newTab.document.open();
+    newTab.document.write(html);
+    newTab.document.close();
+    // Trigger download after a short delay
+    setTimeout(()=>{
+      const a=newTab.document.createElement('a');
+      const blob=new Blob([html],{type:'text/html'});
+      a.href=newTab.URL.createObjectURL(blob);
+      a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
+      newTab.document.body.appendChild(a);
+      a.click();
+    },500);
+  } else {
+    // Fallback: data URI
+    const encoded='data:text/html;charset=utf-8,'+encodeURIComponent(html);
+    const a=document.createElement('a');
+    a.href=encoded;
+    a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
+    a.target='_blank';
+    a.click();
+  }
+}
+
+function printReport(){
+  const html=buildReportHTML(true);
+  const newTab=window.open('','_blank');
+  if(newTab){
+    newTab.document.open();
+    newTab.document.write(html);
+    newTab.document.close();
+    // Auto-trigger print dialog once loaded
+    newTab.onload=()=>newTab.print();
+    setTimeout(()=>newTab.print(),800);
+  }
+}
+
 function restart(){answers=[];currentQ=0;showScreen('intro-screen');}
 </script>
 </body>
