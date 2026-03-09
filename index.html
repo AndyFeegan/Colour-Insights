@@ -161,16 +161,13 @@
     </div>
     <div id="report-content"></div>
     <div class="action-row">
-      <button class="btn-primary" onclick="downloadReport()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Download report
-      </button>
-      <button class="btn-secondary" onclick="printReport()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="5" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V3h6v2M5 10h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Print / Save as PDF
-      </button>
+      <a id="btn-open" class="btn-primary" href="#" target="_blank" rel="noreferrer">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3H3v10h10v-3M9 2h5v5M8 8l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open full report
+      </a>
       <button class="btn-ghost" onclick="restart()">↩ Start again</button>
     </div>
+    <p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:12px;">Opens in a new tab — print or save as PDF from there</p>
   </div>
 
 </div>
@@ -673,6 +670,9 @@ function buildReport(){
   container.appendChild(makeCard('🤝','How to Get the Best From You',`<div class="tip-grid">${profile.tips.map(t=>`<div class="tip-card"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>`));
   const growthBars=Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('');
   container.appendChild(makeCard('🌱','Your Growth Edge',`<p>${profile.growth}</p><div class="growth-section"><div class="growth-label">Colours to stretch into</div>${growthBars}</div>`));
+
+  // Set the "Open full report" link with URL params
+  setReportLink();
 }
 
 function makeCard(icon,title,bodyHTML){
@@ -687,145 +687,102 @@ function setBar(colour,pct){
   document.getElementById('num-'+colour).textContent=pct+'%';
 }
 
-// ── BUILD REPORT HTML (shared by download + print) ──
-function buildReportHTML(forPrint){
+// ── OPEN REPORT IN NEW TAB via URL params (works inside Notion iframe) ──
+function setReportLink(){
   const scores=computeScores();
   const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
   const dom=sorted[0],sec=sorted[1];
+  const params=new URLSearchParams({
+    name: userName,
+    dom, sec,
+    R: scores.R, Y: scores.Y, G: scores.G, B: scores.B
+  });
+  const btn=document.getElementById('btn-open');
+  btn.href=window.location.href.split('?')[0]+'?report=1&'+params.toString();
+}
+
+// ── CHECK IF WE'RE IN REPORT VIEW MODE ──
+function checkReportMode(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('report')!=='1') return false;
+
+  const name=params.get('name')||'Friend';
+  const dom=params.get('dom')||'R';
+  const sec=params.get('sec')||'Y';
+  const scores={R:+params.get('R')||0,Y:+params.get('Y')||0,G:+params.get('G')||0,B:+params.get('B')||0};
+
+  renderStandaloneReport(name,dom,sec,scores);
+  return true;
+}
+
+function renderStandaloneReport(name,dom,sec,scores){
   const profile=profiles[dom+sec]||profiles[dom+dom];
   const meta=colourMeta[dom],secMeta=colourMeta[sec];
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
-  const printBtn=forPrint?`<div style="text-align:center;margin-bottom:32px;">
-    <button onclick="window.print()" style="padding:12px 28px;background:#1A1612;color:#F5F0E8;border:none;border-radius:10px;font-size:1rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-right:10px;">🖨 Print / Save as PDF</button>
-    <button onclick="window.close()" style="padding:12px 24px;background:transparent;color:#8C8275;border:1.5px solid #E0D8CC;border-radius:10px;font-size:0.9rem;font-family:'DM Sans',sans-serif;cursor:pointer;">Close</button>
-  </div>`:'';
+  document.body.innerHTML=`
+  <div style="font-family:'DM Sans',sans-serif;max-width:760px;margin:0 auto;padding:48px 32px 80px;background:#F5F0E8;color:#1A1612;">
+    <div style="display:flex;gap:8px;margin-bottom:28px;">
+      <div style="width:12px;height:12px;border-radius:50%;background:#E8341C"></div>
+      <div style="width:12px;height:12px;border-radius:50%;background:#F5C518"></div>
+      <div style="width:12px;height:12px;border-radius:50%;background:#3A8C5C"></div>
+      <div style="width:12px;height:12px;border-radius:50%;background:#1C5FA8"></div>
+    </div>
+    <div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:8px;">Colour Insights Report</div>
+    <div style="font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:16px;line-height:1.15;">${name}'s Report</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:${meta.hex}"></div>${meta.name}
+    </div>
+    <div style="font-size:0.85rem;color:#8C8275;margin-bottom:28px;">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
 
-  return`<!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<title>Colour Insights — ${userName}</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;max-width:760px;margin:0 auto;padding:48px 32px 80px;background:#F5F0E8;color:#1A1612;}
-  .dots{display:flex;gap:8px;margin-bottom:28px;}
-  .dot{width:12px;height:12px;border-radius:50%;}
-  .greeting{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:8px;}
-  h1{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:16px;line-height:1.15;}
-  .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:6px;}
-  .badge-dot{width:8px;height:8px;border-radius:50%;background:${meta.hex};}
-  .combo{font-size:0.85rem;color:#8C8275;margin-bottom:28px;}
-  .divider{height:1px;background:#E0D8CC;margin:28px 0;}
-  .scores-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:14px;}
-  .score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-  .score-label{width:135px;font-size:0.82rem;font-weight:500;flex-shrink:0;}
-  .score-bar{flex:1;height:6px;background:#E0D8CC;border-radius:3px;overflow:hidden;}
-  .score-fill{height:100%;border-radius:3px;}
-  .score-pct{width:30px;text-align:right;font-size:0.8rem;color:#8C8275;}
-  .card{background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:30px;margin-bottom:16px;page-break-inside:avoid;}
-  .card h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;}
-  .card p{font-size:0.96rem;line-height:1.8;color:#3A342C;margin-bottom:10px;}
-  .card p:last-child{margin-bottom:0;}
-  .card ul{padding-left:20px;}
-  .card li{font-size:0.96rem;line-height:1.7;color:#3A342C;margin-bottom:7px;}
-  .tip{background:#F5F0E8;border:1.5px solid #E0D8CC;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;}
-  .tip-icon{font-size:1.05rem;flex-shrink:0;margin-top:1px;}
-  .tip-text{font-size:0.92rem;line-height:1.6;color:#3A342C;}
-  .traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
-  .trait{padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:500;border:1.5px solid #E0D8CC;color:#8C8275;}
-  .growth-label{font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8C8275;margin:16px 0 10px;}
-  .growth-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .growth-name{font-size:0.85rem;width:135px;flex-shrink:0;font-weight:500;}
-  .growth-track{flex:1;height:4px;background:#E0D8CC;border-radius:2px;overflow:hidden;}
-  .growth-fill{height:100%;border-radius:2px;}
-  .footer{margin-top:40px;padding-top:20px;border-top:1px solid #E0D8CC;font-size:0.78rem;color:#8C8275;text-align:center;}
-  @media print{
-    body{background:#fff;padding:20px;}
-    .no-print{display:none!important;}
-    .card{box-shadow:none;border-color:#ddd;}
-  }
-</style></head>
-<body>
-${printBtn}
-<div class="dots">
-  <div class="dot" style="background:#E8341C"></div>
-  <div class="dot" style="background:#F5C518"></div>
-  <div class="dot" style="background:#3A8C5C"></div>
-  <div class="dot" style="background:#1C5FA8"></div>
-</div>
-<div class="greeting">Colour Insights Report</div>
-<h1>${userName}'s Report</h1>
-<div class="badge"><div class="badge-dot"></div>${meta.name}</div>
-<div class="combo">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
-<div class="divider"></div>
-<div class="scores-title">Your colour profile breakdown</div>
-${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([n,h,p])=>
-  `<div class="score-row"><div class="score-label" style="color:${h}">${n}</div><div class="score-bar"><div class="score-fill" style="background:${h};width:${p}%"></div></div><div class="score-pct">${p}%</div></div>`
-).join('')}
-<div class="divider"></div>
+    <div style="height:1px;background:#E0D8CC;margin-bottom:24px;"></div>
+    <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:14px;">Your colour profile breakdown</div>
+    ${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([n,h,p])=>`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="width:135px;font-size:0.82rem;font-weight:500;color:${h}">${n}</div>
+      <div style="flex:1;height:6px;background:#E0D8CC;border-radius:3px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:${h};width:${p}%"></div></div>
+      <div style="width:30px;text-align:right;font-size:0.8rem;color:#8C8275;">${p}%</div>
+    </div>`).join('')}
+    <div style="height:1px;background:#E0D8CC;margin:24px 0;"></div>
 
-<div class="card"><h2>🎨 Overview</h2><p>${profile.overview.replace('{name}',userName)}</p></div>
+    ${[
+      ['🎨','Overview',`<p style="${pStyle}">${profile.overview.replace('{name}',name)}</p>`],
+      ['💬','Your Communication Style',`<p style="${pStyle}">${profile.style}</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;">${profile.traits.map(t=>`<span style="padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:500;border:1.5px solid #E0D8CC;color:#8C8275;">${t}</span>`).join('')}</div>`],
+      ['⚡','What Energises You',`<ul style="padding-left:20px;">${profile.energisers.map(e=>`<li style="${liStyle}">${e}</li>`).join('')}</ul>`],
+      ['🔍','Your Blind Spots',profile.blindspots.map(b=>`<div style="${tipStyle}"><div style="font-size:1.05rem;flex-shrink:0;margin-top:1px;">${b.icon}</div><div style="font-size:0.92rem;line-height:1.6;color:#3A342C;">${b.text}</div></div>`).join('')],
+      ['🤝','How to Get the Best From You',profile.tips.map(t=>`<div style="${tipStyle}"><div style="font-size:1.05rem;flex-shrink:0;margin-top:1px;">${t.icon}</div><div style="font-size:0.92rem;line-height:1.6;color:#3A342C;">${t.text}</div></div>`).join('')],
+      ['🌱','Your Growth Edge',`<p style="${pStyle}">${profile.growth}</p><div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8C8275;margin:16px 0 10px;">Colours to stretch into</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:0.85rem;width:135px;flex-shrink:0;font-weight:500;color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div style="flex:1;height:4px;background:#E0D8CC;border-radius:2px;overflow:hidden;"><div style="height:100%;border-radius:2px;background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}`],
+    ].map(([icon,title,body])=>`
+    <div style="${cardStyle}">
+      <div style="font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;">${icon} ${title}</div>
+      ${body}
+    </div>`).join('')}
 
-<div class="card"><h2>💬 Your Communication Style</h2><p>${profile.style}</p>
-<div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div></div>
+    <div style="text-align:center;margin:32px 0 48px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;" class="no-print">
+      <button onclick="window.print()" style="padding:14px 28px;background:#1A1612;color:#F5F0E8;border:none;border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;cursor:pointer;">🖨 Print / Save as PDF</button>
+    </div>
 
-<div class="card"><h2>⚡ What Energises You</h2><ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul></div>
-
-<div class="card"><h2>🔍 Your Blind Spots</h2>${profile.blindspots.map(b=>`<div class="tip"><div class="tip-icon">${b.icon}</div><div class="tip-text">${b.text}</div></div>`).join('')}</div>
-
-<div class="card"><h2>🤝 How to Get the Best From You</h2>${profile.tips.map(t=>`<div class="tip"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>
-
-<div class="card"><h2>🌱 Your Growth Edge</h2><p>${profile.growth}</p>
-<div class="growth-label">Colours to stretch into</div>
-${Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}
-</div>
-
-<div class="footer">Colour Insights Report · ${userName} · ${date}</div>
-</body></html>`;
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid #E0D8CC;font-size:0.78rem;color:#8C8275;text-align:center;">
+      Colour Insights Report · ${name} · ${date}
+    </div>
+  </div>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+    @media print{.no-print{display:none!important;}body{background:#fff!important;}}
+  </style>`;
 }
 
-function downloadReport(){
-  const html=buildReportHTML(false);
-  // Open in new tab — works in iframes and all browsers
-  const newTab=window.open('','_blank');
-  if(newTab){
-    newTab.document.open();
-    newTab.document.write(html);
-    newTab.document.close();
-    // Trigger download after a short delay
-    setTimeout(()=>{
-      const a=newTab.document.createElement('a');
-      const blob=new Blob([html],{type:'text/html'});
-      a.href=newTab.URL.createObjectURL(blob);
-      a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
-      newTab.document.body.appendChild(a);
-      a.click();
-    },500);
-  } else {
-    // Fallback: data URI
-    const encoded='data:text/html;charset=utf-8,'+encodeURIComponent(html);
-    const a=document.createElement('a');
-    a.href=encoded;
-    a.download=`colour-insights-${userName.toLowerCase().replace(/\s+/g,'-')}.html`;
-    a.target='_blank';
-    a.click();
-  }
-}
-
-function printReport(){
-  const html=buildReportHTML(true);
-  const newTab=window.open('','_blank');
-  if(newTab){
-    newTab.document.open();
-    newTab.document.write(html);
-    newTab.document.close();
-    // Auto-trigger print dialog once loaded
-    newTab.onload=()=>newTab.print();
-    setTimeout(()=>newTab.print(),800);
-  }
-}
+const pStyle="font-size:0.96rem;line-height:1.8;color:#3A342C;margin-bottom:10px;";
+const liStyle="font-size:0.96rem;line-height:1.7;color:#3A342C;margin-bottom:7px;";
+const tipStyle="background:#F5F0E8;border:1.5px solid #E0D8CC;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;";
+const cardStyle="background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:30px;margin-bottom:16px;";
 
 function restart(){answers=[];currentQ=0;showScreen('intro-screen');}
+
+// On page load — check if we're in report view mode
+if(!checkReportMode()){
+  // Normal quiz mode — nothing extra needed
+}
 </script>
 </body>
 </html>
