@@ -3,177 +3,327 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colour Insights — Communication Style Questionnaire</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Colour Insights — Communication Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--red:#E8341C;--yellow:#F5C518;--green:#3A8C5C;--blue:#1C5FA8;--bg:#F5F0E8;--ink:#1A1612;--card:#FDFAF4;--muted:#8C8275;--border:#E0D8CC;}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
-  .orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-  .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12;animation:drift 18s ease-in-out infinite;}
-  .orb-red{width:400px;height:400px;background:var(--red);top:-100px;right:-100px;animation-delay:0s;}
-  .orb-yellow{width:300px;height:300px;background:var(--yellow);bottom:10%;left:-80px;animation-delay:-6s;}
-  .orb-green{width:350px;height:350px;background:var(--green);bottom:-80px;right:20%;animation-delay:-12s;}
-  .orb-blue{width:280px;height:280px;background:var(--blue);top:30%;left:-60px;animation-delay:-4s;}
-  @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,30px) scale(0.95)}}
-  .wrapper{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:60px 24px 100px;}
-  .screen{display:none;}.screen.active{display:block;animation:fadeUp 0.5s ease;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  .logo-row{display:flex;gap:8px;margin-bottom:48px;}
-  .dot{width:14px;height:14px;border-radius:50%;animation:pulse 3s ease-in-out infinite;}
-  .dot-red{background:var(--red);animation-delay:0s;}.dot-yellow{background:var(--yellow);animation-delay:0.3s;}
-  .dot-green{background:var(--green);animation-delay:0.6s;}.dot-blue{background:var(--blue);animation-delay:0.9s;}
-  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-  h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,6vw,3.8rem);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;}
-  h1 em{font-style:italic;color:var(--muted);}
-  .intro-desc{font-size:1.05rem;line-height:1.7;color:#4A4238;max-width:520px;margin-bottom:48px;}
-  .colour-pills{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:48px;}
-  .pill{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;font-size:0.82rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;border:1.5px solid currentColor;}
-  .pill-dot{width:8px;height:8px;border-radius:50%;}
-  .pill-red{color:var(--red);}.pill-yellow{color:#B89010;}.pill-green{color:var(--green);}.pill-blue{color:var(--blue);}
-  .name-block{margin-bottom:36px;}
-  .name-block label{display:block;font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-  .name-block input{width:100%;padding:14px 18px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:1.05rem;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color 0.2s;}
-  .name-block input:focus{border-color:var(--ink);}
-  .btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--ink);color:var(--bg);border:none;border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,22,18,0.2);}
-  .btn-secondary{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--card);color:var(--ink);border:1.5px solid var(--border);border-radius:12px;font-size:0.95rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,border-color 0.2s;}
-  .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,22,18,0.12);border-color:var(--ink);}
-  .btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--ink);padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:border-color 0.2s;}
-  .btn-ghost:hover{border-color:var(--ink);}
-  .progress-bar-wrap{margin-bottom:40px;}
-  .progress-meta{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;}
-  .progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
-  .progress-fill{height:100%;background:var(--ink);border-radius:2px;transition:width 0.5s ease;}
-  .q-number{font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-  .q-text{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,1.7rem);line-height:1.4;margin-bottom:36px;}
-  .options-grid{display:grid;gap:12px;}
-  .option-btn{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;cursor:pointer;text-align:left;transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;font-family:'DM Sans',sans-serif;}
-  .option-btn:hover{border-color:var(--ink);transform:translateX(4px);box-shadow:0 4px 16px rgba(26,22,18,0.08);}
-  .option-btn.selected{border-color:var(--ink);background:var(--ink);color:var(--bg);}
-  .option-letter{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;margin-top:1px;}
-  .option-text{font-size:0.97rem;line-height:1.5;}
-  .report-header{margin-bottom:48px;}
-  .report-greeting{font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-  .report-name{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);margin-bottom:20px;}
-  .colour-badge{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border-radius:100px;font-size:0.82rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;}
-  .badge-dot{width:10px;height:10px;border-radius:50%;}
-  .colour-combo{font-size:0.85rem;color:var(--muted);margin-bottom:32px;}
-  .scores-section{margin-bottom:40px;}
-  .scores-title{font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
-  .score-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-  .score-label{width:130px;font-size:0.82rem;font-weight:500;flex-shrink:0;}
-  .score-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
-  .score-fill{height:100%;border-radius:3px;transition:width 1.2s ease;}
-  .score-num{width:28px;text-align:right;font-size:0.82rem;color:var(--muted);}
-  .report-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:36px;margin-bottom:20px;}
-  .report-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-  .report-card p{font-size:0.97rem;line-height:1.8;color:#3A342C;margin-bottom:12px;}
-  .report-card p:last-child{margin-bottom:0;}
-  .report-card ul{padding-left:20px;}
-  .report-card li{font-size:0.97rem;line-height:1.7;color:#3A342C;margin-bottom:8px;}
-  .trait-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
-  .trait-tag{padding:6px 14px;border-radius:100px;font-size:0.78rem;font-weight:500;letter-spacing:0.04em;border:1.5px solid var(--border);color:var(--muted);}
-  .tip-grid{display:grid;gap:12px;margin-top:4px;}
-  .tip-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;}
-  .tip-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
-  .tip-text{font-size:0.92rem;line-height:1.6;color:#3A342C;}
-  .growth-section{margin-top:20px;}
-  .growth-label{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-  .growth-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .growth-name{font-size:0.85rem;width:130px;flex-shrink:0;font-weight:500;}
-  .growth-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
-  .growth-fill{height:100%;border-radius:2px;}
-  .action-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:48px;}
-  @media(max-width:480px){.wrapper{padding:40px 16px 80px;}.report-card{padding:24px;}}
+:root{
+  --bg:#0A0C0F;
+  --surface:#111318;
+  --surface2:#161A20;
+  --border:#1E2330;
+  --border2:#252B38;
+  --ink:#F0EDE8;
+  --ink2:#9BA3B4;
+  --ink3:#5C6478;
+  --red:#C84B2F;
+  --red-soft:#2A1510;
+  --yellow:#C49A1A;
+  --yellow-soft:#221D08;
+  --green:#2E7D52;
+  --green-soft:#0D1F16;
+  --blue:#2058A0;
+  --blue-soft:#0D1525;
+  --accent:#C8A96E;
+  --accent2:#8B6F3E;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-  /* PRINT STYLES */
-  @media print{
-    .orbs,.btn-primary,.btn-secondary,.btn-ghost,.action-row{display:none!important;}
-    body{background:#fff;}
-    .wrapper{padding:20px;}
-    .report-card{break-inside:avoid;border:1px solid #ddd;box-shadow:none;}
-    .screen{display:block!important;}
-    #intro-screen,#quiz-screen{display:none!important;}
-    #report-screen{display:block!important;}
-  }
+/* Subtle grid texture */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(200,169,110,0.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,169,110,0.015) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0;
+}
+
+/* Top accent line */
+body::after{
+  content:'';position:fixed;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  z-index:100;
+}
+
+.wrapper{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:72px 32px 120px;}
+
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LOGO MARK ── */
+.logomark{display:flex;align-items:center;gap:16px;margin-bottom:64px;}
+.colour-squares{display:flex;gap:3px;}
+.csq{width:7px;height:7px;}
+.csq-r{background:var(--red);}
+.csq-y{background:var(--yellow);}
+.csq-g{background:var(--green);}
+.csq-b{background:var(--blue);}
+.brand-text{font-size:0.7rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);}
+
+/* ── INTRO ── */
+.eyebrow{font-size:0.68rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5rem);font-weight:300;line-height:1.0;letter-spacing:-0.02em;margin-bottom:28px;color:var(--ink);}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:0.95rem;line-height:1.75;color:var(--ink2);max-width:480px;margin-bottom:56px;font-weight:300;}
+
+/* Colour legend */
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:52px;}
+.legend-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;}
+.legend-swatch{width:3px;height:32px;border-radius:2px;flex-shrink:0;}
+.legend-info{}
+.legend-name{font-size:0.78rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
+.legend-desc{font-size:0.72rem;color:var(--ink3);font-weight:300;}
+
+/* Name input */
+.field-wrap{margin-bottom:36px;}
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
+.field-input{width:100%;padding:14px 18px;background:var(--surface);border:1px solid var(--border2);border-radius:4px;font-size:0.97rem;font-family:'Inter',sans-serif;font-weight:300;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.field-input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(200,169,110,0.08);}
+.field-input::placeholder{color:var(--ink3);}
+
+/* ── BUTTONS ── */
+.btn-cta{display:inline-flex;align-items:center;gap:12px;padding:15px 32px;background:var(--accent);color:#0A0C0F;border:none;border-radius:3px;font-size:0.82rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.btn-cta:hover{background:#D4B87A;transform:translateY(-1px);box-shadow:0 8px 32px rgba(200,169,110,0.2);}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;background:transparent;color:var(--ink2);border:1px solid var(--border2);border-radius:3px;font-size:0.78rem;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.btn-ghost:hover{border-color:var(--ink3);color:var(--ink);}
+
+/* ── QUIZ ── */
+.progress-wrap{margin-bottom:52px;}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.progress-label{font-size:0.68rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);}
+.progress-pct{font-size:0.68rem;font-weight:600;letter-spacing:0.1em;color:var(--accent);}
+.progress-track{height:1px;background:var(--border2);position:relative;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.6s cubic-bezier(0.16,1,0.3,1);position:absolute;top:0;left:0;}
+
+.q-num{font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3.5vw,2rem);font-weight:300;line-height:1.35;color:var(--ink);margin-bottom:40px;letter-spacing:-0.01em;}
+
+.options-list{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:4px;cursor:pointer;text-align:left;transition:all 0.15s;font-family:'Inter',sans-serif;width:100%;}
+.opt-btn:hover{border-color:var(--border2);background:var(--surface2);}
+.opt-btn.selected{border-color:var(--accent2);background:var(--surface2);}
+.opt-letter{flex-shrink:0;width:22px;height:22px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:600;letter-spacing:0.05em;color:var(--ink3);border-radius:2px;margin-top:1px;transition:all 0.15s;}
+.opt-btn:hover .opt-letter,.opt-btn.selected .opt-letter{border-color:var(--accent2);color:var(--accent);}
+.opt-text{font-size:0.92rem;line-height:1.55;color:var(--ink2);font-weight:300;}
+.opt-btn:hover .opt-text,.opt-btn.selected .opt-text{color:var(--ink);}
+
+/* ── REPORT ── */
+.report-eyebrow{font-size:0.65rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.report-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:300;line-height:1.05;letter-spacing:-0.02em;margin-bottom:24px;}
+
+.colour-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:3px;font-size:0.68rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;}
+.badge-pip{width:6px;height:6px;border-radius:50%;}
+.tagline-row{font-size:0.82rem;color:var(--ink3);margin-bottom:40px;font-weight:300;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1rem;}
+
+/* Score bars */
+.scores-wrap{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:28px;margin-bottom:32px;}
+.scores-head{font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:20px;}
+.score-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.score-row:last-child{margin-bottom:0;}
+.score-lbl{width:140px;font-size:0.78rem;font-weight:500;flex-shrink:0;letter-spacing:0.02em;}
+.score-track{flex:1;height:2px;background:var(--border2);position:relative;}
+.score-fill{height:100%;position:absolute;top:0;left:0;transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
+.score-pct{width:30px;text-align:right;font-size:0.75rem;color:var(--ink3);font-variant-numeric:tabular-nums;}
+
+/* Report sections */
+.section-divider{height:1px;background:var(--border);margin:28px 0;}
+
+.report-section{margin-bottom:8px;}
+.section-header{display:flex;align-items:center;gap:14px;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:4px 4px 0 0;cursor:pointer;transition:background 0.15s;}
+.section-header:hover{background:var(--surface2);}
+.section-num{font-size:0.62rem;font-weight:600;letter-spacing:0.16em;color:var(--ink3);width:20px;}
+.section-title{font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);flex:1;}
+.section-chevron{color:var(--ink3);font-size:0.7rem;transition:transform 0.2s;}
+.section-header.open .section-chevron{transform:rotate(180deg);}
+
+.section-body{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 4px 4px;padding:24px 28px;display:none;}
+.section-body.open{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.section-body p{font-size:0.92rem;line-height:1.8;color:var(--ink2);font-weight:300;margin-bottom:14px;}
+.section-body p:last-child{margin-bottom:0;}
+.section-body ul{padding-left:0;list-style:none;}
+.section-body li{font-size:0.92rem;line-height:1.7;color:var(--ink2);font-weight:300;padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;}
+.section-body li:last-child{border-bottom:none;}
+.li-dot{width:4px;height:4px;border-radius:50%;background:var(--accent2);margin-top:9px;flex-shrink:0;}
+
+/* Trait pills */
+.trait-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.trait-pill{padding:5px 12px;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--border2);color:var(--ink3);border-radius:2px;}
+
+/* Insight cards (blindspots / tips) */
+.insight-list{display:flex;flex-direction:column;gap:10px;}
+.insight-card{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:16px 18px;display:flex;gap:14px;}
+.insight-index{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;color:var(--accent2);width:18px;flex-shrink:0;padding-top:2px;}
+.insight-text{font-size:0.88rem;line-height:1.65;color:var(--ink2);font-weight:300;}
+
+/* Growth bars */
+.growth-list{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.growth-head{font-size:0.62rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;}
+.growth-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.growth-lbl{font-size:0.75rem;width:140px;flex-shrink:0;font-weight:400;}
+.growth-track{flex:1;height:1px;background:var(--border2);position:relative;}
+.growth-fill{height:100%;position:absolute;top:0;left:0;}
+
+/* Action row */
+.action-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:48px;flex-wrap:wrap;}
+.action-note{text-align:center;font-size:0.72rem;color:var(--ink3);margin-top:10px;width:100%;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .wrapper{padding:48px 20px 80px;}
+  .legend{grid-template-columns:1fr;}
+  .report-name{font-size:2.2rem;}
+}
 </style>
 </head>
 <body>
-<div class="orbs">
-  <div class="orb orb-red"></div><div class="orb orb-yellow"></div>
-  <div class="orb orb-green"></div><div class="orb orb-blue"></div>
-</div>
 <div class="wrapper">
 
-  <!-- INTRO -->
+  <!-- ══ INTRO ══ -->
   <div id="intro-screen" class="screen active">
-    <div class="logo-row">
-      <div class="dot dot-red"></div><div class="dot dot-yellow"></div>
-      <div class="dot dot-green"></div><div class="dot dot-blue"></div>
+    <div class="logomark">
+      <div class="colour-squares">
+        <div class="csq csq-r"></div>
+        <div class="csq csq-y"></div>
+        <div class="csq csq-g"></div>
+        <div class="csq csq-b"></div>
+      </div>
+      <div class="brand-text">Colour Insights</div>
     </div>
-    <h1>Discover your<br><em>communication</em><br>colour</h1>
-    <p class="intro-desc">Answer 20 questions about how you naturally think, communicate, and work. You'll receive a detailed personalised report revealing your unique communication style and colour blend — and you can download it to keep.</p>
-    <div class="colour-pills">
-      <div class="pill pill-red"><div class="pill-dot" style="background:var(--red)"></div>Fiery Red</div>
-      <div class="pill pill-yellow"><div class="pill-dot" style="background:var(--yellow)"></div>Sunshine Yellow</div>
-      <div class="pill pill-green"><div class="pill-dot" style="background:var(--green)"></div>Earth Green</div>
-      <div class="pill pill-blue"><div class="pill-dot" style="background:var(--blue)"></div>Cool Blue</div>
+
+    <div class="eyebrow">Communication Profile Assessment</div>
+    <h1 class="hero-title">Know how<br>you <em>Communicate.</em></h1>
+    <p class="hero-sub">A 20-question assessment revealing your natural communication style, leadership tendencies, and the conditions in which you do your most effective work.</p>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--red)"></div>
+        <div class="legend-info">
+          <div class="legend-name" style="color:#E06040">Fiery Red</div>
+          <div class="legend-desc">Decisive · Results-driven</div>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--yellow)"></div>
+        <div class="legend-info">
+          <div class="legend-name" style="color:#C49A1A">Sunshine Yellow</div>
+          <div class="legend-desc">Energetic · Persuasive</div>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--green)"></div>
+        <div class="legend-info">
+          <div class="legend-name" style="color:#3A9060">Earth Green</div>
+          <div class="legend-desc">Empathetic · Steady</div>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:var(--blue)"></div>
+        <div class="legend-info">
+          <div class="legend-name" style="color:#4A80C0">Cool Blue</div>
+          <div class="legend-desc">Analytical · Precise</div>
+        </div>
+      </div>
     </div>
-    <div class="name-block">
-      <label for="user-name">Your first name</label>
-      <input type="text" id="user-name" placeholder="e.g. Sarah" autocomplete="given-name"/>
+
+    <div class="field-wrap">
+      <label class="field-label" for="user-name">Your name</label>
+      <input class="field-input" type="text" id="user-name" placeholder="First name" autocomplete="given-name"/>
     </div>
-    <button class="btn-primary" onclick="startQuiz()">Begin questionnaire
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+    <button class="btn-cta" onclick="startQuiz()">
+      Begin assessment
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
 
-  <!-- QUIZ -->
+  <!-- ══ QUIZ ══ -->
   <div id="quiz-screen" class="screen">
-    <div class="progress-bar-wrap">
-      <div class="progress-meta">
-        <span id="q-progress-label">Question 1 of 20</span>
-        <span id="q-progress-pct">0%</span>
+    <div class="logomark">
+      <div class="colour-squares">
+        <div class="csq csq-r"></div><div class="csq csq-y"></div>
+        <div class="csq csq-g"></div><div class="csq csq-b"></div>
       </div>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="brand-text">Colour Insights</div>
     </div>
-    <div class="q-number" id="q-number">01 / 20</div>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label" id="q-progress-label">Question 1 of 20</span>
+        <span class="progress-pct" id="q-progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="q-num" id="q-number">01 / 20</div>
     <div class="q-text" id="q-text"></div>
-    <div class="options-grid" id="options-grid"></div>
+    <div class="options-list" id="options-grid"></div>
   </div>
 
-  <!-- REPORT -->
+  <!-- ══ REPORT ══ -->
   <div id="report-screen" class="screen">
-    <div class="report-header">
-      <div class="report-greeting">Your Colour Insights Report</div>
-      <div class="report-name" id="report-name"></div>
-      <div class="colour-badge" id="colour-badge"><div class="badge-dot" id="badge-dot"></div><span id="badge-label"></span></div>
-      <div class="colour-combo" id="colour-combo"></div>
+    <div class="logomark">
+      <div class="colour-squares">
+        <div class="csq csq-r"></div><div class="csq csq-y"></div>
+        <div class="csq csq-g"></div><div class="csq csq-b"></div>
+      </div>
+      <div class="brand-text">Colour Insights</div>
     </div>
-    <div class="scores-section">
-      <div class="scores-title">Your colour profile breakdown</div>
-      <div class="score-row"><div class="score-label" style="color:var(--red)">Fiery Red</div><div class="score-track"><div class="score-fill" id="bar-red" style="background:var(--red);width:0%"></div></div><div class="score-num" id="num-red">0%</div></div>
-      <div class="score-row"><div class="score-label" style="color:#B89010">Sunshine Yellow</div><div class="score-track"><div class="score-fill" id="bar-yellow" style="background:var(--yellow);width:0%"></div></div><div class="score-num" id="num-yellow">0%</div></div>
-      <div class="score-row"><div class="score-label" style="color:var(--green)">Earth Green</div><div class="score-track"><div class="score-fill" id="bar-green" style="background:var(--green);width:0%"></div></div><div class="score-num" id="num-green">0%</div></div>
-      <div class="score-row"><div class="score-label" style="color:var(--blue)">Cool Blue</div><div class="score-track"><div class="score-fill" id="bar-blue" style="background:var(--blue);width:0%"></div></div><div class="score-num" id="num-blue">0%</div></div>
+
+    <div class="report-eyebrow">Communication Profile</div>
+    <div class="report-name" id="report-name"></div>
+    <div class="colour-badge" id="colour-badge">
+      <div class="badge-pip" id="badge-pip"></div>
+      <span id="badge-label"></span>
     </div>
-    <div id="report-content"></div>
+    <div class="tagline-row" id="tagline-row"></div>
+
+    <div class="scores-wrap">
+      <div class="scores-head">Colour profile breakdown</div>
+      <div class="score-row">
+        <div class="score-lbl" style="color:#E06040">Fiery Red</div>
+        <div class="score-track"><div class="score-fill" id="bar-red" style="background:var(--red);width:0%"></div></div>
+        <div class="score-pct" id="num-red">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-lbl" style="color:#C49A1A">Sunshine Yellow</div>
+        <div class="score-track"><div class="score-fill" id="bar-yellow" style="background:var(--yellow);width:0%"></div></div>
+        <div class="score-pct" id="num-yellow">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-lbl" style="color:#3A9060">Earth Green</div>
+        <div class="score-track"><div class="score-fill" id="bar-green" style="background:var(--green);width:0%"></div></div>
+        <div class="score-pct" id="num-green">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-lbl" style="color:#4A80C0">Cool Blue</div>
+        <div class="score-track"><div class="score-fill" id="bar-blue" style="background:var(--blue);width:0%"></div></div>
+        <div class="score-pct" id="num-blue">0%</div>
+      </div>
+    </div>
+
+    <div id="report-sections"></div>
+
     <div class="action-row">
-      <a id="btn-open" class="btn-primary" href="#" target="_blank" rel="noreferrer">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3H3v10h10v-3M9 2h5v5M8 8l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <a id="btn-open" class="btn-cta" href="#" target="_blank" rel="noreferrer">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2H2.5v9H11.5V9M8 2h3.5v3.5M6 8l5.5-5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Open full report
       </a>
-      <button class="btn-ghost" onclick="restart()">↩ Start again</button>
+      <button class="btn-ghost" onclick="restart()">← Start again</button>
     </div>
-    <p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:12px;">Opens in a new tab — print or save as PDF from there</p>
+    <div class="action-note">Opens in new tab — print or save as PDF from there</div>
   </div>
 
 </div>
 <script>
 const questions=[
-  // ── ORIGINAL 15 ──
   {text:"When you're given a new project, your first instinct is to…",options:[
     {text:"Dive straight in — figure it out as you go.",c:'R'},
     {text:"Gather everyone together and brainstorm ideas excitedly.",c:'Y'},
@@ -249,8 +399,6 @@ const questions=[
     {text:"You had great conversations and made things fun for people.",c:'Y'},
     {text:"Your team felt supported and things ran smoothly.",c:'G'},
     {text:"You produced something accurate, thorough, and high quality.",c:'B'}]},
-
-  // ── 5 NEW QUESTIONS ──
   {text:"When you have to give someone difficult news, you…",options:[
     {text:"Deliver it clearly and immediately — waiting only makes it worse.",c:'R'},
     {text:"Try to frame it as positively as possible and focus on what comes next.",c:'Y'},
@@ -279,10 +427,10 @@ const questions=[
 ];
 
 const colourMeta={
-  R:{name:'Fiery Red',hex:'#E8341C',bg:'#FFF0EE',light:'#FDECEA'},
-  Y:{name:'Sunshine Yellow',hex:'#F5C518',bg:'#FFFBEE',light:'#FFFDE7'},
-  G:{name:'Earth Green',hex:'#3A8C5C',bg:'#EDFAF3',light:'#E8F5E9'},
-  B:{name:'Cool Blue',hex:'#1C5FA8',bg:'#EEF4FF',light:'#E3F2FD'},
+  R:{name:'Fiery Red',hex:'#C84B2F',soft:'#2A1510',text:'#E06040'},
+  Y:{name:'Sunshine Yellow',hex:'#C49A1A',soft:'#221D08',text:'#C49A1A'},
+  G:{name:'Earth Green',hex:'#2E7D52',soft:'#0D1F16',text:'#3A9060'},
+  B:{name:'Cool Blue',hex:'#2058A0',soft:'#0D1525',text:'#4A80C0'},
 };
 
 const profiles={
@@ -291,300 +439,285 @@ const profiles={
     style:`You communicate with precision and purpose. Every word counts, and you have little patience for waffle or vagueness. You lead with outcomes and expect others to match your pace. You're at your best when given autonomy and clear targets, and you naturally gravitate toward leadership positions — not because you seek status, but because you genuinely believe you can get things done faster and better.`,
     energisers:['Being given full autonomy to deliver results your way','Competing — whether against others or your own personal best','Solving problems quickly and making things happen','Environments that reward performance over politics','Clear goals with the freedom to define your own path'],
     blindspots:[
-      {icon:'⚡',text:'Your directness can sometimes land as harshness. People may hear criticism where you intended efficiency. Pausing to acknowledge effort before jumping to solutions can transform how your feedback is received.'},
-      {icon:'🔄',text:'You can underestimate how much others need context, reassurance, and inclusion in decisions. What feels like helpful decisiveness to you can feel like steamrolling to a Green or Blue colleague.'},
-      {icon:'🎯',text:'When under pressure, your drive can tip into controlling behaviour. Trusting others to deliver — even imperfectly — is a skill worth cultivating.'},
+      {text:'Your directness can sometimes land as harshness. People may hear criticism where you intended efficiency. Pausing to acknowledge effort before jumping to solutions can transform how your feedback is received.'},
+      {text:'You can underestimate how much others need context, reassurance, and inclusion in decisions. What feels like helpful decisiveness to you can feel like steamrolling to a Green or Blue colleague.'},
+      {text:'When under pressure, your drive can tip into controlling behaviour. Trusting others to deliver — even imperfectly — is a skill worth cultivating.'},
     ],
     tips:[
-      {icon:'🎯',text:'Be direct — they will respect it. Get to the point and skip lengthy preambles.'},
-      {icon:'📋',text:'Frame conversations around outcomes and results, not processes.'},
-      {icon:'🚀',text:'Give them ownership and clear targets. Micromanaging will frustrate them deeply.'},
-      {icon:'⏱',text:'Respect their time. Short, purposeful interactions are always preferred.'},
+      {text:'Be direct — they will respect it. Get to the point and skip lengthy preambles.'},
+      {text:'Frame conversations around outcomes and results, not processes.'},
+      {text:'Give them ownership and clear targets. Micromanaging will frustrate them deeply.'},
+      {text:'Respect their time. Short, purposeful interactions are always preferred.'},
     ],
     growth:`Your edge lies in learning to slow down and bring people with you. Your results speak for themselves, but the most transformational leaders know that how you get there matters as much as getting there. Investing even 10% more attention into relationships, acknowledgement, and listening will multiply your impact far beyond what drive alone can achieve.`,
     traits:['Results-focused','Decisive','Direct','Competitive','Action-oriented','Bold'],
     growthColours:{Y:30,G:50,B:40}},
-
   RY:{tagline:'The Energetic Achiever',
     overview:`{name}, your combination of Fiery Red drive and Sunshine Yellow enthusiasm creates one of the most dynamic communication styles around. You are bold, fast-moving, and magnetic — the kind of person who gets things done while also lighting up the room. You bring urgency and energy in equal measure, and people are drawn to your confidence and passion.`,
     style:`You communicate with conviction and colour. You make ideas feel exciting and achievable, and you naturally inspire action in others. You're persuasive without even trying — your energy is contagious and your self-belief is evident. In meetings you are often the one setting the direction and raising the ambition level. You want things to move quickly, and you're not afraid to push.`,
     energisers:['Fast-paced environments with visible wins','Being in front of people — presenting, pitching, leading','Creative problem-solving under pressure','Recognition for results AND relationships','High-profile, high-stakes projects'],
     blindspots:[
-      {icon:'🎭',text:'Your enthusiasm can sometimes outpace your follow-through. Big ideas need execution plans, and you may move on to the next exciting thing before the first is complete.'},
-      {icon:'👂',text:'In your drive to move fast, quieter voices in your team may not feel heard. Slowing down to listen often uncovers your best ideas.'},
-      {icon:'📊',text:'Detail and process may feel tedious to you, but they\'re often where plans succeed or fail. Building a trusted Blue-energy colleague into your process is a game-changer.'},
+      {text:'Your enthusiasm can sometimes outpace your follow-through. Big ideas need execution plans, and you may move on to the next exciting thing before the first is complete.'},
+      {text:'In your drive to move fast, quieter voices in your team may not feel heard. Slowing down to listen often uncovers your best ideas.'},
+      {text:'Detail and process may feel tedious to you, but they\'re often where plans succeed or fail. Building a trusted Blue-energy colleague into your process is a game-changer.'},
     ],
     tips:[
-      {icon:'🏆',text:'Connect tasks to meaningful goals and outcomes they can own.'},
-      {icon:'💡',text:'Give them space to innovate and bring their personality to their work.'},
-      {icon:'⚡',text:'Be energetic and positive — they respond to enthusiasm, not bureaucracy.'},
-      {icon:'🎤',text:'Give them visible, high-impact roles and celebrate their wins publicly.'},
+      {text:'Connect tasks to meaningful goals and outcomes they can own.'},
+      {text:'Give them space to innovate and bring their personality to their work.'},
+      {text:'Be energetic and positive — they respond to enthusiasm, not bureaucracy.'},
+      {text:'Give them visible, high-impact roles and celebrate their wins publicly.'},
     ],
     growth:`Your growth edge is in building depth alongside your breadth. You are exceptional at starting things and inspiring people — the next level is becoming known for finishing as powerfully as you begin. Developing your ability to sit with complexity, listen at length, and follow the detail through will turn your natural charisma into genuine long-term influence.`,
     traits:['Energetic','Bold','Persuasive','Fast-moving','Inspiring','Confident'],
     growthColours:{Y:0,G:45,B:55}},
-
   RG:{tagline:'The Driven Collaborator',
     overview:`{name}, you carry a rare and powerful combination — the determination of Fiery Red softened and enriched by the warmth of Earth Green. You drive for results, but you genuinely care about the people around you. This makes you one of the most effective and trusted communicators in any team — someone who can push hard and still keep people onside.`,
     style:`You communicate with both authority and empathy. You're direct, but people rarely feel bruised by your directness because your care for them is evident. You set high expectations and then personally invest in helping people meet them. You're the kind of communicator who will have the hard conversation — and then check in afterwards to make sure the relationship is intact.`,
     energisers:['Leading a team toward a meaningful goal','Solving real problems that make a difference to people','Being trusted with high responsibility','Environments where performance AND culture both matter','Mentoring and developing others'],
     blindspots:[
-      {icon:'⚖️',text:'Your Red and Green can occasionally pull in opposite directions — you want to push, but you also don\'t want to upset anyone. Learning when to hold firm is important.'},
-      {icon:'🔋',text:'Your investment in people is a strength, but it can be draining. Setting boundaries around your emotional availability protects your energy without making you less caring.'},
-      {icon:'🎯',text:'You can occasionally soften feedback too much to preserve the relationship. Clear, direct feedback delivered kindly is one of the most generous things you can give someone.'},
+      {text:'Your Red and Green can occasionally pull in opposite directions — you want to push, but you also don\'t want to upset anyone. Learning when to hold firm is important.'},
+      {text:'Your investment in people is a strength, but it can be draining. Setting boundaries around your emotional availability protects your energy without making you less caring.'},
+      {text:'You can occasionally soften feedback too much to preserve the relationship. Clear, direct feedback delivered kindly is one of the most generous things you can give someone.'},
     ],
     tips:[
-      {icon:'🤝',text:'Show genuine interest in them as a person, not just as a resource.'},
-      {icon:'🎯',text:'Give clear goals alongside genuine support to achieve them.'},
-      {icon:'💬',text:'Be honest and direct — they can handle it and will respect your candour.'},
-      {icon:'🌟',text:'Acknowledge both results AND effort — both matter to them.'},
+      {text:'Show genuine interest in them as a person, not just as a resource.'},
+      {text:'Give clear goals alongside genuine support to achieve them.'},
+      {text:'Be honest and direct — they can handle it and will respect your candour.'},
+      {text:'Acknowledge both results AND effort — both matter to them.'},
     ],
     growth:`Your growth edge is in learning to hold your Red energy more consistently under pressure without defaulting to Green's desire for harmony. The most effective version of you gives direct feedback without softening it to the point of confusion, and trusts that caring about someone and challenging them are not mutually exclusive.`,
     traits:['Determined','Empathetic','Trustworthy','Direct','People-focused','Resilient'],
     growthColours:{Y:40,G:0,B:35}},
-
   RB:{tagline:'The Strategic Achiever',
     overview:`{name}, your Fiery Red drive combined with Cool Blue precision creates a rare and highly effective style. You combine the urgency of action with the discipline of rigour — you want results and you want them to be right. This makes you exceptionally effective in high-stakes environments where both speed and quality matter.`,
     style:`You communicate with authority and precision. You are decisive but not reckless — you gather what you need to know, then act with confidence. People trust your judgement because you back it up with both conviction and evidence. You have a sharp eye for what's working and what isn't, and you cut through vague discussions to land on clear, practical positions.`,
     energisers:['Complex problems that require both analysis and action','Being given authority to make real decisions','High-standards environments where quality is genuinely valued','Working with data and evidence to drive better outcomes','Setting strategy and then executing against it'],
     blindspots:[
-      {icon:'🌡️',text:'Your combination of directness and precision can come across as cold or intimidating. People may find you hard to read emotionally, which can create distance in relationships.'},
-      {icon:'🌀',text:'You can occasionally get stuck between wanting to act fast (Red) and wanting all the information first (Blue). Developing a personal threshold for "enough data" helps avoid paralysis.'},
-      {icon:'🎉',text:'You may undervalue the human, emotional side of leadership. Teams that feel seen and celebrated consistently outperform those that are merely managed.'},
+      {text:'Your combination of directness and precision can come across as cold or intimidating. People may find you hard to read emotionally, which can create distance in relationships.'},
+      {text:'You can occasionally get stuck between wanting to act fast (Red) and wanting all the information first (Blue). Developing a personal threshold for "enough data" helps avoid paralysis.'},
+      {text:'You may undervalue the human, emotional side of leadership. Teams that feel seen and celebrated consistently outperform those that are merely managed.'},
     ],
     tips:[
-      {icon:'📊',text:'Back up requests with evidence, data, and clear rationale.'},
-      {icon:'⚡',text:'Be efficient — get to the point and have a recommendation ready.'},
-      {icon:'🧠',text:'Engage their intellect. They enjoy challenge and debate.'},
-      {icon:'🏁',text:'Set clear performance standards and let them own delivery.'},
+      {text:'Back up requests with evidence, data, and clear rationale.'},
+      {text:'Be efficient — get to the point and have a recommendation ready.'},
+      {text:'Engage their intellect. They enjoy challenge and debate.'},
+      {text:'Set clear performance standards and let them own delivery.'},
     ],
     growth:`Your growth edge lies in developing the relational warmth that transforms good leaders into great ones. Your competence is rarely in question — what will unlock your next level is investing genuine curiosity in the people around you. Understanding what drives them, what worries them, and what they need will make your already impressive capability feel truly inspiring to work alongside.`,
     traits:['Strategic','Precise','Results-driven','Rigorous','Confident','Analytical'],
     growthColours:{Y:50,G:40,B:0}},
-
   YR:{tagline:'The Inspiring Activator',
     overview:`{name}, your Sunshine Yellow lead energy powered by Fiery Red ambition makes you one of the most naturally inspiring communicators in any group. You generate ideas, enthusiasm, and momentum — and then you actually make things happen. You have the rare ability to get people excited AND get things done.`,
     style:`You communicate with infectious positivity and a clear sense of direction. You paint compelling visions and make people feel genuinely excited about what's possible. At the same time, your Red edge means you're not all talk — you have a competitive streak and a real desire to win. You naturally move conversations from "isn't this a great idea" to "here's what we're going to do about it."`,
     energisers:['Leading change and taking people on a journey','Being in front of audiences — pitching, inspiring, rallying','Fast environments with visible, celebrated progress','Projects that combine creativity with real-world impact','Being given the stage to do things your way'],
     blindspots:[
-      {icon:'📋',text:'Your idea-to-action speed can mean important details get missed. Building a habit of pausing to sanity-check plans before charging forward saves significant rework.'},
-      {icon:'🔊',text:'You are a natural talker, and in your enthusiasm you may dominate conversations. Actively creating space for quieter voices often surfaces your best insights.'},
-      {icon:'🌧️',text:'You are at your best in positive environments, but can struggle when things are genuinely hard. Staying solution-focused during difficult periods is a key leadership skill.'},
+      {text:'Your idea-to-action speed can mean important details get missed. Building a habit of pausing to sanity-check plans before charging forward saves significant rework.'},
+      {text:'You are a natural talker, and in your enthusiasm you may dominate conversations. Actively creating space for quieter voices often surfaces your best insights.'},
+      {text:'You are at your best in positive environments, but can struggle when things are genuinely hard. Staying solution-focused during difficult periods is a key leadership skill.'},
     ],
     tips:[
-      {icon:'🎯',text:'Make things feel exciting and meaningful — connect tasks to a bigger vision.'},
-      {icon:'💬',text:'Be warm, positive, and energetic in your interactions.'},
-      {icon:'🏆',text:'Celebrate achievements visibly and frequently.'},
-      {icon:'🎤',text:'Give them high-visibility opportunities and let them shine.'},
+      {text:'Make things feel exciting and meaningful — connect tasks to a bigger vision.'},
+      {text:'Be warm, positive, and energetic in your interactions.'},
+      {text:'Celebrate achievements visibly and frequently.'},
+      {text:'Give them high-visibility opportunities and let them shine.'},
     ],
     growth:`Your growth edge is in developing your capacity for depth — sitting with complexity, listening for longer, and doing the less glamorous work that turns big ideas into lasting results. Your natural charisma already opens doors; the discipline to follow through and remain engaged when the excitement fades is what will make your impact genuinely enduring.`,
     traits:['Inspiring','Energetic','Persuasive','Ambitious','Creative','Action-oriented'],
     growthColours:{Y:0,G:40,B:50}},
-
   YY:{tagline:'The Pure Enthusiast',
     overview:`{name}, you are an almost pure expression of Sunshine Yellow energy — warm, spontaneous, optimistic, and magnetic. You light up every room you enter, and people are naturally drawn to your openness and enthusiasm. You bring joy, creativity, and a genuine belief that anything is possible. Working with you is rarely dull, and your positivity is genuinely contagious.`,
     style:`You communicate with your whole self — emotionally expressive, animated, and genuinely engaged. You tell great stories, you make ideas feel alive, and you build rapport effortlessly with almost anyone. You thrive in social environments and your natural empathy means people quickly feel comfortable around you. You often do your best thinking out loud, in conversation with others.`,
     energisers:['Being around people and building genuine connections','Brainstorming, creating, and exploring possibilities','Recognition, appreciation, and being seen','Variety — new projects, new faces, new challenges','Environments full of laughter, energy, and positivity'],
     blindspots:[
-      {icon:'📌',text:'Your love of the new can mean you struggle with follow-through. Projects started with excitement can lose their lustre once they become routine. Building completion habits is a real growth area.'},
-      {icon:'🔬',text:'You may avoid conflict or difficult conversations in favour of keeping things light. But sweeping issues under the rug often creates bigger problems later.'},
-      {icon:'⏰',text:'Time and structure can be challenging for pure Yellow energy. Partnering with someone who brings organisation and discipline can be genuinely transformative.'},
+      {text:'Your love of the new can mean you struggle with follow-through. Projects started with excitement can lose their lustre once they become routine. Building completion habits is a real growth area.'},
+      {text:'You may avoid conflict or difficult conversations in favour of keeping things light. But sweeping issues under the rug often creates bigger problems later.'},
+      {text:'Time and structure can be challenging for pure Yellow energy. Partnering with someone who brings organisation and discipline can be genuinely transformative.'},
     ],
     tips:[
-      {icon:'😊',text:'Be warm, friendly, and genuinely interested in them as a person first.'},
-      {icon:'🌈',text:'Frame feedback positively and focus on possibilities, not problems.'},
-      {icon:'🎉',text:'Celebrate them — recognition matters enormously to Yellow energy.'},
-      {icon:'🗺️',text:'Help them connect the detail to the bigger picture they care about.'},
+      {text:'Be warm, friendly, and genuinely interested in them as a person first.'},
+      {text:'Frame feedback positively and focus on possibilities, not problems.'},
+      {text:'Celebrate them — recognition matters enormously to Yellow energy.'},
+      {text:'Help them connect the detail to the bigger picture they care about.'},
     ],
     growth:`Your growth edge is in building structure, discipline, and follow-through alongside your natural spontaneity. Your enthusiasm opens doors that others can't — now focus on walking through them consistently. Developing the capacity to stay engaged when things get hard or routine, and to have the difficult conversations you'd rather avoid, will take you from lovable to genuinely formidable.`,
     traits:['Enthusiastic','Warm','Creative','Optimistic','Sociable','Expressive'],
     growthColours:{R:40,G:30,B:55}},
-
   YG:{tagline:'The Warm Connector',
     overview:`{name}, your Sunshine Yellow exuberance combined with Earth Green warmth creates one of the most genuinely people-centred communication styles imaginable. You make others feel valued, seen, and energised in equal measure. You bring light to any team, and your ability to build deep, authentic relationships while also generating excitement is a rare and valuable gift.`,
     style:`You communicate from a place of deep care and genuine interest in people. You're expressive and enthusiastic, but never at the expense of those around you — you are acutely aware of how people are feeling and calibrate accordingly. You create psychological safety almost automatically. People open up to you, trust you quickly, and often describe you as the person who truly "gets it."`,
     energisers:['Building meaningful relationships and helping people thrive','Environments where everyone feels included and valued','Collaborative, creative projects with a human purpose','Facilitating connection and bringing people together','Work where the impact on people is visible and real'],
     blindspots:[
-      {icon:'💬',text:'Your desire to keep everyone happy can make it hard to deliver difficult feedback or make unpopular decisions. People who care as much as you do have a responsibility to be honest, even when it\'s uncomfortable.'},
-      {icon:'🛡️',text:'You may take on others\' emotional burdens as your own. Without healthy boundaries, your empathy becomes exhausting rather than energising.'},
-      {icon:'📣',text:'Your voice deserves to be heard. In meetings, you may defer to louder personalities — but your perspective is often the most important one in the room.'},
+      {text:'Your desire to keep everyone happy can make it hard to deliver difficult feedback or make unpopular decisions. People who care as much as you do have a responsibility to be honest, even when it\'s uncomfortable.'},
+      {text:'You may take on others\' emotional burdens as your own. Without healthy boundaries, your empathy becomes exhausting rather than energising.'},
+      {text:'Your voice deserves to be heard. In meetings, you may defer to louder personalities — but your perspective is often the most important one in the room.'},
     ],
     tips:[
-      {icon:'❤️',text:'Take time to genuinely connect — they notice when people are going through the motions.'},
-      {icon:'🤲',text:'Be collaborative and inclusive in how you involve them in decisions.'},
-      {icon:'💌',text:'Written, thoughtful feedback lands better than quick verbal comments.'},
-      {icon:'🌱',text:'Show them how their work makes a real difference to people.'},
+      {text:'Take time to genuinely connect — they notice when people are going through the motions.'},
+      {text:'Be collaborative and inclusive in how you involve them in decisions.'},
+      {text:'Written, thoughtful feedback lands better than quick verbal comments.'},
+      {text:'Show them how their work makes a real difference to people.'},
     ],
     growth:`Your growth edge is in claiming your own voice and needs with the same energy you bring to advocating for others. You are extraordinarily gifted at seeing and nurturing potential in people — the transformational next step is applying that same compassionate belief to yourself. Saying what you really think, setting boundaries, and letting yourself be seen as clearly as you see others will unlock a whole new level of impact.`,
     traits:['Warm','Empathetic','Enthusiastic','Inclusive','Creative','Genuine'],
     growthColours:{R:55,G:0,B:40}},
-
   YB:{tagline:'The Creative Analyst',
     overview:`{name}, your Sunshine Yellow creativity combined with Cool Blue rigour creates a fascinating and highly effective communication style. You can move between the world of ideas and the world of evidence with unusual fluency — bringing imagination and structure in the same breath. You're one of the few people who can both dream up a vision and explain exactly why it will work.`,
     style:`You communicate with both warmth and depth. You know how to make complex things feel accessible and engaging, and you instinctively understand that the best ideas need both compelling stories and compelling evidence. In meetings you're often the person who asks the insightful question that shifts the whole conversation, then follows it up with a creative solution nobody else had considered.`,
     energisers:['Problems that require both creative and analytical thinking','Learning deeply and then teaching or presenting your insights','Work that combines data with human stories','Projects where quality AND innovation both matter','Being given space to think before speaking'],
     blindspots:[
-      {icon:'⚡',text:'Your Yellow-Blue blend can sometimes produce beautiful thinking that struggles to translate into action. Partnering with strong Red energy helps bridge the gap between brilliant ideas and actual delivery.'},
-      {icon:'🌡️',text:'You may overthink before sharing — running ideas through both creative and critical filters internally. Sometimes your first instinct is your best one.'},
-      {icon:'🌿',text:'In your focus on ideas and analysis, the purely emotional and relational needs of colleagues can go unnoticed. Investing time in relationships pays significant dividends.'},
+      {text:'Your Yellow-Blue blend can sometimes produce beautiful thinking that struggles to translate into action. Partnering with strong Red energy helps bridge the gap between brilliant ideas and actual delivery.'},
+      {text:'You may overthink before sharing — running ideas through both creative and critical filters internally. Sometimes your first instinct is your best one.'},
+      {text:'In your focus on ideas and analysis, the purely emotional and relational needs of colleagues can go unnoticed. Investing time in relationships pays significant dividends.'},
     ],
     tips:[
-      {icon:'💡',text:'Engage their curiosity — bring interesting ideas and questions to the conversation.'},
-      {icon:'📊',text:'Back ideas with both evidence and an inspiring narrative.'},
-      {icon:'🕐',text:'Give them time to think — they do their best work when not rushed.'},
-      {icon:'🎨',text:'Allow space for both creative exploration and structured analysis.'},
+      {text:'Engage their curiosity — bring interesting ideas and questions to the conversation.'},
+      {text:'Back ideas with both evidence and an inspiring narrative.'},
+      {text:'Give them time to think — they do their best work when not rushed.'},
+      {text:'Allow space for both creative exploration and structured analysis.'},
     ],
     growth:`Your growth edge is in decisiveness and delivery. Your thinking is often exceptional — the challenge is not in the quality of your ideas but in backing yourself to act on them before they're perfectly formed. Learning to trust your instincts more, share your thinking earlier, and move from analysis to action with confidence will unlock the full power of your remarkable mind.`,
     traits:['Curious','Creative','Analytical','Thoughtful','Articulate','Precise'],
     growthColours:{R:55,G:35,B:0}},
-
   GR:{tagline:'The Determined Peacemaker',
     overview:`{name}, your Earth Green core enriched by Fiery Red determination creates a powerful combination — you lead with warmth and care, but you are nobody's pushover. You have genuine conviction and the courage to act on it. People trust you instinctively, and then are often pleasantly surprised by your resilience and directness when it counts. You combine integrity with impact.`,
     style:`You communicate with care and clarity. You take time to understand people, to listen properly, and to build genuine trust — and then you use that relational foundation to drive real change. You are not afraid of difficult conversations when they matter, but you approach them with sensitivity and respect. People rarely feel attacked by your challenges because they already know you're on their side.`,
     energisers:['Leading change in a way that brings people with you','Building and maintaining strong, trusting team cultures','Solving real-world problems that matter to people','Being given responsibility and the trust to deliver it','Environments where both results and relationships are valued'],
     blindspots:[
-      {icon:'⏳',text:'Your natural pace is thoughtful and considered. In fast-moving environments, this can occasionally be read as hesitation. Learning to make "good enough" decisions at speed is valuable.'},
-      {icon:'🚧',text:'You can invest deeply in relationships that aren\'t always reciprocated. Recognising when a situation is not worth more of your emotional energy is important self-protection.'},
-      {icon:'🔈',text:'Under real pressure, your Red can occasionally emerge in ways that surprise people who only know your Green face. Developing awareness of this shift helps you manage it more consciously.'},
+      {text:'Your natural pace is thoughtful and considered. In fast-moving environments, this can occasionally be read as hesitation. Learning to make "good enough" decisions at speed is valuable.'},
+      {text:'You can invest deeply in relationships that aren\'t always reciprocated. Recognising when a situation is not worth more of your emotional energy is important self-protection.'},
+      {text:'Under real pressure, your Red can occasionally emerge in ways that surprise people who only know your Green face. Developing awareness of this shift helps you manage it more consciously.'},
     ],
     tips:[
-      {icon:'🤝',text:'Invest in the relationship first — genuine connection unlocks their best work.'},
-      {icon:'💬',text:'Be open and honest; they deeply value authenticity over polish.'},
-      {icon:'🎯',text:'Connect their work to meaningful purpose and real human impact.'},
-      {icon:'⚡',text:'When you need action, be clear and direct — they can handle it.'},
+      {text:'Invest in the relationship first — genuine connection unlocks their best work.'},
+      {text:'Be open and honest; they deeply value authenticity over polish.'},
+      {text:'Connect their work to meaningful purpose and real human impact.'},
+      {text:'When you need action, be clear and direct — they can handle it.'},
     ],
     growth:`Your growth edge is in claiming your own needs and boundaries with the same clarity you bring to advocating for others. You are exceptional at giving — to your team, your family, your colleagues. The next level of growth is in learning to receive, to say no without guilt, and to direct your considerable drive toward your own goals with the same commitment you give to everyone else.`,
     traits:['Caring','Determined','Trustworthy','Resilient','Empathetic','Genuine'],
     growthColours:{R:0,Y:45,B:35}},
-
   GY:{tagline:'The Nurturing Energiser',
     overview:`{name}, your Earth Green heart infused with Sunshine Yellow warmth makes you one of the most beloved and energising communicators in any team. You genuinely care about people and you make them feel it — and then you lift them, inspire them, and bring out the best in them with your infectious optimism. You create belonging wherever you go.`,
     style:`You communicate with abundant warmth and genuine positivity. You're interested in people — not performatively, but truly — and this shows in how you listen, how you respond, and how you remember things. You're a natural encourager, and your ability to see potential in people and hold it up for them to see themselves is one of your most powerful gifts.`,
     energisers:['Supporting and developing others to reach their potential','Creating connected, joyful team environments','Work that has a clear positive impact on people\'s lives','Collaborative projects with shared purpose and energy','Being appreciated for who you are, not just what you produce'],
     blindspots:[
-      {icon:'🗣️',text:'Difficult conversations can feel almost physically uncomfortable for this colour combination. The truth said kindly is still the truth — and the people you care about deserve your honesty.'},
-      {icon:'📌',text:'Your warmth and care for others can pull your focus away from personal goals. Protecting time and energy for your own development is not selfish — it\'s essential.'},
-      {icon:'🔴',text:'When your needs go unmet for too long, Green-Yellow energy can become quietly resentful rather than addressing the issue directly. Naming what you need early prevents this build-up.'},
+      {text:'Difficult conversations can feel almost physically uncomfortable for this colour combination. The truth said kindly is still the truth — and the people you care about deserve your honesty.'},
+      {text:'Your warmth and care for others can pull your focus away from personal goals. Protecting time and energy for your own development is not selfish — it\'s essential.'},
+      {text:'When your needs go unmet for too long, Green-Yellow energy can become quietly resentful rather than addressing the issue directly. Naming what you need early prevents this build-up.'},
     ],
     tips:[
-      {icon:'💛',text:'Show genuine warmth and interest — performative niceness won\'t cut it with them.'},
-      {icon:'🌟',text:'Acknowledge and celebrate their contributions generously and publicly.'},
-      {icon:'🌿',text:'Create a safe, supportive space for them to do their best work.'},
-      {icon:'🎯',text:'Help them see how their personal strengths connect to team success.'},
+      {text:'Show genuine warmth and interest — performative niceness won\'t cut it with them.'},
+      {text:'Acknowledge and celebrate their contributions generously and publicly.'},
+      {text:'Create a safe, supportive space for them to do their best work.'},
+      {text:'Help them see how their personal strengths connect to team success.'},
     ],
     growth:`Your growth edge is in developing your voice. You have wisdom, perspective, and insight that the world genuinely needs — but it only counts if you share it. Practising direct communication, holding your boundaries, and trusting that your honest opinion won't cost you the relationships you value so deeply will transform you from a supportive presence into a genuinely transformational one.`,
     traits:['Nurturing','Warm','Optimistic','Inclusive','Encouraging','Genuine'],
     growthColours:{R:50,G:0,B:40}},
-
   GG:{tagline:'The Steadfast Supporter',
     overview:`{name}, you embody the deepest qualities of Earth Green — steadiness, sincerity, and an almost extraordinary capacity for care. You are the quiet anchor in any team: reliable, trustworthy, and genuinely invested in the wellbeing of those around you. People confide in you, lean on you, and feel safer knowing you're there.`,
     style:`You communicate slowly, thoughtfully, and with great care. You listen more than you speak, and when you do speak, people pay attention because they know you mean it. You are not performative — you don't say what people want to hear, you say what you genuinely believe. You build trust through consistency over time, and once earned, that trust is almost never broken.`,
     energisers:['Long-term, meaningful relationships built on genuine trust','Work that makes a real, tangible difference to people\'s lives','Stable, collaborative environments with clear shared values','Being trusted with responsibility and given time to deliver','Recognition that feels personal, not just professional'],
     blindspots:[
-      {icon:'⚡',text:'Your preference for stability and consensus can make you slow to act in situations that genuinely need urgency. Not every decision needs full buy-in before moving forward.'},
-      {icon:'🔊',text:'Your quieter communication style means your ideas are often undersold. Speaking earlier and with more confidence in group settings will ensure your perspective shapes outcomes.'},
-      {icon:'🚪',text:'You may absorb others\' stress and conflict without releasing it. Finding healthy outlets is important for long-term sustainability.'},
+      {text:'Your preference for stability and consensus can make you slow to act in situations that genuinely need urgency. Not every decision needs full buy-in before moving forward.'},
+      {text:'Your quieter communication style means your ideas are often undersold. Speaking earlier and with more confidence in group settings will ensure your perspective shapes outcomes.'},
+      {text:'You may absorb others\' stress and conflict without releasing it. Finding healthy outlets is important for long-term sustainability.'},
     ],
     tips:[
-      {icon:'⏳',text:'Be patient — they build trust gradually, and it\'s worth waiting for.'},
-      {icon:'🤲',text:'Ask for their opinion and genuinely listen — they notice when it\'s just a formality.'},
-      {icon:'🌱',text:'Invest in the relationship before asking for anything in return.'},
-      {icon:'💬',text:'Give feedback gently, in private, and with clear appreciation first.'},
+      {text:'Be patient — they build trust gradually, and it\'s worth waiting for.'},
+      {text:'Ask for their opinion and genuinely listen — they notice when it\'s just a formality.'},
+      {text:'Invest in the relationship before asking for anything in return.'},
+      {text:'Give feedback gently, in private, and with clear appreciation first.'},
     ],
     growth:`Your growth edge is in finding and using your voice with greater confidence and speed. Your wisdom is real — the challenge is that the world won't always wait for you to feel completely ready. Practising the act of speaking up earlier, saying what you truly think, and backing yourself to take up more space in important conversations will dramatically expand your impact.`,
     traits:['Steadfast','Caring','Sincere','Reliable','Empathetic','Loyal'],
     growthColours:{R:55,Y:45,B:30}},
-
   GB:{tagline:'The Thoughtful Guardian',
     overview:`{name}, your Earth Green warmth combined with Cool Blue precision creates a communication style that is both deeply trustworthy and remarkably thorough. You care about people and you care about getting things right — and you rarely sacrifice one for the other. People trust your judgement precisely because they know you've considered not just the data, but the human impact too.`,
     style:`You communicate with careful thoughtfulness. You don't rush to conclusions, you don't say things you don't mean, and you don't share ideas before they're properly formed. When you do communicate, your clarity and sincerity are evident. You ask excellent questions, listen with genuine attention, and bring a quality of thinking to conversations that people find both reassuring and elevating.`,
     energisers:['Work that requires both careful thought and genuine human care','Being trusted with complex, meaningful problems','Environments where quality and integrity are non-negotiable','Deep one-to-one conversations over large group dynamics','Research, analysis, and evidence-based decision making'],
     blindspots:[
-      {icon:'🚀',text:'Your combined Green-Blue caution can sometimes result in decisions being delayed longer than necessary. Developing comfort with "sufficiently good information" rather than "complete information" is a useful skill.'},
-      {icon:'🎉',text:'Your preference for depth and substance means small talk and social dynamics can feel draining. But these lighter moments of connection often build the relational capital that makes your serious work land better.'},
-      {icon:'📣',text:'You tend to process internally and share selectively. Sharing your thinking earlier — even half-formed ideas — builds trust and invites valuable input.'},
+      {text:'Your combined Green-Blue caution can sometimes result in decisions being delayed longer than necessary. Developing comfort with "sufficiently good information" rather than "complete information" is a useful skill.'},
+      {text:'Your preference for depth and substance means small talk and social dynamics can feel draining. But these lighter moments of connection often build the relational capital that makes your serious work land better.'},
+      {text:'You tend to process internally and share selectively. Sharing your thinking earlier — even half-formed ideas — builds trust and invites valuable input.'},
     ],
     tips:[
-      {icon:'📊',text:'Back proposals with evidence AND show you\'ve considered the human impact.'},
-      {icon:'🕰️',text:'Give them time to reflect — don\'t expect immediate responses to complex questions.'},
-      {icon:'🤝',text:'Build the relationship first; they trust people before they trust ideas.'},
-      {icon:'✉️',text:'Written communication often works better than spontaneous verbal discussions.'},
+      {text:'Back proposals with evidence AND show you\'ve considered the human impact.'},
+      {text:'Give them time to reflect — don\'t expect immediate responses to complex questions.'},
+      {text:'Build the relationship first; they trust people before they trust ideas.'},
+      {text:'Written communication often works better than spontaneous verbal discussions.'},
     ],
     growth:`Your growth edge is in learning to act with confidence on incomplete information. Your rigour and care are exceptional — and they can also become a barrier to progress if you wait until everything is perfectly understood before moving. The world needs people who combine your level of care and quality with the courage to move forward before they're completely certain. That person is already you, just one step bolder.`,
     traits:['Thoughtful','Precise','Caring','Thorough','Trustworthy','Sincere'],
     growthColours:{R:55,Y:40,B:0}},
-
   BR:{tagline:'The Rigorous Driver',
     overview:`{name}, your Cool Blue precision powered by Fiery Red determination creates a formidable combination — you think rigorously, decide confidently, and execute relentlessly. You hold yourself to extraordinarily high standards and have little patience for vagueness or mediocrity. You are the person others turn to when the stakes are highest and the standards cannot slip.`,
     style:`You communicate with authority and evidence. Your arguments are well-constructed, your positions are well-reasoned, and your delivery is direct. You don't need to raise your voice — your certainty speaks for itself. In high-pressure situations, you become more focused and more precise, not less. People find you demanding but almost always fair, and your track record earns you enormous credibility.`,
     energisers:['High-stakes, complex challenges with real consequences','Being the expert — knowing more than anyone in the room','Environments where standards are held and excellence is expected','Making rigorous decisions that genuinely stand up to scrutiny','Having autonomy to do things properly, without corners cut'],
     blindspots:[
-      {icon:'🌡️',text:'Your combination of precision and drive can come across as cold, critical, or unapproachable. Softer relational moments aren\'t a distraction from serious work — they\'re often what makes serious work possible.'},
-      {icon:'🔄',text:'You can be reluctant to change course once you\'ve set a direction, even in the face of new evidence. Being adaptive matters more than being consistently right in a fast-moving world.'},
-      {icon:'🎈',text:'You may view enthusiasm, warmth, and informality as superficial. But these qualities build the relational trust that makes your expertise genuinely influential rather than merely correct.'},
+      {text:'Your combination of precision and drive can come across as cold, critical, or unapproachable. Softer relational moments aren\'t a distraction from serious work — they\'re often what makes serious work possible.'},
+      {text:'You can be reluctant to change course once you\'ve set a direction, even in the face of new evidence. Being adaptive matters more than being consistently right in a fast-moving world.'},
+      {text:'You may view enthusiasm, warmth, and informality as superficial. But these qualities build the relational trust that makes your expertise genuinely influential rather than merely correct.'},
     ],
     tips:[
-      {icon:'📋',text:'Come prepared with thorough, evidence-based thinking — they will probe it.'},
-      {icon:'🎯',text:'Be direct about what you need; they respect clarity over diplomacy.'},
-      {icon:'🧠',text:'Engage them on substance — intellectual rigour is how you earn their respect.'},
-      {icon:'⏱️',text:'Respect their time and get to the point efficiently.'},
+      {text:'Come prepared with thorough, evidence-based thinking — they will probe it.'},
+      {text:'Be direct about what you need; they respect clarity over diplomacy.'},
+      {text:'Engage them on substance — intellectual rigour is how you earn their respect.'},
+      {text:'Respect their time and get to the point efficiently.'},
     ],
     growth:`Your growth edge is in developing the relational and emotional intelligence to match your already exceptional intellectual and operational capability. You don't need to become warm — you need to become warmer. Small investments in curiosity about people, acknowledgement of their contributions, and moments of genuine humanity will transform the way people experience your formidable capability.`,
     traits:['Rigorous','Decisive','Expert','Precise','Demanding','Strategic'],
     growthColours:{Y:55,G:45,B:0}},
-
   BY:{tagline:'The Inquisitive Innovator',
     overview:`{name}, your Cool Blue intellectual depth combined with Sunshine Yellow creativity makes you a genuinely unusual and highly effective thinker and communicator. You can go deep AND go wide — exploring ideas with rigour and then connecting them in ways others haven't imagined. You bring curiosity, intelligence, and a sense of possibility that makes conversations with you both stimulating and inspiring.`,
     style:`You communicate with thoughtfulness and colour. You're someone who prepares carefully but can also improvise brilliantly. You make complex ideas accessible through analogy and story, and your precision never feels dry because your Yellow energy keeps things alive. You're often the person in the room who's three steps ahead — and can explain exactly how you got there.`,
     energisers:['Deep, intellectually stimulating problems with no obvious answer','Learning, researching, and becoming genuinely expert','Creative work that also needs to be rigorously correct','Environments that value both innovation and excellence','Explaining complex things in ways that genuinely land'],
     blindspots:[
-      {icon:'🤝',text:'Your intellectual confidence can occasionally read as dismissiveness toward less analytical thinking styles. Emotional intelligence and creative intuition are forms of rigour too — just in a different register.'},
-      {icon:'⚡',text:'Your Blue need to think things through, combined with Yellow\'s tendency to generate new angles constantly, can make it hard to commit and execute. At some point, imperfect action beats perfect planning.'},
-      {icon:'🌿',text:'The human, relational side of work — the check-ins, the encouragement, the emotional maintenance — can feel less important than ideas. But without tended relationships, even your best ideas struggle to gain traction.'},
+      {text:'Your intellectual confidence can occasionally read as dismissiveness toward less analytical thinking styles. Emotional intelligence and creative intuition are forms of rigour too — just in a different register.'},
+      {text:'Your Blue need to think things through, combined with Yellow\'s tendency to generate new angles constantly, can make it hard to commit and execute. At some point, imperfect action beats perfect planning.'},
+      {text:'The human, relational side of work — the check-ins, the encouragement, the emotional maintenance — can feel less important than ideas. But without tended relationships, even your best ideas struggle to gain traction.'},
     ],
     tips:[
-      {icon:'💡',text:'Bring interesting ideas and intellectual challenges — they love a good problem.'},
-      {icon:'📚',text:'Share evidence, references, and reasoning — they appreciate depth.'},
-      {icon:'🎨',text:'Leave space for creative exploration alongside analytical discussion.'},
-      {icon:'⏰',text:'Give them preparation time — they do their best work when not caught off-guard.'},
+      {text:'Bring interesting ideas and intellectual challenges — they love a good problem.'},
+      {text:'Share evidence, references, and reasoning — they appreciate depth.'},
+      {text:'Leave space for creative exploration alongside analytical discussion.'},
+      {text:'Give them preparation time — they do their best work when not caught off-guard.'},
     ],
     growth:`Your growth edge is in the messy, imperfect, deeply human world of relationships and action. Your mind is genuinely exceptional — the invitation now is to trust it enough to share your ideas earlier, commit to decisions before they're fully formed, and invest in the people around you with the same passionate curiosity you bring to your best intellectual problems.`,
     traits:['Curious','Analytical','Creative','Precise','Imaginative','Articulate'],
     growthColours:{R:50,G:40,B:0}},
-
   BG:{tagline:'The Considered Collaborator',
     overview:`{name}, your Cool Blue intellect combined with Earth Green care creates one of the most trustworthy and quietly impactful communication styles in any team. You think carefully, you care deeply, and you act with integrity. People rely on you for your judgement — not just because it's well-reasoned, but because they know it's also humane. You are the quiet conscience of every team you're part of.`,
     style:`You communicate with careful precision and genuine warmth. You take time to understand before you respond, and your responses are almost always worth waiting for. You are one of nature's great listeners — fully present, genuinely interested, and excellent at asking the question that unlocks the conversation. In group settings, your contributions are considered, well-timed, and often transformative.`,
     energisers:['Complex, meaningful work that genuinely matters to people','Deep research and careful, evidence-based thinking','Long-term, trusting professional relationships','Environments with high integrity and genuine collaboration','Being given the time and space to do things properly'],
     blindspots:[
-      {icon:'🔈',text:'Your thoughtfulness can make you slow to speak in fast-moving discussions. Earlier, rougher contributions are still valuable — waiting for the perfect response often means your insight is lost.'},
-      {icon:'⚡',text:'Green-Blue caution can create analysis paralysis in situations that need action. Sometimes the most caring and rigorous thing you can do is decide, even imperfectly, and move forward.'},
-      {icon:'🌟',text:'You can underplay your own contributions out of modesty. Your ideas and insights have real value — own them with the same conviction you bring to everything else.'},
+      {text:'Your thoughtfulness can make you slow to speak in fast-moving discussions. Earlier, rougher contributions are still valuable — waiting for the perfect response often means your insight is lost.'},
+      {text:'Green-Blue caution can create analysis paralysis in situations that need action. Sometimes the most caring and rigorous thing you can do is decide, even imperfectly, and move forward.'},
+      {text:'You can underplay your own contributions out of modesty. Your ideas and insights have real value — own them with the same conviction you bring to everything else.'},
     ],
     tips:[
-      {icon:'📊',text:'Show your working — they appreciate thorough, evidence-based thinking.'},
-      {icon:'🤝',text:'Take time to build genuine trust before expecting full engagement.'},
-      {icon:'💬',text:'Ask their opinion and give proper space for a considered answer.'},
-      {icon:'🌱',text:'Connect work to meaningful purpose and demonstrated positive impact.'},
+      {text:'Show your working — they appreciate thorough, evidence-based thinking.'},
+      {text:'Take time to build genuine trust before expecting full engagement.'},
+      {text:'Ask their opinion and give proper space for a considered answer.'},
+      {text:'Connect work to meaningful purpose and demonstrated positive impact.'},
     ],
     growth:`Your growth edge is in visibility and speed. The depth of your thinking and the quality of your care are not in question — what holds you back is a reluctance to be seen, heard, and to act before everything is certain. Claiming space in conversations, sharing half-formed ideas, and making decisions from good-enough information will multiply the impact of your already remarkable qualities.`,
     traits:['Thoughtful','Caring','Precise','Trustworthy','Rigorous','Sincere'],
     growthColours:{R:55,Y:40,G:0}},
-
   BB:{tagline:'The Masterful Analyst',
     overview:`{name}, you are an almost pure expression of Cool Blue energy — precise, rigorous, thorough, and deeply principled. Your ability to think clearly, analyse carefully, and hold to high standards is exceptional. You are the person who spots the flaw in the logic before everyone else, asks the question that should have been asked, and produces work of a quality that others genuinely aspire to.`,
     style:`You communicate with precision and economy. Every word you use is intentional, and you have a deep discomfort with vagueness, assumption, or sloppy thinking. You prepare carefully, you listen critically, and you speak with measured confidence. In meetings you tend to let others talk first, gathering information and forming views — then when you contribute, it lands with weight and clarity.`,
     energisers:['Deep, complex analytical problems with real stakes','Being the expert — the person with the deepest knowledge','Environments where quality, accuracy, and standards genuinely matter','Time and space to think without interruption or rush','Work that produces output you can be genuinely proud of'],
     blindspots:[
-      {icon:'🌡️',text:'Your precision and high standards can be experienced as cold, perfectionistic, or overly critical. Not every piece of work needs to meet your internal standard — and saying so occasionally would be enormously liberating for your colleagues.'},
-      {icon:'🚀',text:'You can be the last person to be ready to move, even when waiting longer adds little value. Developing a personal threshold for "good enough to proceed" will dramatically increase your speed without sacrificing quality.'},
-      {icon:'🎉',text:'Relationships, warmth, and informal connection don\'t always come naturally to Blue energy. But they\'re the oil in the engine of any team — and investing in them pays dividends even the most rigorous analysis would endorse.'},
+      {text:'Your precision and high standards can be experienced as cold, perfectionistic, or overly critical. Not every piece of work needs to meet your internal standard — and saying so occasionally would be enormously liberating for your colleagues.'},
+      {text:'You can be the last person to be ready to move, even when waiting longer adds little value. Developing a personal threshold for "good enough to proceed" will dramatically increase your speed without sacrificing quality.'},
+      {text:'Relationships, warmth, and informal connection don\'t always come naturally to Blue energy. But they\'re the oil in the engine of any team — and investing in them pays dividends even the most rigorous analysis would endorse.'},
     ],
     tips:[
-      {icon:'📋',text:'Come prepared with thorough, well-reasoned thinking — improvised suggestions will not land well.'},
-      {icon:'🕐',text:'Give them adequate time to prepare and process — last-minute requests create real stress.'},
-      {icon:'📊',text:'Use evidence, data, and logic — emotional appeals without supporting rationale will be dismissed.'},
-      {icon:'✅',text:'Be precise about what you want and by when — vague requests produce nothing.'},
+      {text:'Come prepared with thorough, well-reasoned thinking — improvised suggestions will not land well.'},
+      {text:'Give them adequate time to prepare and process — last-minute requests create real stress.'},
+      {text:'Use evidence, data, and logic — emotional appeals without supporting rationale will be dismissed.'},
+      {text:'Be precise about what you want and by when — vague requests produce nothing.'},
     ],
     growth:`Your growth edge is in the full, messy, unpredictable world of people. Your analytical mind is a genuine gift — and it has limits. People are not logical systems, and the most impactful work of your career will require you to move beyond what can be measured and proven. Developing genuine curiosity about how others feel, what they need, and why they behave as they do will take your already exceptional capability to a completely new level.`,
     traits:['Analytical','Precise','Thorough','Principled','Expert','Rigorous'],
@@ -602,7 +735,7 @@ function showScreen(id){
 }
 
 function startQuiz(){
-  userName=document.getElementById('user-name').value.trim()||'Friend';
+  userName=document.getElementById('user-name').value.trim()||'Participant';
   answers=[];currentQ=0;
   showScreen('quiz-screen');renderQuestion();
 }
@@ -619,22 +752,22 @@ function renderQuestion(){
   grid.innerHTML='';
   q.options.forEach((opt,i)=>{
     const btn=document.createElement('button');
-    btn.className='option-btn';
-    btn.innerHTML=`<div class="option-letter">${letters[i]}</div><div class="option-text">${opt.text}</div>`;
+    btn.className='opt-btn';
+    btn.innerHTML=`<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt.text}</div>`;
     btn.onclick=()=>selectAnswer(opt.c,btn);
     grid.appendChild(btn);
   });
 }
 
 function selectAnswer(colour,btn){
-  document.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
   answers.push(colour);
   setTimeout(()=>{
     currentQ++;
     if(currentQ<questions.length)renderQuestion();
     else buildReport();
-  },380);
+  },340);
 }
 
 function computeScores(){
@@ -651,35 +784,62 @@ function buildReport(){
   const profile=profiles[dom+sec]||profiles[dom+dom];
   const meta=colourMeta[dom],secMeta=colourMeta[sec];
 
-  document.getElementById('report-name').textContent=`${userName}'s Report`;
+  document.getElementById('report-name').textContent=`${userName}`;
   document.getElementById('badge-label').textContent=meta.name;
-  document.getElementById('badge-dot').style.background=meta.hex;
+  document.getElementById('badge-pip').style.background=meta.hex;
   const badge=document.getElementById('colour-badge');
-  badge.style.background=meta.light;badge.style.color=meta.hex;badge.style.border=`1.5px solid ${meta.hex}`;
-  document.getElementById('colour-combo').textContent=`${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}`;
+  badge.style.background=meta.soft;
+  badge.style.color=meta.text;
+  badge.style.border=`1px solid ${meta.hex}`;
+  document.getElementById('tagline-row').textContent=`${meta.name} dominant · ${secMeta.name} secondary — "${profile.tagline}"`;
 
   showScreen('report-screen');
-  setTimeout(()=>{setBar('red',scores.R);setBar('yellow',scores.Y);setBar('green',scores.G);setBar('blue',scores.B);},200);
+  setTimeout(()=>{
+    setBar('red',scores.R);setBar('yellow',scores.Y);
+    setBar('green',scores.G);setBar('blue',scores.B);
+  },300);
 
-  const container=document.getElementById('report-content');
+  // Build accordion sections
+  const container=document.getElementById('report-sections');
   container.innerHTML='';
-  container.appendChild(makeCard('🎨','Overview',`<p>${profile.overview.replace('{name}',userName)}</p>`));
-  container.appendChild(makeCard('💬','Your Communication Style',`<p>${profile.style}</p><div class="trait-tags">${profile.traits.map(t=>`<span class="trait-tag">${t}</span>`).join('')}</div>`));
-  container.appendChild(makeCard('⚡','What Energises You',`<ul>${profile.energisers.map(e=>`<li>${e}</li>`).join('')}</ul>`));
-  container.appendChild(makeCard('🔍','Your Blind Spots',`<div class="tip-grid">${profile.blindspots.map(b=>`<div class="tip-card"><div class="tip-icon">${b.icon}</div><div class="tip-text">${b.text}</div></div>`).join('')}</div>`));
-  container.appendChild(makeCard('🤝','How to Get the Best From You',`<div class="tip-grid">${profile.tips.map(t=>`<div class="tip-card"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('')}</div>`));
-  const growthBars=Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-name" style="color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('');
-  container.appendChild(makeCard('🌱','Your Growth Edge',`<p>${profile.growth}</p><div class="growth-section"><div class="growth-label">Colours to stretch into</div>${growthBars}</div>`));
 
-  // Set the "Open full report" link with URL params
+  const sections=[
+    {num:'01',title:'Overview',body:()=>`<p>${profile.overview.replace('{name}',userName)}</p>`},
+    {num:'02',title:'Communication Style',body:()=>`<p>${profile.style}</p><div class="trait-row">${profile.traits.map(t=>`<span class="trait-pill">${t}</span>`).join('')}</div>`},
+    {num:'03',title:'What Energises You',body:()=>`<ul>${profile.energisers.map(e=>`<li><div class="li-dot"></div><span>${e}</span></li>`).join('')}</ul>`},
+    {num:'04',title:'Blind Spots',body:()=>`<div class="insight-list">${profile.blindspots.map((b,i)=>`<div class="insight-card"><div class="insight-index">0${i+1}</div><div class="insight-text">${b.text}</div></div>`).join('')}</div>`},
+    {num:'05',title:'How to Get the Best From You',body:()=>`<div class="insight-list">${profile.tips.map((t,i)=>`<div class="insight-card"><div class="insight-index">0${i+1}</div><div class="insight-text">${t.text}</div></div>`).join('')}</div>`},
+    {num:'06',title:'Your Growth Edge',body:()=>`<p>${profile.growth}</p><div class="growth-list"><div class="growth-head">Colours to develop</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-lbl" style="color:${colourMeta[c].text}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}</div>`},
+  ];
+
+  sections.forEach((s,idx)=>{
+    const wrap=document.createElement('div');
+    wrap.className='report-section';
+    wrap.style.marginBottom='4px';
+
+    const hdr=document.createElement('div');
+    hdr.className='section-header'+(idx===0?' open':'');
+    hdr.innerHTML=`<span class="section-num">${s.num}</span><span class="section-title">${s.title}</span><span class="section-chevron">▾</span>`;
+
+    const body=document.createElement('div');
+    body.className='section-body'+(idx===0?' open':'');
+    body.innerHTML=s.body();
+
+    hdr.onclick=()=>{
+      const isOpen=hdr.classList.contains('open');
+      hdr.classList.toggle('open',!isOpen);
+      body.classList.toggle('open',!isOpen);
+      body.style.display=isOpen?'none':'block';
+    };
+    // First section open by default
+    if(idx!==0) body.style.display='none';
+
+    wrap.appendChild(hdr);
+    wrap.appendChild(body);
+    container.appendChild(wrap);
+  });
+
   setReportLink();
-}
-
-function makeCard(icon,title,bodyHTML){
-  const div=document.createElement('div');
-  div.className='report-card';
-  div.innerHTML=`<h3><span>${icon}</span>${title}</h3>${bodyHTML}`;
-  return div;
 }
 
 function setBar(colour,pct){
@@ -687,30 +847,21 @@ function setBar(colour,pct){
   document.getElementById('num-'+colour).textContent=pct+'%';
 }
 
-// ── OPEN REPORT IN NEW TAB via URL params (works inside Notion iframe) ──
 function setReportLink(){
   const scores=computeScores();
   const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
   const dom=sorted[0],sec=sorted[1];
-  const params=new URLSearchParams({
-    name: userName,
-    dom, sec,
-    R: scores.R, Y: scores.Y, G: scores.G, B: scores.B
-  });
-  const btn=document.getElementById('btn-open');
-  btn.href=window.location.href.split('?')[0]+'?report=1&'+params.toString();
+  const params=new URLSearchParams({name:userName,dom,sec,R:scores.R,Y:scores.Y,G:scores.G,B:scores.B});
+  document.getElementById('btn-open').href=window.location.href.split('?')[0]+'?report=1&'+params.toString();
 }
 
-// ── CHECK IF WE'RE IN REPORT VIEW MODE ──
 function checkReportMode(){
   const params=new URLSearchParams(window.location.search);
   if(params.get('report')!=='1') return false;
-
-  const name=params.get('name')||'Friend';
+  const name=params.get('name')||'Participant';
   const dom=params.get('dom')||'R';
   const sec=params.get('sec')||'Y';
   const scores={R:+params.get('R')||0,Y:+params.get('Y')||0,G:+params.get('G')||0,B:+params.get('B')||0};
-
   renderStandaloneReport(name,dom,sec,scores);
   return true;
 }
@@ -720,69 +871,72 @@ function renderStandaloneReport(name,dom,sec,scores){
   const meta=colourMeta[dom],secMeta=colourMeta[sec];
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
 
-  document.body.innerHTML=`
-  <div style="font-family:'DM Sans',sans-serif;max-width:760px;margin:0 auto;padding:48px 32px 80px;background:#F5F0E8;color:#1A1612;">
-    <div style="display:flex;gap:8px;margin-bottom:28px;">
-      <div style="width:12px;height:12px;border-radius:50%;background:#E8341C"></div>
-      <div style="width:12px;height:12px;border-radius:50%;background:#F5C518"></div>
-      <div style="width:12px;height:12px;border-radius:50%;background:#3A8C5C"></div>
-      <div style="width:12px;height:12px;border-radius:50%;background:#1C5FA8"></div>
-    </div>
-    <div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:8px;">Colour Insights Report</div>
-    <div style="font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:16px;line-height:1.15;">${name}'s Report</div>
-    <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:${meta.light};color:${meta.hex};border:1.5px solid ${meta.hex};margin-bottom:6px;">
-      <div style="width:8px;height:8px;border-radius:50%;background:${meta.hex}"></div>${meta.name}
-    </div>
-    <div style="font-size:0.85rem;color:#8C8275;margin-bottom:28px;">${meta.name} dominant · ${secMeta.name} secondary · ${profile.tagline}</div>
+  const sBar=(n,h,p)=>`<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div style="width:140px;font-size:0.78rem;font-weight:500;color:${h}">${n}</div><div style="flex:1;height:2px;background:#1E2330;position:relative;"><div style="height:100%;background:${h};width:${p}%;position:absolute;top:0;left:0;"></div></div><div style="width:30px;text-align:right;font-size:0.75rem;color:#5C6478;">${p}%</div></div>`;
 
-    <div style="height:1px;background:#E0D8CC;margin-bottom:24px;"></div>
-    <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8C8275;margin-bottom:14px;">Your colour profile breakdown</div>
-    ${[['Fiery Red','#E8341C',scores.R],['Sunshine Yellow','#F5C518',scores.Y],['Earth Green','#3A8C5C',scores.G],['Cool Blue','#1C5FA8',scores.B]].map(([n,h,p])=>`
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-      <div style="width:135px;font-size:0.82rem;font-weight:500;color:${h}">${n}</div>
-      <div style="flex:1;height:6px;background:#E0D8CC;border-radius:3px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:${h};width:${p}%"></div></div>
-      <div style="width:30px;text-align:right;font-size:0.8rem;color:#8C8275;">${p}%</div>
-    </div>`).join('')}
-    <div style="height:1px;background:#E0D8CC;margin:24px 0;"></div>
+  const insightCard=(i,t)=>`<div style="background:#0A0C0F;border:1px solid #1E2330;border-radius:3px;padding:14px 16px;display:flex;gap:12px;margin-bottom:8px;"><div style="font-size:0.62rem;font-weight:600;letter-spacing:0.1em;color:#8B6F3E;width:18px;flex-shrink:0;padding-top:2px;">0${i+1}</div><div style="font-size:0.88rem;line-height:1.65;color:#9BA3B4;font-weight:300;">${t}</div></div>`;
+
+  document.body.innerHTML=`
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:#0A0C0F;color:#F0EDE8;-webkit-font-smoothing:antialiased;}
+    .page{max-width:720px;margin:0 auto;padding:56px 40px 80px;}
+    .no-print{} @media print{.no-print{display:none!important;}body{background:#fff;color:#111;}.page{padding:20px;}}
+  </style>
+  <div class="page">
+    <div style="display:flex;gap:3px;margin-bottom:48px;">
+      <div style="width:7px;height:7px;background:#C84B2F;"></div>
+      <div style="width:7px;height:7px;background:#C49A1A;"></div>
+      <div style="width:7px;height:7px;background:#2E7D52;"></div>
+      <div style="width:7px;height:7px;background:#2058A0;"></div>
+    </div>
+
+    <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#5C6478;margin-bottom:10px;">Communication Profile</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;line-height:1.0;letter-spacing:-0.02em;margin-bottom:20px;">${name}</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:3px;font-size:0.65rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;background:${meta.soft};color:${meta.text};border:1px solid ${meta.hex};margin-bottom:6px;">
+      <div style="width:6px;height:6px;border-radius:50%;background:${meta.hex};flex-shrink:0;"></div>${meta.name}
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:#5C6478;margin-bottom:36px;font-style:italic;">${meta.name} dominant · ${secMeta.name} secondary — "${profile.tagline}"</div>
+
+    <div style="height:1px;background:#1E2330;margin-bottom:28px;"></div>
+
+    <div style="background:#111318;border:1px solid #1E2330;border-radius:3px;padding:24px;margin-bottom:28px;">
+      <div style="font-size:0.62rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#5C6478;margin-bottom:18px;">Colour profile breakdown</div>
+      ${sBar('Fiery Red','#E06040',scores.R)}
+      ${sBar('Sunshine Yellow','#C49A1A',scores.Y)}
+      ${sBar('Earth Green','#3A9060',scores.G)}
+      ${sBar('Cool Blue','#4A80C0',scores.B)}
+    </div>
 
     ${[
-      ['🎨','Overview',`<p style="${pStyle}">${profile.overview.replace('{name}',name)}</p>`],
-      ['💬','Your Communication Style',`<p style="${pStyle}">${profile.style}</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;">${profile.traits.map(t=>`<span style="padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:500;border:1.5px solid #E0D8CC;color:#8C8275;">${t}</span>`).join('')}</div>`],
-      ['⚡','What Energises You',`<ul style="padding-left:20px;">${profile.energisers.map(e=>`<li style="${liStyle}">${e}</li>`).join('')}</ul>`],
-      ['🔍','Your Blind Spots',profile.blindspots.map(b=>`<div style="${tipStyle}"><div style="font-size:1.05rem;flex-shrink:0;margin-top:1px;">${b.icon}</div><div style="font-size:0.92rem;line-height:1.6;color:#3A342C;">${b.text}</div></div>`).join('')],
-      ['🤝','How to Get the Best From You',profile.tips.map(t=>`<div style="${tipStyle}"><div style="font-size:1.05rem;flex-shrink:0;margin-top:1px;">${t.icon}</div><div style="font-size:0.92rem;line-height:1.6;color:#3A342C;">${t.text}</div></div>`).join('')],
-      ['🌱','Your Growth Edge',`<p style="${pStyle}">${profile.growth}</p><div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8C8275;margin:16px 0 10px;">Colours to stretch into</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:0.85rem;width:135px;flex-shrink:0;font-weight:500;color:${colourMeta[c].hex}">${colourMeta[c].name}</div><div style="flex:1;height:4px;background:#E0D8CC;border-radius:2px;overflow:hidden;"><div style="height:100%;border-radius:2px;background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}`],
-    ].map(([icon,title,body])=>`
-    <div style="${cardStyle}">
-      <div style="font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;">${icon} ${title}</div>
+      ['01','Overview',`<p style="font-size:0.92rem;line-height:1.8;color:#9BA3B4;font-weight:300;margin-bottom:12px;">${profile.overview.replace('{name}',name)}</p>`],
+      ['02','Communication Style',`<p style="font-size:0.92rem;line-height:1.8;color:#9BA3B4;font-weight:300;margin-bottom:14px;">${profile.style}</p><div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:14px;border-top:1px solid #1E2330;">${profile.traits.map(t=>`<span style="padding:4px 10px;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border:1px solid #1E2330;color:#5C6478;border-radius:2px;">${t}</span>`).join('')}</div>`],
+      ['03','What Energises You',`<ul style="padding-left:0;list-style:none;">${profile.energisers.map(e=>`<li style="font-size:0.92rem;line-height:1.7;color:#9BA3B4;font-weight:300;padding:8px 0;border-bottom:1px solid #1E2330;display:flex;gap:10px;"><span style="width:4px;height:4px;border-radius:50%;background:#8B6F3E;margin-top:9px;flex-shrink:0;display:inline-block;"></span><span>${e}</span></li>`).join('')}</ul>`],
+      ['04','Blind Spots',profile.blindspots.map((b,i)=>insightCard(i,b.text)).join('')],
+      ['05','How to Get the Best From You',profile.tips.map((t,i)=>insightCard(i,t.text)).join('')],
+      ['06','Your Growth Edge',`<p style="font-size:0.92rem;line-height:1.8;color:#9BA3B4;font-weight:300;margin-bottom:14px;">${profile.growth}</p><div style="padding-top:14px;border-top:1px solid #1E2330;"><div style="font-size:0.62rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#5C6478;margin-bottom:12px;">Colours to develop</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div style="font-size:0.75rem;width:140px;flex-shrink:0;font-weight:400;color:${colourMeta[c].text}">${colourMeta[c].name}</div><div style="flex:1;height:1px;background:#1E2330;position:relative;"><div style="height:100%;background:${colourMeta[c].hex};width:${v}%;position:absolute;top:0;left:0;"></div></div></div>`).join('')}</div>`],
+    ].map(([num,title,body])=>`
+    <div style="background:#111318;border:1px solid #1E2330;border-radius:3px;padding:24px;margin-bottom:8px;page-break-inside:avoid;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #1E2330;">
+        <span style="font-size:0.6rem;font-weight:600;letter-spacing:0.14em;color:#5C6478;">${num}</span>
+        <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#9BA3B4;">${title}</span>
+      </div>
       ${body}
     </div>`).join('')}
 
-    <div style="text-align:center;margin:32px 0 48px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;" class="no-print">
-      <button onclick="window.print()" style="padding:14px 28px;background:#1A1612;color:#F5F0E8;border:none;border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;cursor:pointer;">🖨 Print / Save as PDF</button>
+    <div style="text-align:center;margin:36px 0 20px;" class="no-print">
+      <button onclick="window.print()" style="padding:13px 28px;background:#C8A96E;color:#0A0C0F;border:none;border-radius:3px;font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">Print / Save as PDF</button>
     </div>
 
-    <div style="margin-top:20px;padding-top:20px;border-top:1px solid #E0D8CC;font-size:0.78rem;color:#8C8275;text-align:center;">
-      Colour Insights Report · ${name} · ${date}
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #1E2330;font-size:0.68rem;color:#5C6478;display:flex;justify-content:space-between;">
+      <span>Colour Insights · Communication Profile</span>
+      <span>${name} · ${date}</span>
     </div>
-  </div>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-    @media print{.no-print{display:none!important;}body{background:#fff!important;}}
-  </style>`;
+  </div>`;
 }
-
-const pStyle="font-size:0.96rem;line-height:1.8;color:#3A342C;margin-bottom:10px;";
-const liStyle="font-size:0.96rem;line-height:1.7;color:#3A342C;margin-bottom:7px;";
-const tipStyle="background:#F5F0E8;border:1.5px solid #E0D8CC;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start;";
-const cardStyle="background:#FDFAF4;border:1.5px solid #E0D8CC;border-radius:16px;padding:30px;margin-bottom:16px;";
 
 function restart(){answers=[];currentQ=0;showScreen('intro-screen');}
-
-// On page load — check if we're in report view mode
-if(!checkReportMode()){
-  // Normal quiz mode — nothing extra needed
-}
+if(!checkReportMode()){}
 </script>
 </body>
 </html>
