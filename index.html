@@ -1,980 +1,1324 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colour Insights — Your Insight Discovery Style</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#F4F7FB;
-  --surface:#FFFFFF;
-  --surface2:#F8FBFF;
-  --border:#D8E1EC;
-  --border2:#C7D2E0;
-  --ink:#0F172A;
-  --ink2:#475569;
-  --ink3:#64748B;
-  --red:#E05A47;
-  --red-soft:#FFF1EE;
-  --yellow:#D8A73C;
-  --yellow-soft:#FFF8E8;
-  --green:#2F8F6B;
-  --green-soft:#EEF9F4;
-  --blue:#2563EB;
-  --blue-soft:#EEF4FF;
-  --accent:#2563EB;
-  --accent2:#1D4ED8;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#F7FAFC 0%,#F3F7FB 100%);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-
-/* Subtle corporate texture */
-body::before{
-  content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(37,99,235,0.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(37,99,235,0.035) 1px,transparent 1px);
-  background-size:56px 56px;opacity:0.45;
-  pointer-events:none;z-index:0;
-}
-
-/* Top accent line */
-body::after{
-  content:'';position:fixed;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(37,99,235,0.55),transparent);
-  z-index:100;
-}
-
-.wrapper{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:56px 28px 96px;}
-
-/* SCREENS */
-.screen{display:none;}
-.screen.active{display:block;animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── LOGO MARK ── */
-.logomark{display:flex;align-items:center;gap:16px;margin-bottom:64px;}
-.colour-squares{display:flex;gap:3px;}
-.csq{width:7px;height:7px;}
-.csq-r{background:var(--red);}
-.csq-y{background:var(--yellow);}
-.csq-g{background:var(--green);}
-.csq-b{background:var(--blue);}
-.brand-text{font-size:0.72rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);}
-
-/* ── INTRO ── */
-.eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
-.hero-title{font-family:'Manrope',sans-serif;font-size:clamp(2.7rem,6vw,4.4rem);font-weight:800;line-height:1.02;letter-spacing:-0.04em;margin-bottom:20px;color:var(--ink);max-width:620px;}
-.hero-title em{font-style:normal;color:var(--accent);}
-.hero-sub{font-size:1rem;line-height:1.7;color:var(--ink2);max-width:560px;margin-bottom:40px;font-weight:400;}
-
-/* Colour legend */
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:52px;}
-.legend-item{display:flex;align-items:center;gap:12px;padding:16px 18px;background:rgba(255,255,255,0.94);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 24px rgba(15,23,42,0.04);}
-.legend-swatch{width:6px;height:36px;border-radius:999px;flex-shrink:0;}
-.legend-info{}
-.legend-name{font-size:0.78rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;}
-.legend-desc{font-size:0.72rem;color:var(--ink3);font-weight:300;}
-
-/* Name input */
-.field-wrap{margin-bottom:36px;}
-.field-label{display:block;font-size:0.74rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
-.field-input{width:100%;padding:16px 18px;background:rgba(255,255,255,0.95);border:1px solid var(--border2);border-radius:12px;font-size:1rem;font-family:'Inter',sans-serif;font-weight:400;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;box-shadow:0 8px 20px rgba(15,23,42,0.03);}
-.field-input:focus{border-color:var(--accent2);box-shadow:0 0 0 4px rgba(37,99,235,0.12);background:#fff;}
-.field-input::placeholder{color:var(--ink3);}
-
-/* ── BUTTONS ── */
-.btn-cta{display:inline-flex;align-items:center;gap:12px;padding:15px 24px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:0.92rem;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;transition:all 0.2s;text-decoration:none;box-shadow:0 14px 32px rgba(37,99,235,0.24);}
-.btn-cta:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 18px 34px rgba(37,99,235,0.26);}
-.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;background:#fff;color:var(--ink2);border:1px solid var(--border2);border-radius:12px;font-size:0.9rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0;text-transform:none;cursor:pointer;transition:all 0.2s;text-decoration:none;}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:#F8FBFF;}
-
-/* ── QUIZ ── */
-.progress-wrap{margin-bottom:52px;}
-.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.progress-label{font-size:0.68rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);}
-.progress-pct{font-size:0.68rem;font-weight:600;letter-spacing:0.1em;color:var(--accent);}
-.progress-track{height:8px;background:#E7EEF7;position:relative;border-radius:999px;overflow:hidden;}
-.progress-fill{height:100%;background:linear-gradient(90deg,#3B82F6 0%,#2563EB 100%);transition:width 0.6s cubic-bezier(0.16,1,0.3,1);position:absolute;top:0;left:0;border-radius:999px;}
-
-.q-num{font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;}
-.q-text{font-family:'Manrope',sans-serif;font-size:clamp(1.45rem,3.2vw,2rem);font-weight:700;line-height:1.35;color:var(--ink);margin-bottom:28px;letter-spacing:-0.02em;}
-
-.options-list{display:flex;flex-direction:column;gap:8px;}
-.opt-btn{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:rgba(255,255,255,0.96);border:1px solid var(--border);border-radius:14px;cursor:pointer;text-align:left;transition:all 0.15s;font-family:'Inter',sans-serif;width:100%;box-shadow:0 8px 24px rgba(15,23,42,0.035);}
-.opt-btn:hover{border-color:#93C5FD;background:#F8FBFF;transform:translateY(-1px);}
-.opt-btn.selected{border-color:var(--accent2);background:#EFF6FF;box-shadow:0 0 0 4px rgba(37,99,235,0.10);}
-.opt-letter{flex-shrink:0;width:28px;height:28px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:0.74rem;font-weight:700;letter-spacing:0;color:var(--ink3);border-radius:999px;margin-top:1px;transition:all 0.15s;background:#fff;}
-.opt-btn:hover .opt-letter,.opt-btn.selected .opt-letter{border-color:var(--accent2);color:var(--accent);}
-.opt-text{font-size:0.98rem;line-height:1.6;color:var(--ink2);font-weight:400;}
-.opt-btn:hover .opt-text,.opt-btn.selected .opt-text{color:var(--ink);}
-
-/* ── REPORT ── */
-.report-eyebrow{font-size:0.65rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
-.report-name{font-family:'Manrope',sans-serif;font-size:clamp(2.2rem,5.4vw,3.4rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:18px;}
-
-.colour-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:3px;font-size:0.68rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;}
-.badge-pip{width:6px;height:6px;border-radius:50%;}
-.tagline-row{font-size:1rem;color:var(--ink2);margin-bottom:28px;font-weight:500;font-style:normal;font-family:'Inter',sans-serif;}
-
-/* Score bars */
-.scores-wrap{background:rgba(255,255,255,0.98);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:28px;box-shadow:0 14px 36px rgba(15,23,42,0.05);}
-.scores-head{font-size:0.65rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:20px;}
-.score-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-.score-row:last-child{margin-bottom:0;}
-.score-lbl{width:140px;font-size:0.78rem;font-weight:500;flex-shrink:0;letter-spacing:0.02em;}
-.score-track{flex:1;height:8px;background:#E7EEF7;position:relative;border-radius:999px;overflow:hidden;}
-.score-fill{height:100%;position:absolute;top:0;left:0;transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
-.score-pct{width:30px;text-align:right;font-size:0.75rem;color:var(--ink3);font-variant-numeric:tabular-nums;}
-
-/* Report sections */
-.section-divider{height:1px;background:var(--border);margin:28px 0;}
-
-.report-section{margin-bottom:12px;}
-.section-header{display:flex;align-items:center;gap:14px;padding:20px 24px;background:rgba(255,255,255,0.98);border:1px solid var(--border);border-radius:18px 18px 0 0;cursor:pointer;transition:background 0.15s;box-shadow:0 10px 30px rgba(15,23,42,0.04);}
-.section-header:hover{background:#F8FBFF;}
-.section-num{font-size:0.62rem;font-weight:600;letter-spacing:0.16em;color:var(--ink3);width:20px;}
-.section-title{font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);flex:1;}
-.section-chevron{color:var(--ink3);font-size:0.7rem;transition:transform 0.2s;}
-.section-header.open .section-chevron{transform:rotate(180deg);}
-
-.section-body{background:rgba(255,255,255,0.98);border:1px solid var(--border);border-top:none;border-radius:0 0 18px 18px;padding:24px 28px;display:none;box-shadow:0 16px 36px rgba(15,23,42,0.04);}
-.section-body.open{display:block;animation:fadeIn 0.3s ease;}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-.section-body p{font-size:0.98rem;line-height:1.75;color:var(--ink2);font-weight:400;margin-bottom:14px;}
-.section-body p:last-child{margin-bottom:0;}
-.section-body ul{padding-left:0;list-style:none;}
-.section-body li{font-size:0.98rem;line-height:1.7;color:var(--ink2);font-weight:400;padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;}
-.section-body li:last-child{border-bottom:none;}
-.li-dot{width:4px;height:4px;border-radius:50%;background:var(--accent2);margin-top:9px;flex-shrink:0;}
-
-/* Trait pills */
-.trait-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
-.trait-pill{padding:7px 12px;font-size:0.72rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:1px solid #DBEAFE;color:#1D4ED8;border-radius:999px;background:#EFF6FF;}
-
-/* Insight cards (blindspots / tips) */
-.insight-list{display:flex;flex-direction:column;gap:10px;}
-.insight-card{background:#F8FBFF;border:1px solid #DBEAFE;border-radius:14px;padding:16px 18px;display:flex;gap:14px;}
-.insight-index{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;color:var(--accent2);width:18px;flex-shrink:0;padding-top:2px;}
-.insight-text{font-size:0.94rem;line-height:1.65;color:var(--ink2);font-weight:400;}
-
-/* Growth bars */
-.growth-list{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
-.growth-head{font-size:0.62rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;}
-.growth-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.growth-lbl{font-size:0.75rem;width:140px;flex-shrink:0;font-weight:400;}
-.growth-track{flex:1;height:1px;background:var(--border2);position:relative;}
-.growth-fill{height:100%;position:absolute;top:0;left:0;}
-
-/* Action row */
-.action-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:48px;flex-wrap:wrap;}
-.action-note{text-align:center;font-size:0.78rem;color:var(--ink3);margin-top:10px;width:100%;}
-
-/* ── RESPONSIVE ── */
-@media(max-width:520px){
-  .wrapper{padding:40px 18px 72px;}
-  .legend{grid-template-columns:1fr;}
-  .report-name{font-size:2.2rem;}
-}
-</style>
-</head>
-<body>
-<div class="wrapper">
-
-  <!-- ══ INTRO ══ -->
-  <div id="intro-screen" class="screen active">
-    <div class="logomark">
-      <div class="colour-squares">
-        <div class="csq csq-r"></div>
-        <div class="csq csq-y"></div>
-        <div class="csq csq-g"></div>
-        <div class="csq csq-b"></div>
-      </div>
-      <div class="brand-text">Colour Insights</div>
-    </div>
-
-    <div class="eyebrow">Your Insight Discovery Style</div>
-    <h1 class="hero-title">Your Insight<br>Discovery <em>Style.</em></h1>
-    <p class="hero-sub">A 20-question assessment revealing your natural communication style, leadership tendencies, and the conditions in which you do your most effective work.</p>
-
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-swatch" style="background:var(--red)"></div>
-        <div class="legend-info">
-          <div class="legend-name" style="color:#E06040">Fiery Red</div>
-          <div class="legend-desc">Decisive · Results-driven</div>
-        </div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-swatch" style="background:var(--yellow)"></div>
-        <div class="legend-info">
-          <div class="legend-name" style="color:#C49A1A">Sunshine Yellow</div>
-          <div class="legend-desc">Energetic · Persuasive</div>
-        </div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-swatch" style="background:var(--green)"></div>
-        <div class="legend-info">
-          <div class="legend-name" style="color:#3A9060">Earth Green</div>
-          <div class="legend-desc">Empathetic · Steady</div>
-        </div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-swatch" style="background:var(--blue)"></div>
-        <div class="legend-info">
-          <div class="legend-name" style="color:#4A80C0">Cool Blue</div>
-          <div class="legend-desc">Analytical · Precise</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="field-wrap">
-      <label class="field-label" for="user-name">Your name</label>
-      <input class="field-input" type="text" id="user-name" placeholder="First name" autocomplete="given-name"/>
-    </div>
-
-    <button class="btn-cta" onclick="startQuiz()">
-      Begin assessment
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-
-  <!-- ══ QUIZ ══ -->
-  <div id="quiz-screen" class="screen">
-    <div class="logomark">
-      <div class="colour-squares">
-        <div class="csq csq-r"></div><div class="csq csq-y"></div>
-        <div class="csq csq-g"></div><div class="csq csq-b"></div>
-      </div>
-      <div class="brand-text">Colour Insights</div>
-    </div>
-
-    <div class="progress-wrap">
-      <div class="progress-header">
-        <span class="progress-label" id="q-progress-label">Question 1 of 20</span>
-        <span class="progress-pct" id="q-progress-pct">0%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
-    </div>
-
-    <div class="q-num" id="q-number">01 / 20</div>
-    <div class="q-text" id="q-text"></div>
-    <div class="options-list" id="options-grid"></div>
-  </div>
-
-  <!-- ══ REPORT ══ -->
-  <div id="report-screen" class="screen">
-    <div class="logomark">
-      <div class="colour-squares">
-        <div class="csq csq-r"></div><div class="csq csq-y"></div>
-        <div class="csq csq-g"></div><div class="csq csq-b"></div>
-      </div>
-      <div class="brand-text">Colour Insights</div>
-    </div>
-
-    <div class="report-eyebrow">Your Insight Discovery Style</div>
-    <div class="report-name" id="report-name"></div>
-    <div class="colour-badge" id="colour-badge">
-      <div class="badge-pip" id="badge-pip"></div>
-      <span id="badge-label"></span>
-    </div>
-    <div class="tagline-row" id="tagline-row"></div>
-
-    <div class="scores-wrap">
-      <div class="scores-head">Colour profile breakdown</div>
-      <div class="score-row">
-        <div class="score-lbl" style="color:#E06040">Fiery Red</div>
-        <div class="score-track"><div class="score-fill" id="bar-red" style="background:var(--red);width:0%"></div></div>
-        <div class="score-pct" id="num-red">0%</div>
-      </div>
-      <div class="score-row">
-        <div class="score-lbl" style="color:#C49A1A">Sunshine Yellow</div>
-        <div class="score-track"><div class="score-fill" id="bar-yellow" style="background:var(--yellow);width:0%"></div></div>
-        <div class="score-pct" id="num-yellow">0%</div>
-      </div>
-      <div class="score-row">
-        <div class="score-lbl" style="color:#3A9060">Earth Green</div>
-        <div class="score-track"><div class="score-fill" id="bar-green" style="background:var(--green);width:0%"></div></div>
-        <div class="score-pct" id="num-green">0%</div>
-      </div>
-      <div class="score-row">
-        <div class="score-lbl" style="color:#4A80C0">Cool Blue</div>
-        <div class="score-track"><div class="score-fill" id="bar-blue" style="background:var(--blue);width:0%"></div></div>
-        <div class="score-pct" id="num-blue">0%</div>
-      </div>
-    </div>
-
-    <div id="report-sections"></div>
-
-    <div class="action-row">
-      <a id="btn-open" class="btn-cta" href="#" target="_blank" rel="noreferrer">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2H2.5v9H11.5V9M8 2h3.5v3.5M6 8l5.5-5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Open full report
-      </a>
-      <button class="btn-ghost" onclick="restart()">← Start again</button>
-    </div>
-    <div class="action-note">Opens in new tab — print or save as PDF from there</div>
-  </div>
-
-</div>
-<script>
-const baseQuestions=[
-  {text:"When you're given a new project, your first instinct is to…",options:[
-    {text:"Dive straight in — figure it out as you go.",c:'R'},
-    {text:"Gather everyone together and brainstorm ideas excitedly.",c:'Y'},
-    {text:"Check in with the team and make sure everyone's on board.",c:'G'},
-    {text:"Research thoroughly and build a detailed plan first.",c:'B'}]},
-  {text:"In a meeting, people would describe your communication style as…",options:[
-    {text:"Direct and to the point — you get to outcomes fast.",c:'R'},
-    {text:"Enthusiastic and expressive — you energise the room.",c:'Y'},
-    {text:"Warm and supportive — you make sure everyone's heard.",c:'G'},
-    {text:"Measured and precise — you ask the right questions.",c:'B'}]},
-  {text:"When facing a conflict with a colleague, you tend to…",options:[
-    {text:"Address it head-on and resolve it quickly.",c:'R'},
-    {text:"Talk it through and look for a positive spin.",c:'Y'},
-    {text:"Try to understand all perspectives and find harmony.",c:'G'},
-    {text:"Think it through calmly and approach it logically.",c:'B'}]},
-  {text:"Your colleagues come to you most often for…",options:[
-    {text:"Quick decisions and cutting through ambiguity.",c:'R'},
-    {text:"Creative ideas and keeping morale high.",c:'Y'},
-    {text:"Emotional support and thoughtful advice.",c:'G'},
-    {text:"Accurate information and careful analysis.",c:'B'}]},
-  {text:"How do you feel about following rules and processes?",options:[
-    {text:"I'll follow them if they're efficient — otherwise I challenge them.",c:'R'},
-    {text:"I like flexibility — rigid rules stifle creativity.",c:'Y'},
-    {text:"I respect them; they keep things fair for everyone.",c:'G'},
-    {text:"I follow them carefully — they exist for good reason.",c:'B'}]},
-  {text:"What motivates you most at work?",options:[
-    {text:"Winning, achieving results, and being number one.",c:'R'},
-    {text:"Being recognised, having fun, and inspiring others.",c:'Y'},
-    {text:"Contributing to something meaningful and helping the team.",c:'G'},
-    {text:"Getting things right, learning, and doing quality work.",c:'B'}]},
-  {text:"When making an important decision, you rely most on…",options:[
-    {text:"Your gut instinct — you trust your own judgement.",c:'R'},
-    {text:"Talking to others and reading the energy in the room.",c:'Y'},
-    {text:"Consensus — what feels right for everyone involved.",c:'G'},
-    {text:"Data, evidence, and logical reasoning.",c:'B'}]},
-  {text:"In a fast-changing environment, you typically…",options:[
-    {text:"Thrive — you love the pace and push even harder.",c:'R'},
-    {text:"Adapt quickly and find it exciting.",c:'Y'},
-    {text:"Stay steady and focus on keeping the team grounded.",c:'G'},
-    {text:"Need time to re-evaluate — change needs careful thought.",c:'B'}]},
-  {text:"When under pressure, others might notice you become…",options:[
-    {text:"More demanding and controlling.",c:'R'},
-    {text:"Frantic or over-optimistic.",c:'Y'},
-    {text:"Over-accommodating or reluctant to speak up.",c:'G'},
-    {text:"Withdrawn and overly critical.",c:'B'}]},
-  {text:"How do you prefer to receive feedback?",options:[
-    {text:"Short, direct, and actionable — no sugar-coating.",c:'R'},
-    {text:"Positive first, framed encouragingly.",c:'Y'},
-    {text:"Gently and with care for how it lands.",c:'G'},
-    {text:"Specific, evidence-based, and well-thought-out.",c:'B'}]},
-  {text:"When someone presents an idea to you, you mostly want to know…",options:[
-    {text:"What's the outcome? Is it worth my time?",c:'R'},
-    {text:"How exciting is this? What's the big picture?",c:'Y'},
-    {text:"How does this affect the team? Is everyone considered?",c:'G'},
-    {text:"What's the evidence? What are the risks?",c:'B'}]},
-  {text:"Your ideal working environment is…",options:[
-    {text:"Competitive, fast, and results-driven.",c:'R'},
-    {text:"Creative, social, and full of energy.",c:'Y'},
-    {text:"Collaborative, supportive, and harmonious.",c:'G'},
-    {text:"Structured, quiet, and organised.",c:'B'}]},
-  {text:"How do you build trust with people?",options:[
-    {text:"By delivering on promises and being reliable under pressure.",c:'R'},
-    {text:"By being open, likeable, and making things enjoyable.",c:'Y'},
-    {text:"By being genuine, consistent, and showing I care.",c:'G'},
-    {text:"By being accurate, thorough, and following through.",c:'B'}]},
-  {text:"When working in a group, your natural role is usually…",options:[
-    {text:"The one who drives things forward and keeps people accountable.",c:'R'},
-    {text:"The one who generates ideas and keeps spirits up.",c:'Y'},
-    {text:"The one who keeps the peace and makes sure everyone's included.",c:'G'},
-    {text:"The one who spots problems and ensures quality.",c:'B'}]},
-  {text:"At the end of a challenging week, you feel most satisfied when…",options:[
-    {text:"You hit your targets and pushed through obstacles.",c:'R'},
-    {text:"You had great conversations and made things fun for people.",c:'Y'},
-    {text:"Your team felt supported and things ran smoothly.",c:'G'},
-    {text:"You produced something accurate, thorough, and high quality.",c:'B'}]},
-  {text:"When you have to give someone difficult news, you…",options:[
-    {text:"Deliver it clearly and immediately — waiting only makes it worse.",c:'R'},
-    {text:"Try to frame it as positively as possible and focus on what comes next.",c:'Y'},
-    {text:"Find a quiet moment, choose your words carefully, and check in after.",c:'G'},
-    {text:"Prepare exactly what you want to say, anticipate questions, and stick to the facts.",c:'B'}]},
-  {text:"In your personal life, friends would most likely describe you as…",options:[
-    {text:"The one who makes things happen and gets everyone off the sofa.",c:'R'},
-    {text:"The fun one — always up for something and full of energy.",c:'Y'},
-    {text:"The loyal one — always there when it matters, without being asked.",c:'G'},
-    {text:"The thoughtful one — considered, reliable, and always well-prepared.",c:'B'}]},
-  {text:"When you're learning something new, you prefer to…",options:[
-    {text:"Try it straight away and learn by doing, even if you make mistakes.",c:'R'},
-    {text:"Discuss it with others, share ideas, and explore it together.",c:'Y'},
-    {text:"Take your time, ask questions, and make sure you fully understand before moving on.",c:'G'},
-    {text:"Read the manual, study the detail, and build a thorough understanding first.",c:'B'}]},
-  {text:"Which of these phrases feels most like you?",options:[
-    {text:"\"Just get it done.\"",c:'R'},
-    {text:"\"Let's make this fun.\"",c:'Y'},
-    {text:"\"Let's make sure everyone's okay.\"",c:'G'},
-    {text:"\"Let's make sure we're doing it right.\"",c:'B'}]},
-  {text:"When a project you care about gets cancelled or changed without warning, you…",options:[
-    {text:"Push back hard and make sure your objections are heard — then move on fast.",c:'R'},
-    {text:"Feel deflated briefly, then start looking for the next exciting opportunity.",c:'Y'},
-    {text:"Worry most about how the people involved are feeling and check in with them.",c:'G'},
-    {text:"Want to understand exactly why the decision was made before you can accept it.",c:'B'}]},
-];
-
-const colourMeta={
-  R:{name:'Fiery Red',hex:'#C84B2F',soft:'#2A1510',text:'#E06040'},
-  Y:{name:'Sunshine Yellow',hex:'#C49A1A',soft:'#221D08',text:'#C49A1A'},
-  G:{name:'Earth Green',hex:'#2E7D52',soft:'#0D1F16',text:'#3A9060'},
-  B:{name:'Cool Blue',hex:'#2058A0',soft:'#0D1525',text:'#4A80C0'},
-};
-
-const profiles={
-  RR:{tagline:'The Decisive Driver',
-    overview:`{name}, you are one of the most powerfully results-oriented communicators around. Pure Fiery Red energy means you are wired for action, outcomes, and impact — and when you walk into a room, people feel it. You have an almost magnetic authority, and your directness is one of your greatest gifts. You cut through noise, make fast decisions, and hold yourself — and others — to an exceptionally high standard.`,
-    style:`You communicate with precision and purpose. Every word counts, and you have little patience for waffle or vagueness. You lead with outcomes and expect others to match your pace. You're at your best when given autonomy and clear targets, and you naturally gravitate toward leadership positions — not because you seek status, but because you genuinely believe you can get things done faster and better.`,
-    energisers:['Being given full autonomy to deliver results your way','Competing — whether against others or your own personal best','Solving problems quickly and making things happen','Environments that reward performance over politics','Clear goals with the freedom to define your own path'],
-    blindspots:[
-      {text:'Your directness can sometimes land as harshness. People may hear criticism where you intended efficiency. Pausing to acknowledge effort before jumping to solutions can transform how your feedback is received.'},
-      {text:'You can underestimate how much others need context, reassurance, and inclusion in decisions. What feels like helpful decisiveness to you can feel like steamrolling to a Green or Blue colleague.'},
-      {text:'When under pressure, your drive can tip into controlling behaviour. Trusting others to deliver — even imperfectly — is a skill worth cultivating.'},
-    ],
-    tips:[
-      {text:'Be direct — they will respect it. Get to the point and skip lengthy preambles.'},
-      {text:'Frame conversations around outcomes and results, not processes.'},
-      {text:'Give them ownership and clear targets. Micromanaging will frustrate them deeply.'},
-      {text:'Respect their time. Short, purposeful interactions are always preferred.'},
-    ],
-    growth:`Your edge lies in learning to slow down and bring people with you. Your results speak for themselves, but the most transformational leaders know that how you get there matters as much as getting there. Investing even 10% more attention into relationships, acknowledgement, and listening will multiply your impact far beyond what drive alone can achieve.`,
-    traits:['Results-focused','Decisive','Direct','Competitive','Action-oriented','Bold'],
-    growthColours:{Y:30,G:50,B:40}},
-  RY:{tagline:'The Energetic Achiever',
-    overview:`{name}, your combination of Fiery Red drive and Sunshine Yellow enthusiasm creates one of the most dynamic communication styles around. You are bold, fast-moving, and magnetic — the kind of person who gets things done while also lighting up the room. You bring urgency and energy in equal measure, and people are drawn to your confidence and passion.`,
-    style:`You communicate with conviction and colour. You make ideas feel exciting and achievable, and you naturally inspire action in others. You're persuasive without even trying — your energy is contagious and your self-belief is evident. In meetings you are often the one setting the direction and raising the ambition level. You want things to move quickly, and you're not afraid to push.`,
-    energisers:['Fast-paced environments with visible wins','Being in front of people — presenting, pitching, leading','Creative problem-solving under pressure','Recognition for results AND relationships','High-profile, high-stakes projects'],
-    blindspots:[
-      {text:'Your enthusiasm can sometimes outpace your follow-through. Big ideas need execution plans, and you may move on to the next exciting thing before the first is complete.'},
-      {text:'In your drive to move fast, quieter voices in your team may not feel heard. Slowing down to listen often uncovers your best ideas.'},
-      {text:'Detail and process may feel tedious to you, but they\'re often where plans succeed or fail. Building a trusted Blue-energy colleague into your process is a game-changer.'},
-    ],
-    tips:[
-      {text:'Connect tasks to meaningful goals and outcomes they can own.'},
-      {text:'Give them space to innovate and bring their personality to their work.'},
-      {text:'Be energetic and positive — they respond to enthusiasm, not bureaucracy.'},
-      {text:'Give them visible, high-impact roles and celebrate their wins publicly.'},
-    ],
-    growth:`Your growth edge is in building depth alongside your breadth. You are exceptional at starting things and inspiring people — the next level is becoming known for finishing as powerfully as you begin. Developing your ability to sit with complexity, listen at length, and follow the detail through will turn your natural charisma into genuine long-term influence.`,
-    traits:['Energetic','Bold','Persuasive','Fast-moving','Inspiring','Confident'],
-    growthColours:{Y:0,G:45,B:55}},
-  RG:{tagline:'The Driven Collaborator',
-    overview:`{name}, you carry a rare and powerful combination — the determination of Fiery Red softened and enriched by the warmth of Earth Green. You drive for results, but you genuinely care about the people around you. This makes you one of the most effective and trusted communicators in any team — someone who can push hard and still keep people onside.`,
-    style:`You communicate with both authority and empathy. You're direct, but people rarely feel bruised by your directness because your care for them is evident. You set high expectations and then personally invest in helping people meet them. You're the kind of communicator who will have the hard conversation — and then check in afterwards to make sure the relationship is intact.`,
-    energisers:['Leading a team toward a meaningful goal','Solving real problems that make a difference to people','Being trusted with high responsibility','Environments where performance AND culture both matter','Mentoring and developing others'],
-    blindspots:[
-      {text:'Your Red and Green can occasionally pull in opposite directions — you want to push, but you also don\'t want to upset anyone. Learning when to hold firm is important.'},
-      {text:'Your investment in people is a strength, but it can be draining. Setting boundaries around your emotional availability protects your energy without making you less caring.'},
-      {text:'You can occasionally soften feedback too much to preserve the relationship. Clear, direct feedback delivered kindly is one of the most generous things you can give someone.'},
-    ],
-    tips:[
-      {text:'Show genuine interest in them as a person, not just as a resource.'},
-      {text:'Give clear goals alongside genuine support to achieve them.'},
-      {text:'Be honest and direct — they can handle it and will respect your candour.'},
-      {text:'Acknowledge both results AND effort — both matter to them.'},
-    ],
-    growth:`Your growth edge is in learning to hold your Red energy more consistently under pressure without defaulting to Green's desire for harmony. The most effective version of you gives direct feedback without softening it to the point of confusion, and trusts that caring about someone and challenging them are not mutually exclusive.`,
-    traits:['Determined','Empathetic','Trustworthy','Direct','People-focused','Resilient'],
-    growthColours:{Y:40,G:0,B:35}},
-  RB:{tagline:'The Strategic Achiever',
-    overview:`{name}, your Fiery Red drive combined with Cool Blue precision creates a rare and highly effective style. You combine the urgency of action with the discipline of rigour — you want results and you want them to be right. This makes you exceptionally effective in high-stakes environments where both speed and quality matter.`,
-    style:`You communicate with authority and precision. You are decisive but not reckless — you gather what you need to know, then act with confidence. People trust your judgement because you back it up with both conviction and evidence. You have a sharp eye for what's working and what isn't, and you cut through vague discussions to land on clear, practical positions.`,
-    energisers:['Complex problems that require both analysis and action','Being given authority to make real decisions','High-standards environments where quality is genuinely valued','Working with data and evidence to drive better outcomes','Setting strategy and then executing against it'],
-    blindspots:[
-      {text:'Your combination of directness and precision can come across as cold or intimidating. People may find you hard to read emotionally, which can create distance in relationships.'},
-      {text:'You can occasionally get stuck between wanting to act fast (Red) and wanting all the information first (Blue). Developing a personal threshold for "enough data" helps avoid paralysis.'},
-      {text:'You may undervalue the human, emotional side of leadership. Teams that feel seen and celebrated consistently outperform those that are merely managed.'},
-    ],
-    tips:[
-      {text:'Back up requests with evidence, data, and clear rationale.'},
-      {text:'Be efficient — get to the point and have a recommendation ready.'},
-      {text:'Engage their intellect. They enjoy challenge and debate.'},
-      {text:'Set clear performance standards and let them own delivery.'},
-    ],
-    growth:`Your growth edge lies in developing the relational warmth that transforms good leaders into great ones. Your competence is rarely in question — what will unlock your next level is investing genuine curiosity in the people around you. Understanding what drives them, what worries them, and what they need will make your already impressive capability feel truly inspiring to work alongside.`,
-    traits:['Strategic','Precise','Results-driven','Rigorous','Confident','Analytical'],
-    growthColours:{Y:50,G:40,B:0}},
-  YR:{tagline:'The Inspiring Activator',
-    overview:`{name}, your Sunshine Yellow lead energy powered by Fiery Red ambition makes you one of the most naturally inspiring communicators in any group. You generate ideas, enthusiasm, and momentum — and then you actually make things happen. You have the rare ability to get people excited AND get things done.`,
-    style:`You communicate with infectious positivity and a clear sense of direction. You paint compelling visions and make people feel genuinely excited about what's possible. At the same time, your Red edge means you're not all talk — you have a competitive streak and a real desire to win. You naturally move conversations from "isn't this a great idea" to "here's what we're going to do about it."`,
-    energisers:['Leading change and taking people on a journey','Being in front of audiences — pitching, inspiring, rallying','Fast environments with visible, celebrated progress','Projects that combine creativity with real-world impact','Being given the stage to do things your way'],
-    blindspots:[
-      {text:'Your idea-to-action speed can mean important details get missed. Building a habit of pausing to sanity-check plans before charging forward saves significant rework.'},
-      {text:'You are a natural talker, and in your enthusiasm you may dominate conversations. Actively creating space for quieter voices often surfaces your best insights.'},
-      {text:'You are at your best in positive environments, but can struggle when things are genuinely hard. Staying solution-focused during difficult periods is a key leadership skill.'},
-    ],
-    tips:[
-      {text:'Make things feel exciting and meaningful — connect tasks to a bigger vision.'},
-      {text:'Be warm, positive, and energetic in your interactions.'},
-      {text:'Celebrate achievements visibly and frequently.'},
-      {text:'Give them high-visibility opportunities and let them shine.'},
-    ],
-    growth:`Your growth edge is in developing your capacity for depth — sitting with complexity, listening for longer, and doing the less glamorous work that turns big ideas into lasting results. Your natural charisma already opens doors; the discipline to follow through and remain engaged when the excitement fades is what will make your impact genuinely enduring.`,
-    traits:['Inspiring','Energetic','Persuasive','Ambitious','Creative','Action-oriented'],
-    growthColours:{Y:0,G:40,B:50}},
-  YY:{tagline:'The Pure Enthusiast',
-    overview:`{name}, you are an almost pure expression of Sunshine Yellow energy — warm, spontaneous, optimistic, and magnetic. You light up every room you enter, and people are naturally drawn to your openness and enthusiasm. You bring joy, creativity, and a genuine belief that anything is possible. Working with you is rarely dull, and your positivity is genuinely contagious.`,
-    style:`You communicate with your whole self — emotionally expressive, animated, and genuinely engaged. You tell great stories, you make ideas feel alive, and you build rapport effortlessly with almost anyone. You thrive in social environments and your natural empathy means people quickly feel comfortable around you. You often do your best thinking out loud, in conversation with others.`,
-    energisers:['Being around people and building genuine connections','Brainstorming, creating, and exploring possibilities','Recognition, appreciation, and being seen','Variety — new projects, new faces, new challenges','Environments full of laughter, energy, and positivity'],
-    blindspots:[
-      {text:'Your love of the new can mean you struggle with follow-through. Projects started with excitement can lose their lustre once they become routine. Building completion habits is a real growth area.'},
-      {text:'You may avoid conflict or difficult conversations in favour of keeping things light. But sweeping issues under the rug often creates bigger problems later.'},
-      {text:'Time and structure can be challenging for pure Yellow energy. Partnering with someone who brings organisation and discipline can be genuinely transformative.'},
-    ],
-    tips:[
-      {text:'Be warm, friendly, and genuinely interested in them as a person first.'},
-      {text:'Frame feedback positively and focus on possibilities, not problems.'},
-      {text:'Celebrate them — recognition matters enormously to Yellow energy.'},
-      {text:'Help them connect the detail to the bigger picture they care about.'},
-    ],
-    growth:`Your growth edge is in building structure, discipline, and follow-through alongside your natural spontaneity. Your enthusiasm opens doors that others can't — now focus on walking through them consistently. Developing the capacity to stay engaged when things get hard or routine, and to have the difficult conversations you'd rather avoid, will take you from lovable to genuinely formidable.`,
-    traits:['Enthusiastic','Warm','Creative','Optimistic','Sociable','Expressive'],
-    growthColours:{R:40,G:30,B:55}},
-  YG:{tagline:'The Warm Connector',
-    overview:`{name}, your Sunshine Yellow exuberance combined with Earth Green warmth creates one of the most genuinely people-centred communication styles imaginable. You make others feel valued, seen, and energised in equal measure. You bring light to any team, and your ability to build deep, authentic relationships while also generating excitement is a rare and valuable gift.`,
-    style:`You communicate from a place of deep care and genuine interest in people. You're expressive and enthusiastic, but never at the expense of those around you — you are acutely aware of how people are feeling and calibrate accordingly. You create psychological safety almost automatically. People open up to you, trust you quickly, and often describe you as the person who truly "gets it."`,
-    energisers:['Building meaningful relationships and helping people thrive','Environments where everyone feels included and valued','Collaborative, creative projects with a human purpose','Facilitating connection and bringing people together','Work where the impact on people is visible and real'],
-    blindspots:[
-      {text:'Your desire to keep everyone happy can make it hard to deliver difficult feedback or make unpopular decisions. People who care as much as you do have a responsibility to be honest, even when it\'s uncomfortable.'},
-      {text:'You may take on others\' emotional burdens as your own. Without healthy boundaries, your empathy becomes exhausting rather than energising.'},
-      {text:'Your voice deserves to be heard. In meetings, you may defer to louder personalities — but your perspective is often the most important one in the room.'},
-    ],
-    tips:[
-      {text:'Take time to genuinely connect — they notice when people are going through the motions.'},
-      {text:'Be collaborative and inclusive in how you involve them in decisions.'},
-      {text:'Written, thoughtful feedback lands better than quick verbal comments.'},
-      {text:'Show them how their work makes a real difference to people.'},
-    ],
-    growth:`Your growth edge is in claiming your own voice and needs with the same energy you bring to advocating for others. You are extraordinarily gifted at seeing and nurturing potential in people — the transformational next step is applying that same compassionate belief to yourself. Saying what you really think, setting boundaries, and letting yourself be seen as clearly as you see others will unlock a whole new level of impact.`,
-    traits:['Warm','Empathetic','Enthusiastic','Inclusive','Creative','Genuine'],
-    growthColours:{R:55,G:0,B:40}},
-  YB:{tagline:'The Creative Analyst',
-    overview:`{name}, your Sunshine Yellow creativity combined with Cool Blue rigour creates a fascinating and highly effective communication style. You can move between the world of ideas and the world of evidence with unusual fluency — bringing imagination and structure in the same breath. You're one of the few people who can both dream up a vision and explain exactly why it will work.`,
-    style:`You communicate with both warmth and depth. You know how to make complex things feel accessible and engaging, and you instinctively understand that the best ideas need both compelling stories and compelling evidence. In meetings you're often the person who asks the insightful question that shifts the whole conversation, then follows it up with a creative solution nobody else had considered.`,
-    energisers:['Problems that require both creative and analytical thinking','Learning deeply and then teaching or presenting your insights','Work that combines data with human stories','Projects where quality AND innovation both matter','Being given space to think before speaking'],
-    blindspots:[
-      {text:'Your Yellow-Blue blend can sometimes produce beautiful thinking that struggles to translate into action. Partnering with strong Red energy helps bridge the gap between brilliant ideas and actual delivery.'},
-      {text:'You may overthink before sharing — running ideas through both creative and critical filters internally. Sometimes your first instinct is your best one.'},
-      {text:'In your focus on ideas and analysis, the purely emotional and relational needs of colleagues can go unnoticed. Investing time in relationships pays significant dividends.'},
-    ],
-    tips:[
-      {text:'Engage their curiosity — bring interesting ideas and questions to the conversation.'},
-      {text:'Back ideas with both evidence and an inspiring narrative.'},
-      {text:'Give them time to think — they do their best work when not rushed.'},
-      {text:'Allow space for both creative exploration and structured analysis.'},
-    ],
-    growth:`Your growth edge is in decisiveness and delivery. Your thinking is often exceptional — the challenge is not in the quality of your ideas but in backing yourself to act on them before they're perfectly formed. Learning to trust your instincts more, share your thinking earlier, and move from analysis to action with confidence will unlock the full power of your remarkable mind.`,
-    traits:['Curious','Creative','Analytical','Thoughtful','Articulate','Precise'],
-    growthColours:{R:55,G:35,B:0}},
-  GR:{tagline:'The Determined Peacemaker',
-    overview:`{name}, your Earth Green core enriched by Fiery Red determination creates a powerful combination — you lead with warmth and care, but you are nobody's pushover. You have genuine conviction and the courage to act on it. People trust you instinctively, and then are often pleasantly surprised by your resilience and directness when it counts. You combine integrity with impact.`,
-    style:`You communicate with care and clarity. You take time to understand people, to listen properly, and to build genuine trust — and then you use that relational foundation to drive real change. You are not afraid of difficult conversations when they matter, but you approach them with sensitivity and respect. People rarely feel attacked by your challenges because they already know you're on their side.`,
-    energisers:['Leading change in a way that brings people with you','Building and maintaining strong, trusting team cultures','Solving real-world problems that matter to people','Being given responsibility and the trust to deliver it','Environments where both results and relationships are valued'],
-    blindspots:[
-      {text:'Your natural pace is thoughtful and considered. In fast-moving environments, this can occasionally be read as hesitation. Learning to make "good enough" decisions at speed is valuable.'},
-      {text:'You can invest deeply in relationships that aren\'t always reciprocated. Recognising when a situation is not worth more of your emotional energy is important self-protection.'},
-      {text:'Under real pressure, your Red can occasionally emerge in ways that surprise people who only know your Green face. Developing awareness of this shift helps you manage it more consciously.'},
-    ],
-    tips:[
-      {text:'Invest in the relationship first — genuine connection unlocks their best work.'},
-      {text:'Be open and honest; they deeply value authenticity over polish.'},
-      {text:'Connect their work to meaningful purpose and real human impact.'},
-      {text:'When you need action, be clear and direct — they can handle it.'},
-    ],
-    growth:`Your growth edge is in claiming your own needs and boundaries with the same clarity you bring to advocating for others. You are exceptional at giving — to your team, your family, your colleagues. The next level of growth is in learning to receive, to say no without guilt, and to direct your considerable drive toward your own goals with the same commitment you give to everyone else.`,
-    traits:['Caring','Determined','Trustworthy','Resilient','Empathetic','Genuine'],
-    growthColours:{R:0,Y:45,B:35}},
-  GY:{tagline:'The Nurturing Energiser',
-    overview:`{name}, your Earth Green heart infused with Sunshine Yellow warmth makes you one of the most beloved and energising communicators in any team. You genuinely care about people and you make them feel it — and then you lift them, inspire them, and bring out the best in them with your infectious optimism. You create belonging wherever you go.`,
-    style:`You communicate with abundant warmth and genuine positivity. You're interested in people — not performatively, but truly — and this shows in how you listen, how you respond, and how you remember things. You're a natural encourager, and your ability to see potential in people and hold it up for them to see themselves is one of your most powerful gifts.`,
-    energisers:['Supporting and developing others to reach their potential','Creating connected, joyful team environments','Work that has a clear positive impact on people\'s lives','Collaborative projects with shared purpose and energy','Being appreciated for who you are, not just what you produce'],
-    blindspots:[
-      {text:'Difficult conversations can feel almost physically uncomfortable for this colour combination. The truth said kindly is still the truth — and the people you care about deserve your honesty.'},
-      {text:'Your warmth and care for others can pull your focus away from personal goals. Protecting time and energy for your own development is not selfish — it\'s essential.'},
-      {text:'When your needs go unmet for too long, Green-Yellow energy can become quietly resentful rather than addressing the issue directly. Naming what you need early prevents this build-up.'},
-    ],
-    tips:[
-      {text:'Show genuine warmth and interest — performative niceness won\'t cut it with them.'},
-      {text:'Acknowledge and celebrate their contributions generously and publicly.'},
-      {text:'Create a safe, supportive space for them to do their best work.'},
-      {text:'Help them see how their personal strengths connect to team success.'},
-    ],
-    growth:`Your growth edge is in developing your voice. You have wisdom, perspective, and insight that the world genuinely needs — but it only counts if you share it. Practising direct communication, holding your boundaries, and trusting that your honest opinion won't cost you the relationships you value so deeply will transform you from a supportive presence into a genuinely transformational one.`,
-    traits:['Nurturing','Warm','Optimistic','Inclusive','Encouraging','Genuine'],
-    growthColours:{R:50,G:0,B:40}},
-  GG:{tagline:'The Steadfast Supporter',
-    overview:`{name}, you embody the deepest qualities of Earth Green — steadiness, sincerity, and an almost extraordinary capacity for care. You are the quiet anchor in any team: reliable, trustworthy, and genuinely invested in the wellbeing of those around you. People confide in you, lean on you, and feel safer knowing you're there.`,
-    style:`You communicate slowly, thoughtfully, and with great care. You listen more than you speak, and when you do speak, people pay attention because they know you mean it. You are not performative — you don't say what people want to hear, you say what you genuinely believe. You build trust through consistency over time, and once earned, that trust is almost never broken.`,
-    energisers:['Long-term, meaningful relationships built on genuine trust','Work that makes a real, tangible difference to people\'s lives','Stable, collaborative environments with clear shared values','Being trusted with responsibility and given time to deliver','Recognition that feels personal, not just professional'],
-    blindspots:[
-      {text:'Your preference for stability and consensus can make you slow to act in situations that genuinely need urgency. Not every decision needs full buy-in before moving forward.'},
-      {text:'Your quieter communication style means your ideas are often undersold. Speaking earlier and with more confidence in group settings will ensure your perspective shapes outcomes.'},
-      {text:'You may absorb others\' stress and conflict without releasing it. Finding healthy outlets is important for long-term sustainability.'},
-    ],
-    tips:[
-      {text:'Be patient — they build trust gradually, and it\'s worth waiting for.'},
-      {text:'Ask for their opinion and genuinely listen — they notice when it\'s just a formality.'},
-      {text:'Invest in the relationship before asking for anything in return.'},
-      {text:'Give feedback gently, in private, and with clear appreciation first.'},
-    ],
-    growth:`Your growth edge is in finding and using your voice with greater confidence and speed. Your wisdom is real — the challenge is that the world won't always wait for you to feel completely ready. Practising the act of speaking up earlier, saying what you truly think, and backing yourself to take up more space in important conversations will dramatically expand your impact.`,
-    traits:['Steadfast','Caring','Sincere','Reliable','Empathetic','Loyal'],
-    growthColours:{R:55,Y:45,B:30}},
-  GB:{tagline:'The Thoughtful Guardian',
-    overview:`{name}, your Earth Green warmth combined with Cool Blue precision creates a communication style that is both deeply trustworthy and remarkably thorough. You care about people and you care about getting things right — and you rarely sacrifice one for the other. People trust your judgement precisely because they know you've considered not just the data, but the human impact too.`,
-    style:`You communicate with careful thoughtfulness. You don't rush to conclusions, you don't say things you don't mean, and you don't share ideas before they're properly formed. When you do communicate, your clarity and sincerity are evident. You ask excellent questions, listen with genuine attention, and bring a quality of thinking to conversations that people find both reassuring and elevating.`,
-    energisers:['Work that requires both careful thought and genuine human care','Being trusted with complex, meaningful problems','Environments where quality and integrity are non-negotiable','Deep one-to-one conversations over large group dynamics','Research, analysis, and evidence-based decision making'],
-    blindspots:[
-      {text:'Your combined Green-Blue caution can sometimes result in decisions being delayed longer than necessary. Developing comfort with "sufficiently good information" rather than "complete information" is a useful skill.'},
-      {text:'Your preference for depth and substance means small talk and social dynamics can feel draining. But these lighter moments of connection often build the relational capital that makes your serious work land better.'},
-      {text:'You tend to process internally and share selectively. Sharing your thinking earlier — even half-formed ideas — builds trust and invites valuable input.'},
-    ],
-    tips:[
-      {text:'Back proposals with evidence AND show you\'ve considered the human impact.'},
-      {text:'Give them time to reflect — don\'t expect immediate responses to complex questions.'},
-      {text:'Build the relationship first; they trust people before they trust ideas.'},
-      {text:'Written communication often works better than spontaneous verbal discussions.'},
-    ],
-    growth:`Your growth edge is in learning to act with confidence on incomplete information. Your rigour and care are exceptional — and they can also become a barrier to progress if you wait until everything is perfectly understood before moving. The world needs people who combine your level of care and quality with the courage to move forward before they're completely certain. That person is already you, just one step bolder.`,
-    traits:['Thoughtful','Precise','Caring','Thorough','Trustworthy','Sincere'],
-    growthColours:{R:55,Y:40,B:0}},
-  BR:{tagline:'The Rigorous Driver',
-    overview:`{name}, your Cool Blue precision powered by Fiery Red determination creates a formidable combination — you think rigorously, decide confidently, and execute relentlessly. You hold yourself to extraordinarily high standards and have little patience for vagueness or mediocrity. You are the person others turn to when the stakes are highest and the standards cannot slip.`,
-    style:`You communicate with authority and evidence. Your arguments are well-constructed, your positions are well-reasoned, and your delivery is direct. You don't need to raise your voice — your certainty speaks for itself. In high-pressure situations, you become more focused and more precise, not less. People find you demanding but almost always fair, and your track record earns you enormous credibility.`,
-    energisers:['High-stakes, complex challenges with real consequences','Being the expert — knowing more than anyone in the room','Environments where standards are held and excellence is expected','Making rigorous decisions that genuinely stand up to scrutiny','Having autonomy to do things properly, without corners cut'],
-    blindspots:[
-      {text:'Your combination of precision and drive can come across as cold, critical, or unapproachable. Softer relational moments aren\'t a distraction from serious work — they\'re often what makes serious work possible.'},
-      {text:'You can be reluctant to change course once you\'ve set a direction, even in the face of new evidence. Being adaptive matters more than being consistently right in a fast-moving world.'},
-      {text:'You may view enthusiasm, warmth, and informality as superficial. But these qualities build the relational trust that makes your expertise genuinely influential rather than merely correct.'},
-    ],
-    tips:[
-      {text:'Come prepared with thorough, evidence-based thinking — they will probe it.'},
-      {text:'Be direct about what you need; they respect clarity over diplomacy.'},
-      {text:'Engage them on substance — intellectual rigour is how you earn their respect.'},
-      {text:'Respect their time and get to the point efficiently.'},
-    ],
-    growth:`Your growth edge is in developing the relational and emotional intelligence to match your already exceptional intellectual and operational capability. You don't need to become warm — you need to become warmer. Small investments in curiosity about people, acknowledgement of their contributions, and moments of genuine humanity will transform the way people experience your formidable capability.`,
-    traits:['Rigorous','Decisive','Expert','Precise','Demanding','Strategic'],
-    growthColours:{Y:55,G:45,B:0}},
-  BY:{tagline:'The Inquisitive Innovator',
-    overview:`{name}, your Cool Blue intellectual depth combined with Sunshine Yellow creativity makes you a genuinely unusual and highly effective thinker and communicator. You can go deep AND go wide — exploring ideas with rigour and then connecting them in ways others haven't imagined. You bring curiosity, intelligence, and a sense of possibility that makes conversations with you both stimulating and inspiring.`,
-    style:`You communicate with thoughtfulness and colour. You're someone who prepares carefully but can also improvise brilliantly. You make complex ideas accessible through analogy and story, and your precision never feels dry because your Yellow energy keeps things alive. You're often the person in the room who's three steps ahead — and can explain exactly how you got there.`,
-    energisers:['Deep, intellectually stimulating problems with no obvious answer','Learning, researching, and becoming genuinely expert','Creative work that also needs to be rigorously correct','Environments that value both innovation and excellence','Explaining complex things in ways that genuinely land'],
-    blindspots:[
-      {text:'Your intellectual confidence can occasionally read as dismissiveness toward less analytical thinking styles. Emotional intelligence and creative intuition are forms of rigour too — just in a different register.'},
-      {text:'Your Blue need to think things through, combined with Yellow\'s tendency to generate new angles constantly, can make it hard to commit and execute. At some point, imperfect action beats perfect planning.'},
-      {text:'The human, relational side of work — the check-ins, the encouragement, the emotional maintenance — can feel less important than ideas. But without tended relationships, even your best ideas struggle to gain traction.'},
-    ],
-    tips:[
-      {text:'Bring interesting ideas and intellectual challenges — they love a good problem.'},
-      {text:'Share evidence, references, and reasoning — they appreciate depth.'},
-      {text:'Leave space for creative exploration alongside analytical discussion.'},
-      {text:'Give them preparation time — they do their best work when not caught off-guard.'},
-    ],
-    growth:`Your growth edge is in the messy, imperfect, deeply human world of relationships and action. Your mind is genuinely exceptional — the invitation now is to trust it enough to share your ideas earlier, commit to decisions before they're fully formed, and invest in the people around you with the same passionate curiosity you bring to your best intellectual problems.`,
-    traits:['Curious','Analytical','Creative','Precise','Imaginative','Articulate'],
-    growthColours:{R:50,G:40,B:0}},
-  BG:{tagline:'The Considered Collaborator',
-    overview:`{name}, your Cool Blue intellect combined with Earth Green care creates one of the most trustworthy and quietly impactful communication styles in any team. You think carefully, you care deeply, and you act with integrity. People rely on you for your judgement — not just because it's well-reasoned, but because they know it's also humane. You are the quiet conscience of every team you're part of.`,
-    style:`You communicate with careful precision and genuine warmth. You take time to understand before you respond, and your responses are almost always worth waiting for. You are one of nature's great listeners — fully present, genuinely interested, and excellent at asking the question that unlocks the conversation. In group settings, your contributions are considered, well-timed, and often transformative.`,
-    energisers:['Complex, meaningful work that genuinely matters to people','Deep research and careful, evidence-based thinking','Long-term, trusting professional relationships','Environments with high integrity and genuine collaboration','Being given the time and space to do things properly'],
-    blindspots:[
-      {text:'Your thoughtfulness can make you slow to speak in fast-moving discussions. Earlier, rougher contributions are still valuable — waiting for the perfect response often means your insight is lost.'},
-      {text:'Green-Blue caution can create analysis paralysis in situations that need action. Sometimes the most caring and rigorous thing you can do is decide, even imperfectly, and move forward.'},
-      {text:'You can underplay your own contributions out of modesty. Your ideas and insights have real value — own them with the same conviction you bring to everything else.'},
-    ],
-    tips:[
-      {text:'Show your working — they appreciate thorough, evidence-based thinking.'},
-      {text:'Take time to build genuine trust before expecting full engagement.'},
-      {text:'Ask their opinion and give proper space for a considered answer.'},
-      {text:'Connect work to meaningful purpose and demonstrated positive impact.'},
-    ],
-    growth:`Your growth edge is in visibility and speed. The depth of your thinking and the quality of your care are not in question — what holds you back is a reluctance to be seen, heard, and to act before everything is certain. Claiming space in conversations, sharing half-formed ideas, and making decisions from good-enough information will multiply the impact of your already remarkable qualities.`,
-    traits:['Thoughtful','Caring','Precise','Trustworthy','Rigorous','Sincere'],
-    growthColours:{R:55,Y:40,G:0}},
-  BB:{tagline:'The Masterful Analyst',
-    overview:`{name}, you are an almost pure expression of Cool Blue energy — precise, rigorous, thorough, and deeply principled. Your ability to think clearly, analyse carefully, and hold to high standards is exceptional. You are the person who spots the flaw in the logic before everyone else, asks the question that should have been asked, and produces work of a quality that others genuinely aspire to.`,
-    style:`You communicate with precision and economy. Every word you use is intentional, and you have a deep discomfort with vagueness, assumption, or sloppy thinking. You prepare carefully, you listen critically, and you speak with measured confidence. In meetings you tend to let others talk first, gathering information and forming views — then when you contribute, it lands with weight and clarity.`,
-    energisers:['Deep, complex analytical problems with real stakes','Being the expert — the person with the deepest knowledge','Environments where quality, accuracy, and standards genuinely matter','Time and space to think without interruption or rush','Work that produces output you can be genuinely proud of'],
-    blindspots:[
-      {text:'Your precision and high standards can be experienced as cold, perfectionistic, or overly critical. Not every piece of work needs to meet your internal standard — and saying so occasionally would be enormously liberating for your colleagues.'},
-      {text:'You can be the last person to be ready to move, even when waiting longer adds little value. Developing a personal threshold for "good enough to proceed" will dramatically increase your speed without sacrificing quality.'},
-      {text:'Relationships, warmth, and informal connection don\'t always come naturally to Blue energy. But they\'re the oil in the engine of any team — and investing in them pays dividends even the most rigorous analysis would endorse.'},
-    ],
-    tips:[
-      {text:'Come prepared with thorough, well-reasoned thinking — improvised suggestions will not land well.'},
-      {text:'Give them adequate time to prepare and process — last-minute requests create real stress.'},
-      {text:'Use evidence, data, and logic — emotional appeals without supporting rationale will be dismissed.'},
-      {text:'Be precise about what you want and by when — vague requests produce nothing.'},
-    ],
-    growth:`Your growth edge is in the full, messy, unpredictable world of people. Your analytical mind is a genuine gift — and it has limits. People are not logical systems, and the most impactful work of your career will require you to move beyond what can be measured and proven. Developing genuine curiosity about how others feel, what they need, and why they behave as they do will take your already exceptional capability to a completely new level.`,
-    traits:['Analytical','Precise','Thorough','Principled','Expert','Rigorous'],
-    growthColours:{R:50,Y:55,G:35}},
-};
-
-// ── ENGINE ──
-const letters=['A','B','C','D'];
-let questions=[],currentQ=0,answers=[],userName='';
-
-function shuffleArray(arr){
-  const copy=[...arr];
-  for(let i=copy.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [copy[i],copy[j]]=[copy[j],copy[i]];
-  }
-  return copy;
-}
-
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function startQuiz(){
-  userName=document.getElementById('user-name').value.trim()||'Participant';
-  questions=shuffleArray(baseQuestions.map(q=>({
-    ...q,
-    options:shuffleArray(q.options.map(opt=>({...opt})))
-  })));
-  answers=[];currentQ=0;
-  showScreen('quiz-screen');renderQuestion();
-}
-
-function renderQuestion(){
-  const q=questions[currentQ],total=questions.length;
-  const pct=Math.round((currentQ/total)*100);
-  document.getElementById('q-progress-label').textContent=`Question ${currentQ+1} of ${total}`;
-  document.getElementById('q-progress-pct').textContent=`${pct}%`;
-  document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('q-number').textContent=String(currentQ+1).padStart(2,'0')+' / '+total;
-  document.getElementById('q-text').textContent=q.text;
-  const grid=document.getElementById('options-grid');
-  grid.innerHTML='';
-  q.options.forEach((opt,i)=>{
-    const btn=document.createElement('button');
-    btn.className='opt-btn';
-    btn.innerHTML=`<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt.text}</div>`;
-    btn.onclick=()=>selectAnswer(opt.c,btn);
-    grid.appendChild(btn);
-  });
-}
-
-function selectAnswer(colour,btn){
-  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  answers.push(colour);
-  setTimeout(()=>{
-    currentQ++;
-    if(currentQ<questions.length)renderQuestion();
-    else buildReport();
-  },340);
-}
-
-function computeScores(){
-  const counts={R:0,Y:0,G:0,B:0};
-  answers.forEach(a=>counts[a]++);
-  const t=answers.length;
-  return{R:Math.round(counts.R/t*100),Y:Math.round(counts.Y/t*100),G:Math.round(counts.G/t*100),B:Math.round(counts.B/t*100)};
-}
-
-function buildReport(){
-  const scores=computeScores();
-  const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
-  const dom=sorted[0],sec=sorted[1];
-  const profile=profiles[dom+sec]||profiles[dom+dom];
-  const meta=colourMeta[dom],secMeta=colourMeta[sec];
-
-  document.getElementById('report-name').textContent=`${userName}`;
-  document.getElementById('badge-label').textContent=meta.name;
-  document.getElementById('badge-pip').style.background=meta.hex;
-  const badge=document.getElementById('colour-badge');
-  badge.style.background=meta.soft;
-  badge.style.color=meta.text;
-  badge.style.border=`1px solid ${meta.hex}`;
-  document.getElementById('tagline-row').textContent=`${meta.name} dominant · ${secMeta.name} secondary — "${profile.tagline}"`;
-
-  showScreen('report-screen');
-  setTimeout(()=>{
-    setBar('red',scores.R);setBar('yellow',scores.Y);
-    setBar('green',scores.G);setBar('blue',scores.B);
-  },300);
-
-  // Build accordion sections
-  const container=document.getElementById('report-sections');
-  container.innerHTML='';
-
-  const sections=[
-    {num:'01',title:'Overview',body:()=>`<p>${profile.overview.replace('{name}',userName)}</p>`},
-    {num:'02',title:'Communication Style',body:()=>`<p>${profile.style}</p><div class="trait-row">${profile.traits.map(t=>`<span class="trait-pill">${t}</span>`).join('')}</div>`},
-    {num:'03',title:'What Energises You',body:()=>`<ul>${profile.energisers.map(e=>`<li><div class="li-dot"></div><span>${e}</span></li>`).join('')}</ul>`},
-    {num:'04',title:'Blind Spots',body:()=>`<div class="insight-list">${profile.blindspots.map((b,i)=>`<div class="insight-card"><div class="insight-index">0${i+1}</div><div class="insight-text">${b.text}</div></div>`).join('')}</div>`},
-    {num:'05',title:'How to Get the Best From You',body:()=>`<div class="insight-list">${profile.tips.map((t,i)=>`<div class="insight-card"><div class="insight-index">0${i+1}</div><div class="insight-text">${t.text}</div></div>`).join('')}</div>`},
-    {num:'06',title:'Your Growth Edge',body:()=>`<p>${profile.growth}</p><div class="growth-list"><div class="growth-head">Colours to develop</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div class="growth-row"><div class="growth-lbl" style="color:${colourMeta[c].text}">${colourMeta[c].name}</div><div class="growth-track"><div class="growth-fill" style="background:${colourMeta[c].hex};width:${v}%"></div></div></div>`).join('')}</div>`},
-  ];
-
-  sections.forEach((s,idx)=>{
-    const wrap=document.createElement('div');
-    wrap.className='report-section';
-    wrap.style.marginBottom='4px';
-
-    const hdr=document.createElement('div');
-    hdr.className='section-header'+(idx===0?' open':'');
-    hdr.innerHTML=`<span class="section-num">${s.num}</span><span class="section-title">${s.title}</span><span class="section-chevron">▾</span>`;
-
-    const body=document.createElement('div');
-    body.className='section-body'+(idx===0?' open':'');
-    body.innerHTML=s.body();
-
-    hdr.onclick=()=>{
-      const isOpen=hdr.classList.contains('open');
-      hdr.classList.toggle('open',!isOpen);
-      body.classList.toggle('open',!isOpen);
-      body.style.display=isOpen?'none':'block';
-    };
-    // First section open by default
-    if(idx!==0) body.style.display='none';
-
-    wrap.appendChild(hdr);
-    wrap.appendChild(body);
-    container.appendChild(wrap);
-  });
-
-  setReportLink();
-}
-
-function setBar(colour,pct){
-  document.getElementById('bar-'+colour).style.width=pct+'%';
-  document.getElementById('num-'+colour).textContent=pct+'%';
-}
-
-function setReportLink(){
-  const scores=computeScores();
-  const sorted=['R','Y','G','B'].sort((a,b)=>scores[b]-scores[a]);
-  const dom=sorted[0],sec=sorted[1];
-  const params=new URLSearchParams({name:userName,dom,sec,R:scores.R,Y:scores.Y,G:scores.G,B:scores.B});
-  const reportUrl=new URL(window.location.href);
-  reportUrl.search='';
-  reportUrl.hash='';
-  reportUrl.search='?report=1&'+params.toString();
-  document.getElementById('btn-open').href=reportUrl.toString();
-}
-
-function checkReportMode(){
-  const params=new URLSearchParams(window.location.search);
-  if(params.get('report')!=='1' && !params.get('dom')) return false;
-  const name=params.get('name')||'Participant';
-  const dom=params.get('dom')||'R';
-  const sec=params.get('sec')||'Y';
-  const scores={R:+params.get('R')||0,Y:+params.get('Y')||0,G:+params.get('G')||0,B:+params.get('B')||0};
-  renderStandaloneReport(name,dom,sec,scores);
-  return true;
-}
-
-function renderStandaloneReport(name,dom,sec,scores){
-  const profile=profiles[dom+sec]||profiles[dom+dom];
-  const meta=colourMeta[dom],secMeta=colourMeta[sec];
-  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-
-  const sBar=(n,h,p)=>`<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;"><div style="width:140px;font-size:0.78rem;font-weight:500;color:${h}">${n}</div><div style="flex:1;height:2px;background:#D8E1EC;position:relative;"><div style="height:100%;background:${h};width:${p}%;position:absolute;top:0;left:0;"></div></div><div style="width:30px;text-align:right;font-size:0.75rem;color:#64748B;">${p}%</div></div>`;
-
-  const insightCard=(i,t)=>`<div style="background:#F8FAFC;border:1px solid #D8E1EC;border-radius:3px;padding:14px 16px;display:flex;gap:12px;margin-bottom:8px;"><div style="font-size:0.62rem;font-weight:600;letter-spacing:0.1em;color:#1D4ED8;width:18px;flex-shrink:0;padding-top:2px;">0${i+1}</div><div style="font-size:0.88rem;line-height:1.65;color:#475569;font-weight:300;">${t}</div></div>`;
-
-  document.body.innerHTML=`
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colour Insights — 16 Type Multilingual</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#0F172A;-webkit-font-smoothing:antialiased;}
-    .page{max-width:720px;margin:0 auto;padding:56px 40px 80px;}
-    .no-print{}
-    @media print{
-      .no-print{display:none!important;}
-      body{background:#fff !important;color:#111 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-      .page{padding:20px;}
-      *{
-        text-shadow:none !important;
-        box-shadow:none !important;
-      }
-      div, span, p, li, ul{
-        color:#111 !important;
-      }
-      [style*="background:#FFFFFF"], [style*="background:#F8FAFC"]{
-        background:#fff !important;
-      }
-      [style*="color:#475569"], [style*="color:#64748B"], [style*="color:#0F172A"]{
-        color:#111 !important;
-      }
-      [style*="border:1px solid #D8E1EC"], [style*="border-top:1px solid #D8E1EC"], [style*="border-bottom:1px solid #D8E1EC"]{
-        border-color:#ccc !important;
-      }
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --border:#d8e1ec;
+      --ink:#0f172a;
+      --ink2:#475569;
+      --ink3:#64748b;
+      --accent:#2563eb;
+      --accent2:#1d4ed8;
+      --red:#e05a47;
+      --yellow:#d8a73c;
+      --green:#2f8f6b;
+      --blue:#2563eb;
+      --redSoft:#fff1ee;
+      --yellowSoft:#fff8e8;
+      --greenSoft:#eef9f4;
+      --blueSoft:#eef4ff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#f7fafc 0%,#f3f7fb 100%);
+      color:var(--ink);
+    }
+    .page{
+      max-width:940px;
+      margin:0 auto;
+      padding:20px 18px 64px;
+    }
+    .toolbar{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:18px;
+    }
+    .lang-wrap{
+      background:rgba(255,255,255,0.96);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      min-width:260px;
+      box-shadow:0 8px 24px rgba(15,23,42,0.06);
+    }
+    .lang-label{
+      display:block;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--ink3);
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    select,input{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      font-size:15px;
+      background:#fff;
+      color:var(--ink);
+    }
+    .screen{display:none}
+    .screen.active{display:block}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:24px;
+      margin-bottom:16px;
+      box-shadow:0 10px 28px rgba(15,23,42,0.04);
+    }
+    .eyebrow{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--accent);
+      margin-bottom:12px;
+      font-weight:700;
+    }
+    h1{
+      font-size:40px;
+      line-height:1.04;
+      margin:0 0 14px;
+    }
+    h2{
+      font-size:28px;
+      line-height:1.2;
+      margin:0 0 16px;
+    }
+    h3{
+      font-size:18px;
+      margin:0 0 12px;
+    }
+    p{
+      line-height:1.75;
+      color:var(--ink2);
+      margin:0 0 14px;
+    }
+    .legend{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin:22px 0 26px;
+    }
+    .legend-item{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:14px;
+      background:#fff;
+    }
+    .swatch{
+      width:8px;height:38px;border-radius:999px;flex-shrink:0;
+    }
+    .legend-title{
+      font-size:13px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:4px;
+    }
+    .legend-sub{
+      color:var(--ink3);
+      font-size:13px;
+    }
+    .field-label{
+      display:block;
+      margin:0 0 8px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--ink3);
+      font-weight:700;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:14px 20px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn-secondary{
+      background:#fff;
+      color:var(--ink2);
+      border:1px solid #cbd5e1;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      margin-bottom:10px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--ink3);
+      font-weight:700;
+    }
+    .progress-track{
+      height:8px;
+      background:#e7eef7;
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:20px;
+    }
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#3b82f6,#2563eb);
+    }
+    .qnum{
+      margin-bottom:12px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--ink3);
+      font-weight:700;
+    }
+    .options{
+      display:grid;
+      gap:10px;
+    }
+    .option{
+      width:100%;
+      text-align:left;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      color:var(--ink2);
+      font-weight:500;
+    }
+    .option:hover{
+      border-color:#93c5fd;
+      background:#f8fbff;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .badge-dot{
+      width:8px;height:8px;border-radius:50%;
+      flex-shrink:0;
+    }
+    .bars{
+      display:grid;
+      gap:12px;
+    }
+    .bar-row{
+      display:grid;
+      grid-template-columns:160px 1fr 48px;
+      gap:12px;
+      align-items:center;
+    }
+    .bar-track{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .bar-fill{
+      height:100%;
+      width:0%;
+    }
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--ink2);
+      line-height:1.85;
+    }
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+    .rtl{
+      direction:rtl;
+      text-align:right;
+    }
+    .rtl .toolbar{justify-content:flex-start}
+    .rtl .bar-row{grid-template-columns:48px 1fr 160px}
+    .rtl .list{padding-left:0;padding-right:18px}
+    @media (max-width:760px){
+      .legend,.grid-2{grid-template-columns:1fr}
+      .bar-row{grid-template-columns:1fr}
+      .rtl .bar-row{grid-template-columns:1fr}
+      h1{font-size:30px}
+      h2{font-size:24px}
     }
   </style>
+</head>
+<body>
   <div class="page">
-    <div style="display:flex;gap:3px;margin-bottom:48px;">
-      <div style="width:7px;height:7px;background:#C84B2F;"></div>
-      <div style="width:7px;height:7px;background:#C49A1A;"></div>
-      <div style="width:7px;height:7px;background:#2E7D52;"></div>
-      <div style="width:7px;height:7px;background:#2058A0;"></div>
-    </div>
-
-    <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#64748B;margin-bottom:10px;">Your Insight Discovery Style</div>
-    <div style="font-family:'Manrope',sans-serif;font-size:3.2rem;font-weight:300;line-height:1.0;letter-spacing:-0.02em;margin-bottom:20px;">${name}</div>
-    <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:3px;font-size:0.65rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;background:${meta.soft};color:${meta.text};border:1px solid ${meta.hex};margin-bottom:6px;">
-      <div style="width:6px;height:6px;border-radius:50%;background:${meta.hex};flex-shrink:0;"></div>${meta.name}
-    </div>
-    <div style="font-family:'Manrope',sans-serif;font-size:1rem;color:#64748B;margin-bottom:36px;font-style:italic;">${meta.name} dominant · ${secMeta.name} secondary — "${profile.tagline}"</div>
-
-    <div style="height:1px;background:#D8E1EC;margin-bottom:28px;"></div>
-
-    <div style="background:#FFFFFF;border:1px solid #D8E1EC;border-radius:3px;padding:24px;margin-bottom:28px;">
-      <div style="font-size:0.62rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#64748B;margin-bottom:18px;">Colour profile breakdown</div>
-      ${sBar('Fiery Red','#E06040',scores.R)}
-      ${sBar('Sunshine Yellow','#C49A1A',scores.Y)}
-      ${sBar('Earth Green','#3A9060',scores.G)}
-      ${sBar('Cool Blue','#4A80C0',scores.B)}
-    </div>
-
-    ${[
-      ['01','Overview',`<p style="font-size:0.92rem;line-height:1.8;color:#475569;font-weight:300;margin-bottom:12px;">${profile.overview.replace('{name}',name)}</p>`],
-      ['02','Communication Style',`<p style="font-size:0.92rem;line-height:1.8;color:#475569;font-weight:300;margin-bottom:14px;">${profile.style}</p><div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:14px;border-top:1px solid #D8E1EC;">${profile.traits.map(t=>`<span style="padding:4px 10px;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border:1px solid #D8E1EC;color:#64748B;border-radius:2px;">${t}</span>`).join('')}</div>`],
-      ['03','What Energises You',`<ul style="padding-left:0;list-style:none;">${profile.energisers.map(e=>`<li style="font-size:0.92rem;line-height:1.7;color:#475569;font-weight:300;padding:8px 0;border-bottom:1px solid #D8E1EC;display:flex;gap:10px;"><span style="width:4px;height:4px;border-radius:50%;background:#1D4ED8;margin-top:9px;flex-shrink:0;display:inline-block;"></span><span>${e}</span></li>`).join('')}</ul>`],
-      ['04','Blind Spots',profile.blindspots.map((b,i)=>insightCard(i,b.text)).join('')],
-      ['05','How to Get the Best From You',profile.tips.map((t,i)=>insightCard(i,t.text)).join('')],
-      ['06','Your Growth Edge',`<p style="font-size:0.92rem;line-height:1.8;color:#475569;font-weight:300;margin-bottom:14px;">${profile.growth}</p><div style="padding-top:14px;border-top:1px solid #D8E1EC;"><div style="font-size:0.62rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#64748B;margin-bottom:12px;">Colours to develop</div>${Object.entries(profile.growthColours).map(([c,v])=>`<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div style="font-size:0.75rem;width:140px;flex-shrink:0;font-weight:400;color:${colourMeta[c].text}">${colourMeta[c].name}</div><div style="flex:1;height:1px;background:#D8E1EC;position:relative;"><div style="height:100%;background:${colourMeta[c].hex};width:${v}%;position:absolute;top:0;left:0;"></div></div></div>`).join('')}</div>`],
-    ].map(([num,title,body])=>`
-    <div style="background:#FFFFFF;border:1px solid #D8E1EC;border-radius:3px;padding:24px;margin-bottom:8px;page-break-inside:avoid;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #D8E1EC;">
-        <span style="font-size:0.6rem;font-weight:600;letter-spacing:0.14em;color:#64748B;">${num}</span>
-        <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#475569;">${title}</span>
+    <div class="toolbar">
+      <div class="lang-wrap">
+        <label class="lang-label" id="languageLabel" for="languageSelect">Language</label>
+        <select id="languageSelect"></select>
       </div>
-      ${body}
-    </div>`).join('')}
-
-    <div style="text-align:center;margin:36px 0 20px;" class="no-print">
-      <button onclick="window.print()" style="padding:13px 28px;background:#C8A96E;color:#F8FAFC;border:none;border-radius:3px;font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">Print / Save as PDF</button>
     </div>
 
-    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #D8E1EC;font-size:0.68rem;color:#64748B;display:flex;justify-content:space-between;">
-      <span>Colour Insights · Your Insight Discovery Style</span>
-      <span>${name} · ${date}</span>
-    </div>
-  </div>`;
-}
+    <div id="intro" class="screen active">
+      <div class="card">
+        <div class="eyebrow" id="introEyebrow"></div>
+        <h1 id="introTitle"></h1>
+        <p id="introSubtitle"></p>
 
-function restart(){answers=[];currentQ=0;showScreen('intro-screen');}
-if(!checkReportMode()){}
-</script>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="swatch" style="background:var(--red)"></div>
+            <div>
+              <div class="legend-title" id="redName"></div>
+              <div class="legend-sub" id="redTag"></div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <div class="swatch" style="background:var(--yellow)"></div>
+            <div>
+              <div class="legend-title" id="yellowName"></div>
+              <div class="legend-sub" id="yellowTag"></div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <div class="swatch" style="background:var(--green)"></div>
+            <div>
+              <div class="legend-title" id="greenName"></div>
+              <div class="legend-sub" id="greenTag"></div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <div class="swatch" style="background:var(--blue)"></div>
+            <div>
+              <div class="legend-title" id="blueName"></div>
+              <div class="legend-sub" id="blueTag"></div>
+            </div>
+          </div>
+        </div>
+
+        <label class="field-label" id="nameLabel" for="userName"></label>
+        <input id="userName" type="text" />
+
+        <div class="actions">
+          <button class="btn-primary" onclick="startQuiz()" id="startBtn"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz" class="screen">
+      <div class="card">
+        <div class="progress-top">
+          <span id="progressLabel"></span>
+          <span id="progressPct"></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="qnum" id="questionNumber"></div>
+        <h2 id="questionText"></h2>
+        <div class="options" id="options"></div>
+      </div>
+    </div>
+
+    <div id="report" class="screen">
+      <div class="card">
+        <div class="eyebrow" id="reportEyebrow"></div>
+        <h1 id="reportName"></h1>
+        <div class="badge" id="reportBadge">
+          <span class="badge-dot" id="badgeDot"></span>
+          <span id="reportType"></span>
+        </div>
+        <p id="reportTagline"></p>
+      </div>
+
+      <div class="card">
+        <h3 id="breakdownTitle"></h3>
+        <div class="bars">
+          <div class="bar-row">
+            <div id="labelR"></div>
+            <div class="bar-track"><div id="barR" class="bar-fill" style="background:var(--red)"></div></div>
+            <div id="pctR"></div>
+          </div>
+          <div class="bar-row">
+            <div id="labelY"></div>
+            <div class="bar-track"><div id="barY" class="bar-fill" style="background:var(--yellow)"></div></div>
+            <div id="pctY"></div>
+          </div>
+          <div class="bar-row">
+            <div id="labelG"></div>
+            <div class="bar-track"><div id="barG" class="bar-fill" style="background:var(--green)"></div></div>
+            <div id="pctG"></div>
+          </div>
+          <div class="bar-row">
+            <div id="labelB"></div>
+            <div class="bar-track"><div id="barB" class="bar-fill" style="background:var(--blue)"></div></div>
+            <div id="pctB"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 id="overviewTitle"></h3>
+        <p id="overviewText"></p>
+      </div>
+
+      <div class="card">
+        <h3 id="communicationTitle"></h3>
+        <p id="communicationText"></p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 id="strengthsTitle"></h3>
+          <ul class="list" id="strengthsList"></ul>
+        </div>
+        <div class="card">
+          <h3 id="tipsTitle"></h3>
+          <ul class="list" id="tipsList"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="actions">
+          <button class="btn-secondary" onclick="restart()" id="restartBtn"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const languages = {
+      en: "English",
+      es: "Español",
+      fr: "Français",
+      de: "Deutsch",
+      it: "Italiano",
+      pt: "Português",
+      nl: "Nederlands",
+      pl: "Polski",
+      tr: "Türkçe",
+      ar: "العربية"
+    };
+
+    const RTL_LANGS = ["ar"];
+
+    const ui = {
+      en: {
+        languageLabel: "Language",
+        introEyebrow: "Your Insight Discovery Style",
+        introTitle: "Your Insight Discovery Style",
+        introSubtitle: "A 20-question assessment revealing your natural communication style, leadership tendencies, and how you work best.",
+        nameLabel: "Your name",
+        namePlaceholder: "First name",
+        startBtn: "Begin assessment",
+        reportEyebrow: "Your Insight Discovery Style",
+        breakdownTitle: "Colour profile breakdown",
+        overviewTitle: "Overview",
+        communicationTitle: "Communication style",
+        strengthsTitle: "Strengths",
+        tipsTitle: "How to get the best from you",
+        restartBtn: "Start again",
+        questionOf: "Question {n} of {total}",
+        qnum: "{n} / {total}",
+        participant: "Participant"
+      },
+      es: {
+        languageLabel: "Idioma",
+        introEyebrow: "Tu estilo de descubrimiento",
+        introTitle: "Tu estilo de descubrimiento",
+        introSubtitle: "Una evaluación de 20 preguntas que revela tu estilo natural de comunicación, tus tendencias de liderazgo y cómo trabajas mejor.",
+        nameLabel: "Tu nombre",
+        namePlaceholder: "Nombre",
+        startBtn: "Comenzar evaluación",
+        reportEyebrow: "Tu estilo de descubrimiento",
+        breakdownTitle: "Desglose del perfil de color",
+        overviewTitle: "Resumen",
+        communicationTitle: "Estilo de comunicación",
+        strengthsTitle: "Fortalezas",
+        tipsTitle: "Cómo sacar lo mejor de ti",
+        restartBtn: "Empezar de nuevo",
+        questionOf: "Pregunta {n} de {total}",
+        qnum: "{n} / {total}",
+        participant: "Participante"
+      },
+      fr: {
+        languageLabel: "Langue",
+        introEyebrow: "Votre style de découverte",
+        introTitle: "Votre style de découverte",
+        introSubtitle: "Une évaluation de 20 questions révélant votre style naturel de communication, vos tendances de leadership et votre meilleure façon de travailler.",
+        nameLabel: "Votre nom",
+        namePlaceholder: "Prénom",
+        startBtn: "Commencer l’évaluation",
+        reportEyebrow: "Votre style de découverte",
+        breakdownTitle: "Répartition du profil couleur",
+        overviewTitle: "Aperçu",
+        communicationTitle: "Style de communication",
+        strengthsTitle: "Forces",
+        tipsTitle: "Comment donner le meilleur de vous-même",
+        restartBtn: "Recommencer",
+        questionOf: "Question {n} sur {total}",
+        qnum: "{n} / {total}",
+        participant: "Participant"
+      },
+      de: {
+        languageLabel: "Sprache",
+        introEyebrow: "Ihr Entdeckungsstil",
+        introTitle: "Ihr Entdeckungsstil",
+        introSubtitle: "Eine 20-Fragen-Auswertung, die Ihren natürlichen Kommunikationsstil, Ihre Führungstendenzen und Ihre beste Arbeitsweise zeigt.",
+        nameLabel: "Ihr Name",
+        namePlaceholder: "Vorname",
+        startBtn: "Assessment starten",
+        reportEyebrow: "Ihr Entdeckungsstil",
+        breakdownTitle: "Farbprofil-Aufschlüsselung",
+        overviewTitle: "Überblick",
+        communicationTitle: "Kommunikationsstil",
+        strengthsTitle: "Stärken",
+        tipsTitle: "So holt man das Beste aus Ihnen heraus",
+        restartBtn: "Neu starten",
+        questionOf: "Frage {n} von {total}",
+        qnum: "{n} / {total}",
+        participant: "Teilnehmer"
+      },
+      it: {
+        languageLabel: "Lingua",
+        introEyebrow: "Il tuo stile di scoperta",
+        introTitle: "Il tuo stile di scoperta",
+        introSubtitle: "Una valutazione di 20 domande che rivela il tuo stile naturale di comunicazione, le tue tendenze di leadership e come lavori al meglio.",
+        nameLabel: "Il tuo nome",
+        namePlaceholder: "Nome",
+        startBtn: "Inizia valutazione",
+        reportEyebrow: "Il tuo stile di scoperta",
+        breakdownTitle: "Ripartizione del profilo colore",
+        overviewTitle: "Panoramica",
+        communicationTitle: "Stile di comunicazione",
+        strengthsTitle: "Punti di forza",
+        tipsTitle: "Come ottenere il meglio da te",
+        restartBtn: "Ricomincia",
+        questionOf: "Domanda {n} di {total}",
+        qnum: "{n} / {total}",
+        participant: "Partecipante"
+      },
+      pt: {
+        languageLabel: "Idioma",
+        introEyebrow: "O seu estilo de descoberta",
+        introTitle: "O seu estilo de descoberta",
+        introSubtitle: "Uma avaliação com 20 perguntas que revela o seu estilo natural de comunicação, as suas tendências de liderança e como trabalha melhor.",
+        nameLabel: "O seu nome",
+        namePlaceholder: "Primeiro nome",
+        startBtn: "Começar avaliação",
+        reportEyebrow: "O seu estilo de descoberta",
+        breakdownTitle: "Distribuição do perfil de cor",
+        overviewTitle: "Visão geral",
+        communicationTitle: "Estilo de comunicação",
+        strengthsTitle: "Pontos fortes",
+        tipsTitle: "Como tirar o melhor de si",
+        restartBtn: "Começar de novo",
+        questionOf: "Pergunta {n} de {total}",
+        qnum: "{n} / {total}",
+        participant: "Participante"
+      },
+      nl: {
+        languageLabel: "Taal",
+        introEyebrow: "Jouw ontdekkingsstijl",
+        introTitle: "Jouw ontdekkingsstijl",
+        introSubtitle: "Een assessment met 20 vragen dat jouw natuurlijke communicatiestijl, leiderschapstendensen en beste manier van werken laat zien.",
+        nameLabel: "Jouw naam",
+        namePlaceholder: "Voornaam",
+        startBtn: "Assessment starten",
+        reportEyebrow: "Jouw ontdekkingsstijl",
+        breakdownTitle: "Uitsplitsing van het kleurprofiel",
+        overviewTitle: "Overzicht",
+        communicationTitle: "Communicatiestijl",
+        strengthsTitle: "Sterktes",
+        tipsTitle: "Hoe je het beste uit jou haalt",
+        restartBtn: "Opnieuw beginnen",
+        questionOf: "Vraag {n} van {total}",
+        qnum: "{n} / {total}",
+        participant: "Deelnemer"
+      },
+      pl: {
+        languageLabel: "Język",
+        introEyebrow: "Twój styl odkrywania",
+        introTitle: "Twój styl odkrywania",
+        introSubtitle: "Test z 20 pytaniami, który pokazuje Twój naturalny styl komunikacji, skłonności przywódcze i to, jak pracujesz najlepiej.",
+        nameLabel: "Twoje imię",
+        namePlaceholder: "Imię",
+        startBtn: "Rozpocznij test",
+        reportEyebrow: "Twój styl odkrywania",
+        breakdownTitle: "Rozkład profilu kolorów",
+        overviewTitle: "Przegląd",
+        communicationTitle: "Styl komunikacji",
+        strengthsTitle: "Mocne strony",
+        tipsTitle: "Jak wydobyć z Ciebie to, co najlepsze",
+        restartBtn: "Zacznij od nowa",
+        questionOf: "Pytanie {n} z {total}",
+        qnum: "{n} / {total}",
+        participant: "Uczestnik"
+      },
+      tr: {
+        languageLabel: "Dil",
+        introEyebrow: "Keşif tarzınız",
+        introTitle: "Keşif tarzınız",
+        introSubtitle: "Doğal iletişim tarzınızı, liderlik eğilimlerinizi ve en iyi nasıl çalıştığınızı ortaya çıkaran 20 soruluk değerlendirme.",
+        nameLabel: "Adınız",
+        namePlaceholder: "Ad",
+        startBtn: "Değerlendirmeyi başlat",
+        reportEyebrow: "Keşif tarzınız",
+        breakdownTitle: "Renk profili dağılımı",
+        overviewTitle: "Genel bakış",
+        communicationTitle: "İletişim tarzı",
+        strengthsTitle: "Güçlü yönler",
+        tipsTitle: "Sizden en iyi verimi alma yolları",
+        restartBtn: "Baştan başla",
+        questionOf: "{total} sorudan {n}. soru",
+        qnum: "{n} / {total}",
+        participant: "Katılımcı"
+      },
+      ar: {
+        languageLabel: "اللغة",
+        introEyebrow: "أسلوبك في الاكتشاف",
+        introTitle: "أسلوبك في الاكتشاف",
+        introSubtitle: "تقييم من 20 سؤالاً يكشف أسلوبك الطبيعي في التواصل، وميولك القيادية، والطريقة التي تعمل بها بأفضل شكل.",
+        nameLabel: "اسمك",
+        namePlaceholder: "الاسم الأول",
+        startBtn: "ابدأ التقييم",
+        reportEyebrow: "أسلوبك في الاكتشاف",
+        breakdownTitle: "توزيع ملف الألوان",
+        overviewTitle: "نظرة عامة",
+        communicationTitle: "أسلوب التواصل",
+        strengthsTitle: "نقاط القوة",
+        tipsTitle: "كيف تحصل على أفضل ما لديك",
+        restartBtn: "ابدأ من جديد",
+        questionOf: "السؤال {n} من {total}",
+        qnum: "{n} / {total}",
+        participant: "المشارك"
+      }
+    };
+
+    const colourLabels = {
+      en: {
+        R: { name: "Fiery Red", tag: "Decisive · Results-driven" },
+        Y: { name: "Sunshine Yellow", tag: "Energetic · Persuasive" },
+        G: { name: "Earth Green", tag: "Empathetic · Steady" },
+        B: { name: "Cool Blue", tag: "Analytical · Precise" }
+      },
+      es: {
+        R: { name: "Rojo intenso", tag: "Decidido · Orientado a resultados" },
+        Y: { name: "Amarillo brillante", tag: "Enérgico · Persuasivo" },
+        G: { name: "Verde tierra", tag: "Empático · Constante" },
+        B: { name: "Azul frío", tag: "Analítico · Preciso" }
+      },
+      fr: {
+        R: { name: "Rouge intense", tag: "Décisif · Axé résultats" },
+        Y: { name: "Jaune lumineux", tag: "Énergique · Persuasif" },
+        G: { name: "Vert terre", tag: "Empathique · Stable" },
+        B: { name: "Bleu froid", tag: "Analytique · Précis" }
+      },
+      de: {
+        R: { name: "Feuriges Rot", tag: "Entschlossen · Ergebnisorientiert" },
+        Y: { name: "Sonniges Gelb", tag: "Energisch · Überzeugend" },
+        G: { name: "Erdiges Grün", tag: "Einfühlsam · Beständig" },
+        B: { name: "Kühles Blau", tag: "Analytisch · Präzise" }
+      },
+      it: {
+        R: { name: "Rosso deciso", tag: "Deciso · Orientato ai risultati" },
+        Y: { name: "Giallo solare", tag: "Energico · Persuasivo" },
+        G: { name: "Verde terra", tag: "Empatico · Costante" },
+        B: { name: "Blu freddo", tag: "Analitico · Preciso" }
+      },
+      pt: {
+        R: { name: "Vermelho intenso", tag: "Decisivo · Orientado a resultados" },
+        Y: { name: "Amarelo radiante", tag: "Enérgico · Persuasivo" },
+        G: { name: "Verde terra", tag: "Empático · Estável" },
+        B: { name: "Azul frio", tag: "Analítico · Preciso" }
+      },
+      nl: {
+        R: { name: "Vurig rood", tag: "Daadkrachtig · Resultaatgericht" },
+        Y: { name: "Zonnig geel", tag: "Energiek · Overtuigend" },
+        G: { name: "Aards groen", tag: "Empathisch · Rustig" },
+        B: { name: "Koel blauw", tag: "Analytisch · Precies" }
+      },
+      pl: {
+        R: { name: "Ognista czerwień", tag: "Zdecydowany · Nastawiony na wyniki" },
+        Y: { name: "Słoneczny żółty", tag: "Energiczny · Przekonujący" },
+        G: { name: "Ziemista zieleń", tag: "Empatyczny · Stabilny" },
+        B: { name: "Chłodny błękit", tag: "Analityczny · Precyzyjny" }
+      },
+      tr: {
+        R: { name: "Ateş kırmızısı", tag: "Kararlı · Sonuç odaklı" },
+        Y: { name: "Güneş sarısı", tag: "Enerjik · İkna edici" },
+        G: { name: "Toprak yeşili", tag: "Empatik · Dengeli" },
+        B: { name: "Soğuk mavi", tag: "Analitik · Hassas" }
+      },
+      ar: {
+        R: { name: "الأحمر الناري", tag: "حاسم · موجّه نحو النتائج" },
+        Y: { name: "الأصفر المشمس", tag: "مفعم بالطاقة · مقنع" },
+        G: { name: "الأخضر الترابي", tag: "متعاطف · ثابت" },
+        B: { name: "الأزرق الهادئ", tag: "تحليلي · دقيق" }
+      }
+    };
+
+    const questionBank = [
+      {
+        en:{q:"When you're given a new project, your first instinct is to…",a:["Dive straight in and figure it out as you go.","Gather everyone together and brainstorm ideas excitedly.","Check in with the team and make sure everyone is on board.","Research thoroughly and build a detailed plan first."]},
+        es:{q:"Cuando te asignan un nuevo proyecto, tu primer impulso es…",a:["Lanzarte de inmediato e ir resolviéndolo sobre la marcha.","Reunir a todos y hacer una lluvia de ideas con entusiasmo.","Hablar con el equipo y asegurarte de que todos estén alineados.","Investigar a fondo y crear primero un plan detallado."]},
+        fr:{q:"Lorsqu’on vous confie un nouveau projet, votre premier réflexe est de…",a:["Vous lancer tout de suite et improviser en avançant.","Réunir tout le monde et faire un brainstorming avec enthousiasme.","Consulter l’équipe et vérifier que tout le monde adhère.","Faire des recherches approfondies et établir d’abord un plan détaillé."]},
+        de:{q:"Wenn Sie ein neues Projekt bekommen, ist Ihr erster Impuls…",a:["Direkt loszulegen und es unterwegs herauszufinden.","Alle zusammenzubringen und begeistert Ideen zu sammeln.","Mit dem Team abzustimmen, ob alle mitgehen.","Zuerst gründlich zu recherchieren und einen detaillierten Plan zu erstellen."]},
+        it:{q:"Quando ti viene assegnato un nuovo progetto, il tuo primo istinto è…",a:["Buttarti subito e capire strada facendo.","Riunire tutti e fare brainstorming con entusiasmo.","Confrontarti con il team e assicurarti che tutti siano allineati.","Fare ricerca a fondo e costruire prima un piano dettagliato."]},
+        pt:{q:"Quando recebe um novo projeto, o seu primeiro impulso é…",a:["Começar logo e ir percebendo no processo.","Juntar toda a gente e fazer brainstorming com entusiasmo.","Falar com a equipa e garantir que todos estão alinhados.","Pesquisar bem e construir primeiro um plano detalhado."]},
+        nl:{q:"Wanneer je een nieuw project krijgt, is je eerste instinct om…",a:["Er meteen in te duiken en het onderweg uit te zoeken.","Iedereen samen te brengen en enthousiast te brainstormen.","Bij het team in te checken en te zorgen dat iedereen mee is.","Eerst grondig onderzoek te doen en een gedetailleerd plan te maken."]},
+        pl:{q:"Gdy dostajesz nowy projekt, Twój pierwszy odruch to…",a:["Od razu zacząć i ogarniać wszystko po drodze.","Zebrać wszystkich i z entuzjazmem zrobić burzę mózgów.","Sprawdzić z zespołem, czy wszyscy są na pokładzie.","Najpierw dokładnie zbadać temat i ułożyć szczegółowy plan."]},
+        tr:{q:"Yeni bir proje verildiğinde ilk içgüdünüz…",a:["Hemen dalmak ve giderken çözmek olur.","Herkesi bir araya getirip heyecanla fikir üretmek olur.","Ekiple konuşup herkesin aynı çizgide olduğundan emin olmak olur.","Önce detaylı araştırıp ayrıntılı bir plan oluşturmak olur."]},
+        ar:{q:"عندما يُسند إليك مشروع جديد، فإن أول رد فعل لديك هو…",a:["البدء فوراً ومعرفة التفاصيل أثناء التنفيذ.","جمع الجميع وإجراء عصف ذهني بحماس.","التواصل مع الفريق والتأكد من أن الجميع متفقون.","البحث جيداً ووضع خطة مفصلة أولاً."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"In a meeting, people would describe your communication style as…",a:["Direct and to the point.","Enthusiastic and expressive.","Warm and supportive.","Measured and precise."]},
+        es:{q:"En una reunión, la gente describiría tu estilo de comunicación como…",a:["Directo y al grano.","Entusiasta y expresivo.","Cálido y cercano.","Sereno y preciso."]},
+        fr:{q:"En réunion, les gens décriraient votre style de communication comme…",a:["Direct et concis.","Enthousiaste et expressif.","Chaleureux et soutenant.","Mesuré et précis."]},
+        de:{q:"In einem Meeting würden Menschen Ihren Kommunikationsstil so beschreiben…",a:["Direkt und auf den Punkt.","Begeistert und ausdrucksstark.","Warm und unterstützend.","Überlegt und präzise."]},
+        it:{q:"In una riunione, il tuo stile di comunicazione verrebbe descritto come…",a:["Diretto e concreto.","Entusiasta ed espressivo.","Caldo e di supporto.","Misurato e preciso."]},
+        pt:{q:"Numa reunião, o seu estilo de comunicação seria descrito como…",a:["Direto e objetivo.","Entusiástico e expressivo.","Caloroso e apoiador.","Ponderado e preciso."]},
+        nl:{q:"In een vergadering zouden mensen jouw communicatiestijl omschrijven als…",a:["Direct en to the point.","Enthousiast en expressief.","Warm en ondersteunend.","Afgewogen en precies."]},
+        pl:{q:"Na spotkaniu ludzie opisaliby Twój styl komunikacji jako…",a:["Bezpośredni i konkretny.","Entuzjastyczny i ekspresyjny.","Ciepły i wspierający.","Wyważony i precyzyjny."]},
+        tr:{q:"Bir toplantıda insanlar iletişim tarzınızı şöyle tanımlar…",a:["Doğrudan ve net.","Coşkulu ve ifade gücü yüksek.","Sıcak ve destekleyici.","Ölçülü ve hassas."]},
+        ar:{q:"في الاجتماع، سيصف الناس أسلوبك في التواصل بأنه…",a:["مباشر وواضح.","متحمس ومعبر.","دافئ وداعم.","متزن ودقيق."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When facing a conflict with a colleague, you tend to…",a:["Address it head-on and resolve it quickly.","Talk it through and keep the tone positive.","Understand all perspectives and restore harmony.","Think it through calmly and respond logically."]},
+        es:{q:"Cuando surge un conflicto con un compañero, tiendes a…",a:["Afrontarlo de frente y resolverlo rápido.","Hablarlo y mantener un tono positivo.","Entender todas las perspectivas y recuperar la armonía.","Pensarlo con calma y responder de forma lógica."]},
+        fr:{q:"En cas de conflit avec un collègue, vous avez tendance à…",a:["L’aborder de front et le régler rapidement.","En parler en gardant un ton positif.","Comprendre tous les points de vue et rétablir l’harmonie.","Réfléchir calmement et répondre avec logique."]},
+        de:{q:"Wenn es einen Konflikt mit einem Kollegen gibt, neigen Sie dazu…",a:["Ihn direkt anzusprechen und schnell zu lösen.","Darüber zu sprechen und positiv zu bleiben.","Alle Perspektiven zu verstehen und Harmonie wiederherzustellen.","Ruhig nachzudenken und logisch zu reagieren."]},
+        it:{q:"Quando affronti un conflitto con un collega, tendi a…",a:["Affrontarlo direttamente e risolverlo rapidamente.","Parlarne mantenendo un tono positivo.","Capire tutti i punti di vista e ristabilire armonia.","Riflettere con calma e rispondere in modo logico."]},
+        pt:{q:"Quando surge um conflito com um colega, tende a…",a:["Enfrentá-lo diretamente e resolvê-lo depressa.","Conversar e manter um tom positivo.","Compreender todas as perspetivas e restaurar a harmonia.","Pensar com calma e responder de forma lógica."]},
+        nl:{q:"Wanneer je een conflict met een collega hebt, ben je geneigd om…",a:["Het direct aan te pakken en snel op te lossen.","Het uit te praten en positief te blijven.","Alle perspectieven te begrijpen en harmonie te herstellen.","Rustig na te denken en logisch te reageren."]},
+        pl:{q:"Gdy pojawia się konflikt ze współpracownikiem, zwykle…",a:["Podchodzisz do niego bezpośrednio i szybko go rozwiązujesz.","Rozmawiasz o nim i utrzymujesz pozytywny ton.","Staram się zrozumieć wszystkie perspektywy i przywrócić harmonię.","Spokojnie to przemyślasz i odpowiadasz logicznie."]},
+        tr:{q:"Bir iş arkadaşınızla çatışma yaşadığınızda genelde…",a:["Doğrudan ele alır ve hızlıca çözersiniz.","Konuşarak çözmeye ve tonu olumlu tutmaya çalışırsınız.","Tüm bakış açılarını anlamaya ve uyumu geri getirmeye çalışırsınız.","Sakin şekilde düşünüp mantıklı yanıt verirsiniz."]},
+        ar:{q:"عند مواجهة خلاف مع زميل، فإنك تميل إلى…",a:["مواجهته مباشرة وحله بسرعة.","التحدث عنه مع الحفاظ على نبرة إيجابية.","فهم جميع وجهات النظر واستعادة الانسجام.","التفكير بهدوء والرد بشكل منطقي."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"Your colleagues come to you most often for…",a:["Quick decisions and cutting through ambiguity.","Creative ideas and high energy.","Support and thoughtful advice.","Accuracy and careful analysis."]},
+        es:{q:"Tus compañeros suelen acudir a ti por…",a:["Decisiones rápidas y claridad.","Ideas creativas y mucha energía.","Apoyo y consejos reflexivos.","Precisión y análisis cuidadoso."]},
+        fr:{q:"Vos collègues viennent le plus souvent vous voir pour…",a:["Des décisions rapides et de la clarté.","Des idées créatives et de l’énergie.","Du soutien et des conseils réfléchis.","La précision et une analyse soignée."]},
+        de:{q:"Ihre Kollegen kommen am häufigsten zu Ihnen wegen…",a:["Schneller Entscheidungen und Klarheit.","Kreativer Ideen und Energie.","Unterstützung und durchdachtem Rat.","Genauigkeit und sorgfältiger Analyse."]},
+        it:{q:"I colleghi si rivolgono più spesso a te per…",a:["Decisioni rapide e chiarezza.","Idee creative ed energia.","Supporto e consigli ponderati.","Precisione e analisi accurata."]},
+        pt:{q:"Os colegas recorrem mais a si para…",a:["Decisões rápidas e clareza.","Ideias criativas e energia.","Apoio e conselhos ponderados.","Precisão e análise cuidada."]},
+        nl:{q:"Collega’s komen meestal naar jou voor…",a:["Snelle beslissingen en duidelijkheid.","Creatieve ideeën en energie.","Steun en doordacht advies.","Nauwkeurigheid en zorgvuldige analyse."]},
+        pl:{q:"Współpracownicy najczęściej przychodzą do Ciebie po…",a:["Szybkie decyzje i jasność.","Kreatywne pomysły i energię.","Wsparcie i przemyślane rady.","Dokładność i uważną analizę."]},
+        tr:{q:"İş arkadaşlarınız size en çok şunun için gelir…",a:["Hızlı kararlar ve belirsizliği azaltmak.","Yaratıcı fikirler ve yüksek enerji.","Destek ve düşünülmüş tavsiyeler.","Doğruluk ve dikkatli analiz."]},
+        ar:{q:"غالباً ما يلجأ زملاؤك إليك من أجل…",a:["قرارات سريعة وإزالة الغموض.","أفكار إبداعية وطاقة عالية.","الدعم والنصيحة المتأنية.","الدقة والتحليل المتأني."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"How do you feel about following rules and processes?",a:["I follow them if they are efficient.","I prefer flexibility over rigid rules.","I respect them because they keep things fair.","I follow them carefully because they matter."]},
+        es:{q:"¿Cómo te sientes respecto a seguir reglas y procesos?",a:["Los sigo si son eficientes.","Prefiero la flexibilidad a las reglas rígidas.","Los respeto porque mantienen la equidad.","Los sigo con cuidado porque son importantes."]},
+        fr:{q:"Quel est votre rapport aux règles et aux processus ?",a:["Je les suis s’ils sont efficaces.","Je préfère la flexibilité aux règles rigides.","Je les respecte car ils garantissent l’équité.","Je les applique avec soin car ils comptent."]},
+        de:{q:"Wie stehen Sie zu Regeln und Prozessen?",a:["Ich folge ihnen, wenn sie effizient sind.","Ich bevorzuge Flexibilität statt starre Regeln.","Ich respektiere sie, weil sie Fairness schaffen.","Ich halte mich sorgfältig daran, weil sie wichtig sind."]},
+        it:{q:"Come vivi il rispetto di regole e processi?",a:["Li seguo se sono efficienti.","Preferisco la flessibilità alle regole rigide.","Li rispetto perché mantengono equità.","Li seguo con attenzione perché contano."]},
+        pt:{q:"Como vê regras e processos?",a:["Sigo-os se forem eficientes.","Prefiro flexibilidade a regras rígidas.","Respeito-os porque mantêm justiça.","Sigo-os com cuidado porque são importantes."]},
+        nl:{q:"Hoe kijk je aan tegen regels en processen?",a:["Ik volg ze als ze efficiënt zijn.","Ik geef de voorkeur aan flexibiliteit boven strakke regels.","Ik respecteer ze omdat ze eerlijkheid brengen.","Ik volg ze zorgvuldig omdat ze belangrijk zijn."]},
+        pl:{q:"Jak podchodzisz do zasad i procesów?",a:["Stosuję je, jeśli są efektywne.","Wolę elastyczność niż sztywne zasady.","Szanuję je, bo zapewniają sprawiedliwość.","Stosuję je uważnie, bo są ważne."]},
+        tr:{q:"Kurallar ve süreçler hakkında ne düşünürsünüz?",a:["Verimliyse uyarım.","Katı kurallardan çok esnekliği tercih ederim.","Adaleti sağladıkları için onlara saygı duyarım.","Önemli oldukları için dikkatle uyarım."]},
+        ar:{q:"ما شعورك تجاه اتباع القواعد والإجراءات؟",a:["أتبعها إذا كانت فعّالة.","أفضل المرونة على القواعد الصارمة.","أحترمها لأنها تحافظ على العدالة.","أتبعها بعناية لأنها مهمة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"What motivates you most at work?",a:["Winning and achieving results.","Recognition, excitement, and inspiration.","Helping the team and doing meaningful work.","Doing things well and learning deeply."]},
+        es:{q:"¿Qué te motiva más en el trabajo?",a:["Ganar y lograr resultados.","Reconocimiento, entusiasmo e inspiración.","Ayudar al equipo y hacer un trabajo con sentido.","Hacer las cosas bien y aprender a fondo."]},
+        fr:{q:"Qu’est-ce qui vous motive le plus au travail ?",a:["Gagner et obtenir des résultats.","La reconnaissance, l’enthousiasme et l’inspiration.","Aider l’équipe et faire un travail utile.","Bien faire les choses et apprendre en profondeur."]},
+        de:{q:"Was motiviert Sie bei der Arbeit am meisten?",a:["Gewinnen und Ergebnisse erzielen.","Anerkennung, Begeisterung und Inspiration.","Dem Team helfen und sinnvolle Arbeit leisten.","Dinge gut machen und tief lernen."]},
+        it:{q:"Cosa ti motiva di più sul lavoro?",a:["Vincere e ottenere risultati.","Riconoscimento, entusiasmo e ispirazione.","Aiutare il team e fare un lavoro significativo.","Fare bene le cose e imparare in profondità."]},
+        pt:{q:"O que mais o motiva no trabalho?",a:["Ganhar e alcançar resultados.","Reconhecimento, entusiasmo e inspiração.","Ajudar a equipa e fazer trabalho com significado.","Fazer bem as coisas e aprender em profundidade."]},
+        nl:{q:"Wat motiveert je het meest op het werk?",a:["Winnen en resultaten behalen.","Erkenning, enthousiasme en inspiratie.","Het team helpen en zinvol werk doen.","Dingen goed doen en diepgaand leren."]},
+        pl:{q:"Co najbardziej motywuje Cię w pracy?",a:["Wygrywanie i osiąganie wyników.","Uznanie, ekscytacja i inspiracja.","Pomaganie zespołowi i robienie czegoś wartościowego.","Robienie rzeczy dobrze i głębokie uczenie się."]},
+        tr:{q:"İş hayatında sizi en çok ne motive eder?",a:["Kazanmak ve sonuç almak.","Takdir, heyecan ve ilham.","Ekibe yardım etmek ve anlamlı işler yapmak.","İşleri iyi yapmak ve derinlemesine öğrenmek."]},
+        ar:{q:"ما الذي يحفزك أكثر في العمل؟",a:["الفوز وتحقيق النتائج.","التقدير والحماس والإلهام.","مساعدة الفريق والقيام بعمل له معنى.","إتقان العمل والتعلم بعمق."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When making an important decision, you rely most on…",a:["Your instinct and judgement.","Talking it through with people.","What feels right for everyone involved.","Data, evidence, and logic."]},
+        es:{q:"Al tomar una decisión importante, confías más en…",a:["Tu instinto y criterio.","Hablarlo con otras personas.","Lo que parece correcto para todos los implicados.","Datos, evidencia y lógica."]},
+        fr:{q:"Lorsque vous prenez une décision importante, vous vous appuyez surtout sur…",a:["Votre instinct et votre jugement.","Le fait d’en parler avec d’autres.","Ce qui semble juste pour toutes les personnes impliquées.","Les données, les preuves et la logique."]},
+        de:{q:"Wenn Sie eine wichtige Entscheidung treffen, verlassen Sie sich am meisten auf…",a:["Ihr Bauchgefühl und Urteil.","Das Gespräch mit anderen.","Das, was sich für alle Beteiligten richtig anfühlt.","Daten, Belege und Logik."]},
+        it:{q:"Quando prendi una decisione importante, fai più affidamento su…",a:["Istinto e giudizio.","Confrontarti con altre persone.","Ciò che sembra giusto per tutti i coinvolti.","Dati, evidenze e logica."]},
+        pt:{q:"Ao tomar uma decisão importante, confia mais em…",a:["O seu instinto e julgamento.","Conversar com outras pessoas.","O que parece certo para todos os envolvidos.","Dados, evidências e lógica."]},
+        nl:{q:"Wanneer je een belangrijke beslissing neemt, vertrouw je het meest op…",a:["Je instinct en oordeel.","Er met anderen over praten.","Wat voor iedereen goed voelt.","Data, bewijs en logica."]},
+        pl:{q:"Podejmując ważną decyzję, najbardziej polegasz na…",a:["Swojej intuicji i ocenie.","Przegadaniu tego z ludźmi.","Tym, co wydaje się właściwe dla wszystkich.","Danych, dowodach i logice."]},
+        tr:{q:"Önemli bir karar verirken en çok neye güvenirsiniz?",a:["İçgüdünüze ve yargınıza.","İnsanlarla konuşmaya.","Herkes için doğru hissettiren şeye.","Veri, kanıt ve mantığa."]},
+        ar:{q:"عند اتخاذ قرار مهم، فإنك تعتمد أكثر على…",a:["حدسك وحكمك الشخصي.","مناقشته مع الآخرين.","ما يبدو مناسباً لكل من له علاقة.","البيانات والأدلة والمنطق."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"In a fast-changing environment, you typically…",a:["Thrive and push even harder.","Adapt quickly and enjoy the pace.","Stay steady and help others stay grounded.","Need time to re-evaluate carefully."]},
+        es:{q:"En un entorno que cambia rápidamente, normalmente…",a:["Prosperas y aceleras aún más.","Te adaptas rápido y disfrutas el ritmo.","Te mantienes estable y ayudas a otros a centrarse.","Necesitas tiempo para reevaluar con cuidado."]},
+        fr:{q:"Dans un environnement qui change vite, vous avez tendance à…",a:["Vous épanouir et accélérer encore.","Vous adapter vite et apprécier le rythme.","Rester stable et aider les autres à garder les pieds sur terre.","Avoir besoin de temps pour réévaluer avec soin."]},
+        de:{q:"In einem sich schnell verändernden Umfeld…",a:["Blühen Sie auf und treiben noch stärker voran.","Passen Sie sich schnell an und mögen das Tempo.","Bleiben Sie stabil und helfen anderen, geerdet zu bleiben.","Brauchen Sie Zeit, um sorgfältig neu zu bewerten."]},
+        it:{q:"In un ambiente che cambia rapidamente, di solito…",a:["Dai il meglio e spingi ancora di più.","Ti adatti velocemente e ti piace il ritmo.","Rimani stabile e aiuti gli altri a restare centrati.","Hai bisogno di tempo per rivalutare con attenzione."]},
+        pt:{q:"Num ambiente de mudança rápida, normalmente…",a:["Prospera e acelera ainda mais.","Adapta-se rapidamente e gosta do ritmo.","Mantém-se estável e ajuda os outros a manter o foco.","Precisa de tempo para reavaliar com cuidado."]},
+        nl:{q:"In een snel veranderende omgeving…",a:["Gedij je en duw je nog harder.","Pas je je snel aan en geniet je van het tempo.","Blijf je stabiel en help je anderen gegrond te blijven.","Heb je tijd nodig om zorgvuldig opnieuw te beoordelen."]},
+        pl:{q:"W szybko zmieniającym się środowisku zazwyczaj…",a:["Rozwijasz się i przyspieszasz jeszcze bardziej.","Szybko się dostosowujesz i lubisz tempo.","Pozostajesz stabilny i pomagasz innym zachować spokój.","Potrzebujesz czasu, by uważnie wszystko ocenić na nowo."]},
+        tr:{q:"Hızla değişen bir ortamda genellikle…",a:["Parlar ve daha da çok zorlarsınız.","Hızlı uyum sağlar ve tempodan keyif alırsınız.","Dengede kalır ve başkalarının da dengede kalmasına yardımcı olursunuz.","Dikkatlice yeniden değerlendirmek için zamana ihtiyaç duyarsınız."]},
+        ar:{q:"في بيئة سريعة التغير، فإنك عادة…",a:["تزدهر وتدفع أكثر.","تتكيف بسرعة وتستمتع بالإيقاع.","تبقى ثابتاً وتساعد الآخرين على الثبات.","تحتاج إلى وقت لإعادة التقييم بعناية."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When under pressure, others might notice you become…",a:["More demanding and controlling.","More frantic or overly optimistic.","Too accommodating or hesitant to speak up.","More withdrawn or overly critical."]},
+        es:{q:"Bajo presión, los demás pueden notar que te vuelves…",a:["Más exigente y controlador.","Más agitado o demasiado optimista.","Demasiado complaciente o dudoso para hablar.","Más reservado o demasiado crítico."]},
+        fr:{q:"Sous pression, les autres peuvent remarquer que vous devenez…",a:["Plus exigeant et contrôlant.","Plus agité ou trop optimiste.","Trop accommodant ou hésitant à parler.","Plus réservé ou trop critique."]},
+        de:{q:"Unter Druck bemerken andere vielleicht, dass Sie…",a:["Anspruchsvoller und kontrollierender werden.","Hektischer oder zu optimistisch werden.","Zu nachgiebig werden oder sich nicht äußern.","Sich zurückziehen oder zu kritisch werden."]},
+        it:{q:"Sotto pressione, gli altri potrebbero notare che diventi…",a:["Più esigente e controllante.","Più agitato o troppo ottimista.","Troppo accomodante o restio a parlare.","Più chiuso o troppo critico."]},
+        pt:{q:"Sob pressão, os outros podem notar que fica…",a:["Mais exigente e controlador.","Mais agitado ou demasiado otimista.","Demasiado acomodado ou hesitante em falar.","Mais reservado ou demasiado crítico."]},
+        nl:{q:"Onder druk merken anderen misschien dat je…",a:["Veeleisender en controlerender wordt.","Onrustiger of té optimistisch wordt.","Te meegaand wordt of niet durft te spreken.","Meer teruggetrokken of te kritisch wordt."]},
+        pl:{q:"Pod presją inni mogą zauważyć, że stajesz się…",a:["Bardziej wymagający i kontrolujący.","Bardziej nerwowy lub zbyt optymistyczny.","Zbyt ugodowy albo niechętny do zabrania głosu.","Bardziej wycofany albo zbyt krytyczny."]},
+        tr:{q:"Baskı altındayken başkaları sizde şunu fark edebilir…",a:["Daha talepkâr ve kontrolcü olursunuz.","Daha telaşlı ya da aşırı iyimser olursunuz.","Fazla uyumlu ya da konuşmakta çekingen olursunuz.","Daha içine kapanık ya da aşırı eleştirel olursunuz."]},
+        ar:{q:"تحت الضغط، قد يلاحظ الآخرون أنك تصبح…",a:["أكثر طلباً وسيطرة.","أكثر ارتباكاً أو مفرط التفاؤل.","مسايراً أكثر من اللازم أو متردداً في التحدث.","أكثر انسحاباً أو انتقاداً."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"How do you prefer to receive feedback?",a:["Short, direct, and actionable.","Positive and encouraging first.","Gentle and considerate.","Specific and evidence-based."]},
+        es:{q:"¿Cómo prefieres recibir feedback?",a:["Breve, directo y accionable.","Primero positivo y alentador.","Suave y considerado.","Específico y basado en evidencias."]},
+        fr:{q:"Comment préférez-vous recevoir un retour ?",a:["Court, direct et exploitable.","Positif et encourageant d’abord.","Doux et attentionné.","Spécifique et fondé sur des preuves."]},
+        de:{q:"Wie möchten Sie Feedback am liebsten erhalten?",a:["Kurz, direkt und umsetzbar.","Zuerst positiv und ermutigend.","Sanft und rücksichtsvoll.","Spezifisch und belegbasiert."]},
+        it:{q:"Come preferisci ricevere feedback?",a:["Breve, diretto e operativo.","Prima positivo e incoraggiante.","Delicato e rispettoso.","Specifico e basato su evidenze."]},
+        pt:{q:"Como prefere receber feedback?",a:["Curto, direto e acionável.","Primeiro positivo e encorajador.","Suave e cuidadoso.","Específico e baseado em evidências."]},
+        nl:{q:"Hoe ontvang je het liefst feedback?",a:["Kort, direct en bruikbaar.","Eerst positief en bemoedigend.","Zacht en zorgvuldig.","Specifiek en op feiten gebaseerd."]},
+        pl:{q:"Jak wolisz otrzymywać informację zwrotną?",a:["Krótko, bezpośrednio i konkretnie.","Najpierw pozytywnie i zachęcająco.","Delikatnie i z wyczuciem.","Konkretnie i na podstawie faktów."]},
+        tr:{q:"Geri bildirimi nasıl almayı tercih edersiniz?",a:["Kısa, doğrudan ve uygulanabilir.","Önce olumlu ve teşvik edici.","Nazik ve düşünceli.","Spesifik ve kanıta dayalı."]},
+        ar:{q:"كيف تفضل تلقي الملاحظات؟",a:["قصيرة ومباشرة وقابلة للتنفيذ.","إيجابية ومشجعة أولاً.","بلطف ومراعاة.","بشكل محدد ومدعوم بالأدلة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When someone presents an idea, you mostly want to know…",a:["What outcome it will drive.","How exciting and inspiring it is.","How it affects people and the team.","What evidence supports it and what the risks are."]},
+        es:{q:"Cuando alguien presenta una idea, lo que más quieres saber es…",a:["Qué resultado va a generar.","Qué tan emocionante e inspiradora es.","Cómo afecta a las personas y al equipo.","Qué evidencia la respalda y cuáles son los riesgos."]},
+        fr:{q:"Quand quelqu’un présente une idée, vous voulez surtout savoir…",a:["Quel résultat elle produira.","À quel point elle est enthousiasmante.","Comment elle affecte les personnes et l’équipe.","Quelles preuves la soutiennent et quels sont les risques."]},
+        de:{q:"Wenn jemand eine Idee vorstellt, möchten Sie vor allem wissen…",a:["Welches Ergebnis sie bringt.","Wie spannend und inspirierend sie ist.","Wie sie sich auf Menschen und das Team auswirkt.","Welche Belege es gibt und welche Risiken bestehen."]},
+        it:{q:"Quando qualcuno presenta un’idea, vuoi soprattutto sapere…",a:["Quale risultato porterà.","Quanto sia stimolante e ispirante.","Come influirà sulle persone e sul team.","Quali prove la sostengono e quali rischi ci sono."]},
+        pt:{q:"Quando alguém apresenta uma ideia, quer sobretudo saber…",a:["Que resultado vai gerar.","Quão entusiasmante e inspiradora é.","Como afeta as pessoas e a equipa.","Que evidências a sustentam e quais são os riscos."]},
+        nl:{q:"Wanneer iemand een idee presenteert, wil je vooral weten…",a:["Welk resultaat het oplevert.","Hoe spannend en inspirerend het is.","Hoe het mensen en het team beïnvloedt.","Welk bewijs er is en wat de risico’s zijn."]},
+        pl:{q:"Gdy ktoś przedstawia pomysł, najbardziej chcesz wiedzieć…",a:["Jaki efekt przyniesie.","Na ile jest ekscytujący i inspirujący.","Jak wpłynie na ludzi i zespół.","Jakie są dowody i ryzyka."]},
+        tr:{q:"Biri bir fikir sunduğunda en çok şunu bilmek istersiniz…",a:["Hangi sonucu getireceğini.","Ne kadar heyecan verici ve ilham verici olduğunu.","İnsanları ve ekibi nasıl etkileyeceğini.","Hangi kanıtlarla desteklendiğini ve risklerin ne olduğunu."]},
+        ar:{q:"عندما يطرح شخص فكرة، فأكثر ما تريد معرفته هو…",a:["ما النتيجة التي ستقود إليها.","مدى حماسها وإلهامها.","كيف ستؤثر على الناس والفريق.","ما الأدلة التي تدعمها وما المخاطر."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"Your ideal working environment is…",a:["Competitive, fast, and results-driven.","Creative, social, and full of energy.","Collaborative, supportive, and calm.","Structured, quiet, and organised."]},
+        es:{q:"Tu entorno de trabajo ideal es…",a:["Competitivo, rápido y orientado a resultados.","Creativo, social y lleno de energía.","Colaborativo, de apoyo y tranquilo.","Estructurado, silencioso y organizado."]},
+        fr:{q:"Votre environnement de travail idéal est…",a:["Compétitif, rapide et axé résultats.","Créatif, social et plein d’énergie.","Collaboratif, soutenant et calme.","Structuré, calme et organisé."]},
+        de:{q:"Ihr ideales Arbeitsumfeld ist…",a:["Wettbewerbsorientiert, schnell und ergebnisfokussiert.","Kreativ, sozial und voller Energie.","Kollaborativ, unterstützend und ruhig.","Strukturiert, ruhig und organisiert."]},
+        it:{q:"Il tuo ambiente di lavoro ideale è…",a:["Competitivo, veloce e orientato ai risultati.","Creativo, sociale e pieno di energia.","Collaborativo, di supporto e tranquillo.","Strutturato, silenzioso e organizzato."]},
+        pt:{q:"O seu ambiente de trabalho ideal é…",a:["Competitivo, rápido e orientado a resultados.","Criativo, social e cheio de energia.","Colaborativo, apoiador e calmo.","Estruturado, silencioso e organizado."]},
+        nl:{q:"Je ideale werkomgeving is…",a:["Competitief, snel en resultaatgericht.","Creatief, sociaal en vol energie.","Samenwerkend, ondersteunend en rustig.","Gestructureerd, stil en georganiseerd."]},
+        pl:{q:"Twoje idealne środowisko pracy to…",a:["Konkurencyjne, szybkie i nastawione na wyniki.","Kreatywne, społeczne i pełne energii.","Współpracujące, wspierające i spokojne.","Uporządkowane, ciche i zorganizowane."]},
+        tr:{q:"İdeal çalışma ortamınız…",a:["Rekabetçi, hızlı ve sonuç odaklıdır.","Yaratıcı, sosyal ve enerji doludur.","İş birliğine açık, destekleyici ve sakindir.","Yapılandırılmış, sessiz ve düzenlidir."]},
+        ar:{q:"بيئة العمل المثالية بالنسبة لك هي…",a:["تنافسية وسريعة وموجهة نحو النتائج.","إبداعية واجتماعية ومليئة بالطاقة.","تعاونية وداعمة وهادئة.","منظمة وهادئة ومرتبة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"How do you build trust with people?",a:["By delivering and being reliable under pressure.","By being open, engaging, and enjoyable to work with.","By being genuine, consistent, and caring.","By being accurate, thorough, and dependable."]},
+        es:{q:"¿Cómo construyes confianza con los demás?",a:["Cumpliendo y siendo fiable bajo presión.","Siendo abierto, cercano y agradable para trabajar.","Siendo genuino, constante y cuidadoso.","Siendo preciso, minucioso y fiable."]},
+        fr:{q:"Comment créez-vous la confiance avec les autres ?",a:["En livrant et en étant fiable sous pression.","En étant ouvert, engageant et agréable.","En étant authentique, constant et bienveillant.","En étant précis, rigoureux et fiable."]},
+        de:{q:"Wie bauen Sie Vertrauen zu anderen auf?",a:["Indem Sie liefern und unter Druck verlässlich sind.","Indem Sie offen, zugänglich und angenehm sind.","Indem Sie authentisch, beständig und fürsorglich sind.","Indem Sie genau, gründlich und verlässlich sind."]},
+        it:{q:"Come costruisci fiducia con le persone?",a:["Consegnando risultati ed essendo affidabile sotto pressione.","Essendo aperto, coinvolgente e piacevole nel lavoro.","Essendo genuino, costante e attento.","Essendo preciso, accurato e affidabile."]},
+        pt:{q:"Como constrói confiança com as pessoas?",a:["Cumprindo e sendo fiável sob pressão.","Sendo aberto, envolvente e agradável de trabalhar.","Sendo genuíno, consistente e cuidadoso.","Sendo preciso, rigoroso e fiável."]},
+        nl:{q:"Hoe bouw je vertrouwen op met mensen?",a:["Door te leveren en betrouwbaar te zijn onder druk.","Door open, betrokken en prettig in de samenwerking te zijn.","Door oprecht, consistent en zorgzaam te zijn.","Door nauwkeurig, grondig en betrouwbaar te zijn."]},
+        pl:{q:"Jak budujesz zaufanie z ludźmi?",a:["Dowożąc wyniki i będąc niezawodnym pod presją.","Będąc otwartym, angażującym i przyjemnym we współpracy.","Będąc autentycznym, konsekwentnym i troskliwym.","Będąc dokładnym, rzetelnym i godnym zaufania."]},
+        tr:{q:"İnsanlarla güveni nasıl kurarsınız?",a:["Baskı altında sonuç getirerek ve güvenilir olarak.","Açık, ilgili ve birlikte çalışması keyifli olarak.","Samimi, tutarlı ve ilgili olarak.","Doğru, titiz ve güvenilir olarak."]},
+        ar:{q:"كيف تبني الثقة مع الآخرين؟",a:["من خلال الإنجاز والاعتمادية تحت الضغط.","من خلال الانفتاح والتفاعل وجعل العمل معك ممتعاً.","من خلال الأصالة والثبات والاهتمام.","من خلال الدقة والعمق والاعتمادية."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When working in a group, your natural role is usually…",a:["Driving things forward and keeping people accountable.","Generating ideas and lifting the mood.","Keeping the peace and making sure everyone is included.","Spotting issues and maintaining quality."]},
+        es:{q:"Cuando trabajas en grupo, tu rol natural suele ser…",a:["Impulsar el avance y exigir responsabilidad.","Generar ideas y levantar el ánimo.","Mantener la armonía e incluir a todos.","Detectar problemas y cuidar la calidad."]},
+        fr:{q:"Quand vous travaillez en groupe, votre rôle naturel est souvent…",a:["Faire avancer les choses et responsabiliser.","Générer des idées et remonter l’énergie.","Maintenir la paix et inclure tout le monde.","Repérer les problèmes et préserver la qualité."]},
+        de:{q:"Wenn Sie in einer Gruppe arbeiten, ist Ihre natürliche Rolle meist…",a:["Dinge voranzutreiben und Verantwortung einzufordern.","Ideen zu erzeugen und die Stimmung zu heben.","Frieden zu wahren und alle einzubeziehen.","Probleme zu erkennen und Qualität zu sichern."]},
+        it:{q:"Quando lavori in gruppo, il tuo ruolo naturale di solito è…",a:["Far avanzare le cose e tenere tutti responsabili.","Generare idee e sollevare il clima.","Mantenere armonia e includere tutti.","Individuare problemi e preservare qualità."]},
+        pt:{q:"Quando trabalha em grupo, o seu papel natural costuma ser…",a:["Fazer as coisas avançar e garantir responsabilidade.","Gerar ideias e elevar o ânimo.","Manter a paz e incluir toda a gente.","Detetar problemas e manter qualidade."]},
+        nl:{q:"Wanneer je in een groep werkt, is jouw natuurlijke rol meestal…",a:["Vooruitgang afdwingen en mensen verantwoordelijk houden.","Ideeën genereren en de sfeer verhogen.","De rust bewaren en iedereen meenemen.","Problemen signaleren en kwaliteit bewaken."]},
+        pl:{q:"Gdy pracujesz w grupie, Twoją naturalną rolą jest zwykle…",a:["Popychanie spraw do przodu i pilnowanie odpowiedzialności.","Tworzenie pomysłów i podnoszenie energii.","Utrzymywanie spokoju i dbanie, by wszyscy byli włączeni.","Wyłapywanie problemów i pilnowanie jakości."]},
+        tr:{q:"Bir grupta çalışırken doğal rolünüz genelde…",a:["İşleri ileri taşımak ve hesap verebilirliği sağlamak olur.","Fikir üretmek ve ortamın enerjisini yükseltmek olur.","Uyumu korumak ve herkesin dahil olmasını sağlamak olur.","Sorunları fark etmek ve kaliteyi korumak olur."]},
+        ar:{q:"عند العمل ضمن مجموعة، يكون دورك الطبيعي غالباً…",a:["دفع الأمور إلى الأمام ومحاسبة الآخرين.","توليد الأفكار ورفع المعنويات.","الحفاظ على الانسجام وضمان شمول الجميع.","رصد المشكلات والحفاظ على الجودة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"At the end of a challenging week, you feel most satisfied when…",a:["You hit targets and pushed through obstacles.","You had great conversations and brought energy.","Your team felt supported and things ran smoothly.","You produced something accurate and high quality."]},
+        es:{q:"Al final de una semana difícil, te sientes más satisfecho cuando…",a:["Cumpliste objetivos y superaste obstáculos.","Tuviste grandes conversaciones y aportaste energía.","Tu equipo se sintió apoyado y todo fluyó bien.","Produjiste algo preciso y de alta calidad."]},
+        fr:{q:"À la fin d’une semaine difficile, vous vous sentez le plus satisfait quand…",a:["Vous avez atteint vos objectifs et surmonté les obstacles.","Vous avez eu de bonnes conversations et apporté de l’énergie.","Votre équipe s’est sentie soutenue et tout a bien fonctionné.","Vous avez produit quelque chose de précis et de grande qualité."]},
+        de:{q:"Am Ende einer anspruchsvollen Woche sind Sie am zufriedensten, wenn…",a:["Sie Ziele erreicht und Hindernisse überwunden haben.","Sie gute Gespräche hatten und Energie eingebracht haben.","Ihr Team sich unterstützt fühlte und alles gut lief.","Sie etwas Präzises und Hochwertiges geliefert haben."]},
+        it:{q:"Alla fine di una settimana impegnativa, ti senti più soddisfatto quando…",a:["Hai raggiunto gli obiettivi e superato gli ostacoli.","Hai avuto ottime conversazioni e portato energia.","Il tuo team si è sentito supportato e tutto è andato bene.","Hai prodotto qualcosa di preciso e di alta qualità."]},
+        pt:{q:"No fim de uma semana exigente, sente-se mais satisfeito quando…",a:["Atingiu objetivos e ultrapassou obstáculos.","Teve boas conversas e trouxe energia.","A sua equipa sentiu-se apoiada e tudo correu bem.","Produziu algo preciso e de alta qualidade."]},
+        nl:{q:"Aan het einde van een uitdagende week voel je je het meest tevreden wanneer…",a:["Je doelen haalde en obstakels overwon.","Je goede gesprekken had en energie bracht.","Je team zich gesteund voelde en alles soepel liep.","Je iets nauwkeurigs en van hoge kwaliteit opleverde."]},
+        pl:{q:"Pod koniec trudnego tygodnia jesteś najbardziej zadowolony, gdy…",a:["Osiągnąłeś cele i przebiłeś się przez przeszkody.","Miałeś świetne rozmowy i wnosiłeś energię.","Twój zespół czuł wsparcie, a wszystko przebiegało płynnie.","Stworzyłeś coś dokładnego i wysokiej jakości."]},
+        tr:{q:"Zorlu bir haftanın sonunda en çok şu durumda tatmin olursunuz…",a:["Hedeflere ulaşıp engelleri aştığınızda.","İyi konuşmalar yapıp enerji kattığınızda.","Ekibiniz desteklendiğini hissettiğinde ve işler düzgün aktığında.","Doğru ve yüksek kaliteli bir iş ortaya koyduğunuzda."]},
+        ar:{q:"في نهاية أسبوع صعب، تشعر بأكبر قدر من الرضا عندما…",a:["تصل إلى الأهداف وتتجاوز العقبات.","تجري محادثات رائعة وتضيف طاقة.","يشعر فريقك بالدعم وتسير الأمور بسلاسة.","تنتج شيئاً دقيقاً وعالي الجودة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When you need to deliver difficult news, you…",a:["Say it clearly and quickly.","Try to keep it positive and future-focused.","Choose your words carefully and check in afterwards.","Prepare carefully and stick to the facts."]},
+        es:{q:"Cuando necesitas dar una noticia difícil, tú…",a:["La dices con claridad y rapidez.","Intentas mantenerla positiva y enfocada en el futuro.","Eliges bien las palabras y haces seguimiento después.","Te preparas con cuidado y te ciñes a los hechos."]},
+        fr:{q:"Lorsque vous devez annoncer une nouvelle difficile, vous…",a:["La dites clairement et rapidement.","Essayez de rester positif et tourné vers la suite.","Choisissez vos mots avec soin et reprenez contact ensuite.","Vous préparez soigneusement et vous en tenez aux faits."]},
+        de:{q:"Wenn Sie schlechte Nachrichten überbringen müssen, dann…",a:["Sagen Sie es klar und schnell.","Versuchen Sie, positiv und zukunftsorientiert zu bleiben.","Wählen Sie Ihre Worte sorgfältig und fragen später nach.","Bereiten Sie sich gründlich vor und bleiben bei den Fakten."]},
+        it:{q:"Quando devi dare una notizia difficile, tu…",a:["La dici chiaramente e subito.","Cerchi di mantenerla positiva e orientata al futuro.","Scegli con cura le parole e poi ricontrolli.","Ti prepari bene e rimani sui fatti."]},
+        pt:{q:"Quando precisa dar uma notícia difícil, você…",a:["Diz de forma clara e rápida.","Tenta manter um tom positivo e orientado para o futuro.","Escolhe as palavras com cuidado e volta a falar depois.","Prepara-se bem e fica pelos factos."]},
+        nl:{q:"Wanneer je moeilijk nieuws moet brengen, dan…",a:["Zeg je het duidelijk en snel.","Probeer je het positief en toekomstgericht te houden.","Kies je je woorden zorgvuldig en check je later nog eens in.","Bereid je je goed voor en houd je je aan de feiten."]},
+        pl:{q:"Gdy musisz przekazać trudną wiadomość, to…",a:["Mówisz ją jasno i szybko.","Starasz się zachować pozytywny i przyszłościowy ton.","Dobierasz słowa ostrożnie i wracasz do rozmowy później.","Przygotowujesz się dokładnie i trzymasz się faktów."]},
+        tr:{q:"Zor bir haberi iletmeniz gerektiğinde…",a:["Açık ve hızlı şekilde söylersiniz.","Olumlu ve geleceğe dönük tutmaya çalışırsınız.","Kelimelerinizi dikkatle seçer ve sonra tekrar yoklarsınız.","Dikkatle hazırlanır ve gerçeklere bağlı kalırsınız."]},
+        ar:{q:"عندما تحتاج إلى إيصال خبر صعب، فإنك…",a:["تقوله بوضوح وبسرعة.","تحاول الحفاظ على نبرة إيجابية وموجهة للمستقبل.","تختار كلماتك بعناية وتتابع لاحقاً.","تستعد جيداً وتلتزم بالحقائق."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"Friends would most likely describe you as…",a:["The one who gets things moving.","The fun, upbeat one.","The loyal one who is always there.","The thoughtful and prepared one."]},
+        es:{q:"Tus amigos probablemente te describirían como…",a:["La persona que hace que las cosas arranquen.","La persona divertida y positiva.","La persona leal que siempre está.","La persona reflexiva y preparada."]},
+        fr:{q:"Vos amis vous décriraient probablement comme…",a:["Celui ou celle qui fait bouger les choses.","La personne drôle et positive.","La personne loyale toujours présente.","La personne réfléchie et préparée."]},
+        de:{q:"Freunde würden Sie wahrscheinlich so beschreiben…",a:["Als die Person, die Dinge in Bewegung bringt.","Als die lustige und positive Person.","Als die loyale Person, die immer da ist.","Als die nachdenkliche und gut vorbereitete Person."]},
+        it:{q:"Gli amici probabilmente ti descriverebbero come…",a:["Quello o quella che fa partire le cose.","Quello o quella divertente e positiva.","Quello o quella leale che c’è sempre.","Quello o quella riflessiva e preparata."]},
+        pt:{q:"Os amigos provavelmente descrevê-lo-iam como…",a:["A pessoa que faz as coisas acontecerem.","A pessoa divertida e positiva.","A pessoa leal que está sempre presente.","A pessoa ponderada e preparada."]},
+        nl:{q:"Vrienden zouden jou waarschijnlijk omschrijven als…",a:["Degene die dingen in gang zet.","De leuke en positieve persoon.","De loyale persoon die er altijd is.","De bedachtzame en voorbereide persoon."]},
+        pl:{q:"Przyjaciele najpewniej opisaliby Cię jako…",a:["Tę osobę, która uruchamia działanie.","Tę zabawną i pozytywną osobę.","Tę lojalną osobę, która zawsze jest obok.","Tę refleksyjną i przygotowaną osobę."]},
+        tr:{q:"Arkadaşlarınız sizi büyük olasılıkla şöyle tanımlar…",a:["İşleri harekete geçiren kişi.","Eğlenceli ve pozitif kişi.","Her zaman yanında olan sadık kişi.","Düşünceli ve hazırlıklı kişi."]},
+        ar:{q:"من المرجح أن يصفك أصدقاؤك بأنك…",a:["الشخص الذي يجعل الأمور تتحرك.","الشخص المرح والإيجابي.","الشخص الوفي الذي يكون موجوداً دائماً.","الشخص المتأمل والمستعد دائماً."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When learning something new, you prefer to…",a:["Try it immediately and learn by doing.","Discuss it with others and explore aloud.","Take time and ask questions first.","Read, study, and understand it deeply before starting."]},
+        es:{q:"Cuando aprendes algo nuevo, prefieres…",a:["Probarlo de inmediato y aprender haciendo.","Hablarlo con otros y explorarlo en voz alta.","Tomarte tiempo y hacer preguntas primero.","Leer, estudiar y entenderlo a fondo antes de empezar."]},
+        fr:{q:"Quand vous apprenez quelque chose de nouveau, vous préférez…",a:["L’essayer immédiatement et apprendre en faisant.","En discuter avec d’autres et l’explorer à voix haute.","Prendre du temps et poser des questions d’abord.","Lire, étudier et bien comprendre avant de commencer."]},
+        de:{q:"Wenn Sie etwas Neues lernen, bevorzugen Sie…",a:["Es sofort auszuprobieren und durch Tun zu lernen.","Mit anderen darüber zu sprechen und laut zu erkunden.","Sich Zeit zu nehmen und zuerst Fragen zu stellen.","Zu lesen, zu studieren und es tief zu verstehen, bevor Sie beginnen."]},
+        it:{q:"Quando impari qualcosa di nuovo, preferisci…",a:["Provarlo subito e imparare facendo.","Discuterne con altri ed esplorarlo parlando.","Prenderti tempo e fare domande prima.","Leggere, studiare e capirlo a fondo prima di iniziare."]},
+        pt:{q:"Quando aprende algo novo, prefere…",a:["Experimentar logo e aprender fazendo.","Conversar com outros e explorar em voz alta.","Levar tempo e fazer perguntas primeiro.","Ler, estudar e compreender profundamente antes de começar."]},
+        nl:{q:"Wanneer je iets nieuws leert, doe je dat het liefst door…",a:["Het meteen te proberen en al doende te leren.","Er met anderen over te praten en het hardop te verkennen.","Eerst tijd te nemen en vragen te stellen.","Te lezen, te studeren en het diep te begrijpen voordat je begint."]},
+        pl:{q:"Kiedy uczysz się czegoś nowego, wolisz…",a:["Od razu spróbować i uczyć się przez działanie.","Omówić to z innymi i odkrywać na głos.","Najpierw poświęcić czas i zadawać pytania.","Czytać, studiować i dobrze to zrozumieć przed startem."]},
+        tr:{q:"Yeni bir şey öğrenirken şunu tercih edersiniz…",a:["Hemen denemek ve yaparak öğrenmek.","Başkalarıyla konuşup yüksek sesle keşfetmek.","Önce zaman ayırıp sorular sormak.","Başlamadan önce okuyup çalışmak ve derinlemesine anlamak."]},
+        ar:{q:"عند تعلم شيء جديد، فإنك تفضل…",a:["تجربته فوراً والتعلم بالممارسة.","مناقشته مع الآخرين واستكشافه بصوت عالٍ.","أخذ وقتك وطرح الأسئلة أولاً.","القراءة والدراسة وفهمه بعمق قبل البدء."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"Which phrase feels most like you?",a:["Just get it done.","Let’s make this fun.","Let’s make sure everyone is okay.","Let’s make sure we do it right."]},
+        es:{q:"¿Qué frase sientes más como tuya?",a:["Simplemente haz que ocurra.","Hagamos esto divertido.","Asegurémonos de que todos estén bien.","Asegurémonos de hacerlo bien."]},
+        fr:{q:"Quelle phrase vous ressemble le plus ?",a:["Faisons-le, tout simplement.","Rendons cela agréable.","Assurons-nous que tout le monde va bien.","Assurons-nous de bien le faire."]},
+        de:{q:"Welche Aussage passt am besten zu Ihnen?",a:["Einfach machen.","Lass uns das unterhaltsam machen.","Lass uns sicherstellen, dass es allen gut geht.","Lass uns sicherstellen, dass wir es richtig machen."]},
+        it:{q:"Quale frase ti rappresenta di più?",a:["Facciamolo e basta.","Rendiamo tutto questo divertente.","Assicuriamoci che tutti stiano bene.","Assicuriamoci di farlo bene."]},
+        pt:{q:"Que frase parece mais consigo?",a:["Basta fazer acontecer.","Vamos tornar isto divertido.","Vamos garantir que todos estão bem.","Vamos garantir que o fazemos corretamente."]},
+        nl:{q:"Welke zin past het meest bij jou?",a:["Gewoon doen.","Laten we dit leuk maken.","Laten we zorgen dat iedereen oké is.","Laten we zorgen dat we het goed doen."]},
+        pl:{q:"Które zdanie najbardziej do Ciebie pasuje?",a:["Po prostu zróbmy to.","Zróbmy z tego coś fajnego.","Upewnijmy się, że wszyscy mają się dobrze.","Upewnijmy się, że robimy to dobrze."]},
+        tr:{q:"Hangi ifade size en çok uyuyor?",a:["Hadi bunu bitirelim.","Bunu eğlenceli hale getirelim.","Herkesin iyi olduğundan emin olalım.","Bunu doğru yaptığımızdan emin olalım."]},
+        ar:{q:"أي عبارة تشبهك أكثر؟",a:["فقط أنجز الأمر.","لنجعل هذا ممتعاً.","لنتأكد أن الجميع بخير.","لنتأكد أننا نقوم به بالشكل الصحيح."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When a project you care about changes unexpectedly, you…",a:["Push back, make your view heard, then move on quickly.","Feel disappointed briefly, then look for the next exciting path.","Think first about how people are affected and check in.","Need to understand exactly why before accepting it."]},
+        es:{q:"Cuando un proyecto que te importa cambia inesperadamente, tú…",a:["Te opones, haces oír tu opinión y luego sigues rápido.","Te decepcionas un poco y luego buscas el siguiente camino interesante.","Piensas primero en cómo afecta a las personas y haces seguimiento.","Necesitas entender exactamente por qué antes de aceptarlo."]},
+        fr:{q:"Quand un projet important pour vous change de façon inattendue, vous…",a:["Résistez, faites entendre votre point de vue puis passez vite à la suite.","Êtes brièvement déçu puis cherchez la prochaine voie enthousiasmante.","Pensez d’abord à l’impact sur les personnes et reprenez contact.","Avez besoin de comprendre exactement pourquoi avant de l’accepter."]},
+        de:{q:"Wenn sich ein Projekt, das Ihnen wichtig ist, unerwartet ändert, dann…",a:["Wehren Sie sich, äußern Ihre Sicht und gehen dann schnell weiter.","Sind Sie kurz enttäuscht und suchen dann den nächsten spannenden Weg.","Denken Sie zuerst daran, wie Menschen betroffen sind, und fragen nach.","Müssen Sie genau verstehen, warum, bevor Sie es akzeptieren."]},
+        it:{q:"Quando un progetto a cui tieni cambia in modo imprevisto, tu…",a:["Ti opponi, fai sentire il tuo punto di vista e poi vai avanti rapidamente.","Ti senti deluso per poco e poi cerchi la prossima opportunità stimolante.","Pensi prima a come le persone siano coinvolte e fai follow-up.","Hai bisogno di capire esattamente perché prima di accettarlo."]},
+        pt:{q:"Quando um projeto importante para si muda inesperadamente, você…",a:["Resiste, faz ouvir a sua opinião e depois segue em frente rapidamente.","Fica brevemente desapontado e depois procura o próximo caminho entusiasmante.","Pensa primeiro no impacto nas pessoas e verifica como estão.","Precisa de perceber exatamente porquê antes de aceitar."]},
+        nl:{q:"Wanneer een project waar je om geeft onverwacht verandert, dan…",a:["Duw je terug, laat je mening horen en ga je snel verder.","Ben je even teleurgesteld en zoek je daarna een nieuwe interessante richting.","Denk je eerst aan de impact op mensen en check je bij hen in.","Moet je exact begrijpen waarom voordat je het accepteert."]},
+        pl:{q:"Gdy projekt, na którym Ci zależy, niespodziewanie się zmienia, to…",a:["Protestujesz, wyrażasz swoje zdanie, a potem szybko idziesz dalej.","Na chwilę się zniechęcasz, a potem szukasz kolejnej ciekawej drogi.","Najpierw myślisz o tym, jak wpływa to na ludzi, i sprawdzasz, jak się mają.","Musisz dokładnie zrozumieć dlaczego, zanim to zaakceptujesz."]},
+        tr:{q:"Önemsediğiniz bir proje beklenmedik şekilde değiştiğinde…",a:["İtiraz eder, görüşünüzü açıkça belirtir ve sonra hızlıca yolunuza devam edersiniz.","Kısa süreli hayal kırıklığı yaşar, sonra yeni heyecan verici yolu ararsınız.","Önce insanları nasıl etkilediğini düşünür ve yoklarsınız.","Kabul etmeden önce nedenini tam olarak anlamanız gerekir."]},
+        ar:{q:"عندما يتغير مشروع تهتم به بشكل غير متوقع، فإنك…",a:["تعترض، وتُسمع رأيك، ثم تمضي سريعاً.","تشعر بخيبة قصيرة ثم تبحث عن المسار المثير التالي.","تفكر أولاً في تأثيره على الناس وتطمئن عليهم.","تحتاج إلى فهم السبب بدقة قبل قبوله."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"Your natural leadership style is closest to…",a:["Set the goal, move fast, hold standards.","Inspire people and generate momentum.","Support people and build commitment.","Clarify the plan and reduce risk."]},
+        es:{q:"Tu estilo natural de liderazgo se parece más a…",a:["Marcar la meta, avanzar rápido y mantener el nivel.","Inspirar a las personas y generar impulso.","Apoyar a las personas y construir compromiso.","Aclarar el plan y reducir el riesgo."]},
+        fr:{q:"Votre style naturel de leadership ressemble le plus à…",a:["Fixer l’objectif, aller vite et maintenir le niveau.","Inspirer les gens et créer de l’élan.","Soutenir les gens et créer de l’engagement.","Clarifier le plan et réduire le risque."]},
+        de:{q:"Ihr natürlicher Führungsstil ist am ehesten…",a:["Ziel setzen, schnell vorangehen, Standards halten.","Menschen inspirieren und Schwung erzeugen.","Menschen unterstützen und Commitment aufbauen.","Den Plan klären und Risiken senken."]},
+        it:{q:"Il tuo stile naturale di leadership è più vicino a…",a:["Definire l’obiettivo, andare veloce e mantenere gli standard.","Ispirare le persone e creare slancio.","Supportare le persone e costruire coinvolgimento.","Chiarire il piano e ridurre il rischio."]},
+        pt:{q:"O seu estilo natural de liderança aproxima-se mais de…",a:["Definir o objetivo, avançar rápido e manter padrões.","Inspirar pessoas e gerar impulso.","Apoiar pessoas e criar compromisso.","Clarificar o plano e reduzir risco."]},
+        nl:{q:"Je natuurlijke leiderschapsstijl lijkt het meest op…",a:["Het doel zetten, snel vooruitgaan en standaarden bewaken.","Mensen inspireren en momentum creëren.","Mensen ondersteunen en betrokkenheid opbouwen.","Het plan verduidelijken en risico verminderen."]},
+        pl:{q:"Twój naturalny styl przywództwa jest najbliższy temu, by…",a:["Wyznaczać cel, działać szybko i trzymać standard.","Inspirować ludzi i budować impet.","Wspierać ludzi i budować zaangażowanie.","Wyjaśniać plan i ograniczać ryzyko."]},
+        tr:{q:"Doğal liderlik tarzınız en çok şuna benzer…",a:["Hedefi koymak, hızlı ilerlemek ve standardı korumak.","İnsanlara ilham vermek ve ivme yaratmak.","İnsanları desteklemek ve bağlılık oluşturmak.","Planı netleştirmek ve riski azaltmak."]},
+        ar:{q:"أسلوب قيادتك الطبيعي أقرب إلى…",a:["وضع الهدف والتحرك بسرعة والحفاظ على المعايير.","إلهام الناس وتوليد الزخم.","دعم الناس وبناء الالتزام.","توضيح الخطة وتقليل المخاطر."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"What drains you fastest at work?",a:["Slow decisions and lack of ownership.","Dry routines and low energy.","Tension, coldness, and conflict.","Chaos, vagueness, and poor quality."]},
+        es:{q:"¿Qué te desgasta más rápido en el trabajo?",a:["Las decisiones lentas y la falta de responsabilidad.","Las rutinas secas y la baja energía.","La tensión, la frialdad y el conflicto.","El caos, la vaguedad y la mala calidad."]},
+        fr:{q:"Qu’est-ce qui vous épuise le plus vite au travail ?",a:["Les décisions lentes et le manque de responsabilité.","Les routines fades et le manque d’énergie.","La tension, la froideur et le conflit.","Le chaos, le flou et la mauvaise qualité."]},
+        de:{q:"Was erschöpft Sie bei der Arbeit am schnellsten?",a:["Langsame Entscheidungen und fehlende Verantwortung.","Trockene Routinen und wenig Energie.","Spannung, Kälte und Konflikt.","Chaos, Unklarheit und schlechte Qualität."]},
+        it:{q:"Cosa ti drena più velocemente al lavoro?",a:["Decisioni lente e mancanza di responsabilità.","Routine spente e poca energia.","Tensione, freddezza e conflitto.","Caos, vaghezza e scarsa qualità."]},
+        pt:{q:"O que o desgasta mais depressa no trabalho?",a:["Decisões lentas e falta de responsabilidade.","Rotinas secas e pouca energia.","Tensão, frieza e conflito.","Caos, vagueza e fraca qualidade."]},
+        nl:{q:"Wat kost je op het werk het snelst energie?",a:["Trage beslissingen en gebrek aan eigenaarschap.","Saaie routines en lage energie.","Spanning, kilte en conflict.","Chaos, vaagheid en slechte kwaliteit."]},
+        pl:{q:"Co najszybciej odbiera Ci energię w pracy?",a:["Powolne decyzje i brak odpowiedzialności.","Suche rutyny i niski poziom energii.","Napięcie, chłód i konflikt.","Chaos, niejasność i słaba jakość."]},
+        tr:{q:"İş hayatında enerjinizi en hızlı ne düşürür?",a:["Yavaş kararlar ve sahiplenme eksikliği.","Kuru rutinler ve düşük enerji.","Gerilim, soğukluk ve çatışma.","Kaos, belirsizlik ve düşük kalite."]},
+        ar:{q:"ما الذي يستنزفك أسرع في العمل؟",a:["القرارات البطيئة وغياب تحمل المسؤولية.","الروتين الجاف والطاقة المنخفضة.","التوتر والبرود والصراع.","الفوضى والغموض وضعف الجودة."]},
+        c:["R","Y","G","B"]
+      },
+      {
+        en:{q:"When you are doing your best work, you are usually…",a:["Moving decisively toward a clear result.","Bringing enthusiasm and momentum to people.","Creating trust and steadiness around others.","Thinking clearly and improving quality."]},
+        es:{q:"Cuando estás trabajando en tu mejor nivel, normalmente estás…",a:["Avanzando con decisión hacia un resultado claro.","Aportando entusiasmo y energía a las personas.","Creando confianza y estabilidad a tu alrededor.","Pensando con claridad y elevando la calidad."]},
+        fr:{q:"Quand vous donnez le meilleur de vous-même, vous êtes généralement en train de…",a:["Avancer avec décision vers un résultat clair.","Apporter enthousiasme et énergie aux personnes.","Créer confiance et stabilité autour de vous.","Penser clairement et améliorer la qualité."]},
+        de:{q:"Wenn Sie Ihre beste Arbeit leisten, dann…",a:["Bewegen Sie sich entschlossen auf ein klares Ergebnis zu.","Bringen Sie Begeisterung und Schwung zu Menschen.","Schaffen Sie Vertrauen und Stabilität um andere herum.","Denken Sie klar und verbessern Qualität."]},
+        it:{q:"Quando dai il meglio di te, di solito stai…",a:["Avanzando con decisione verso un risultato chiaro.","Portando entusiasmo e slancio alle persone.","Creando fiducia e stabilità intorno agli altri.","Pensando con chiarezza e migliorando la qualità."]},
+        pt:{q:"Quando está no seu melhor, normalmente está a…",a:["Avançar com decisão para um resultado claro.","Trazer entusiasmo e impulso às pessoas.","Criar confiança e estabilidade à sua volta.","Pensar com clareza e melhorar a qualidade."]},
+        nl:{q:"Wanneer je op je best bent, ben je meestal…",a:["Besluitvaardig op weg naar een duidelijk resultaat.","Enthousiasme en momentum naar mensen aan het brengen.","Vertrouwen en stabiliteit rond anderen aan het creëren.","Helder aan het denken en kwaliteit aan het verbeteren."]},
+        pl:{q:"Kiedy pracujesz najlepiej, zwykle…",a:["Zdecydowanie zmierzasz do jasnego rezultatu.","Wnosisz entuzjazm i impet do ludzi.","Tworzysz zaufanie i stabilność wokół innych.","Myślisz jasno i podnosisz jakość."]},
+        tr:{q:"En iyi çalıştığınızda genelde…",a:["Net bir sonuca kararlı şekilde ilerlersiniz.","İnsanlara heyecan ve ivme katarsınız.","Çevrenizde güven ve denge yaratırsınız.","Net düşünür ve kaliteyi artırırsınız."]},
+        ar:{q:"عندما تكون في أفضل حالاتك في العمل، فإنك عادة…",a:["تتحرك بحسم نحو نتيجة واضحة.","تجلب الحماس والزخم للناس.","تصنع الثقة والثبات حول الآخرين.","تفكر بوضوح وترفع الجودة."]},
+        c:["R","Y","G","B"]
+      }
+    ];
+
+    const pairTaglines = {
+      en: {
+        RR:"The Decisive Driver", RY:"The Energetic Achiever", RG:"The Driven Collaborator", RB:"The Strategic Achiever",
+        YR:"The Inspiring Activator", YY:"The Pure Enthusiast", YG:"The Warm Connector", YB:"The Creative Analyst",
+        GR:"The Determined Peacemaker", GY:"The Nurturing Energiser", GG:"The Steadfast Supporter", GB:"The Thoughtful Guardian",
+        BR:"The Rigorous Driver", BY:"The Inquisitive Innovator", BG:"The Considered Collaborator", BB:"The Masterful Analyst"
+      },
+      es: {
+        RR:"El impulsor decisivo", RY:"El logrador energético", RG:"El colaborador decidido", RB:"El estratega orientado a resultados",
+        YR:"El activador inspirador", YY:"El entusiasta puro", YG:"El conector cercano", YB:"El analista creativo",
+        GR:"El conciliador decidido", GY:"El motivador cuidador", GG:"El apoyo constante", GB:"El guardián reflexivo",
+        BR:"El impulsor riguroso", BY:"El innovador inquisitivo", BG:"El colaborador considerado", BB:"El analista magistral"
+      },
+      fr: {
+        RR:"Le décideur déterminé", RY:"Le performeur énergique", RG:"Le collaborateur moteur", RB:"Le stratège exigeant",
+        YR:"L’activateur inspirant", YY:"L’enthousiaste pur", YG:"Le lien chaleureux", YB:"L’analyste créatif",
+        GR:"Le pacificateur déterminé", GY:"Le dynamiseur bienveillant", GG:"Le soutien constant", GB:"Le gardien réfléchi",
+        BR:"Le meneur rigoureux", BY:"L’innovateur curieux", BG:"Le collaborateur mesuré", BB:"L’analyste accompli"
+      },
+      de: {
+        RR:"Der entschlossene Antreiber", RY:"Der energiegeladene Macher", RG:"Der engagierte Kollaborateur", RB:"Der strategische Leistungsträger",
+        YR:"Der inspirierende Aktivator", YY:"Der pure Enthusiast", YG:"Der warme Verbinder", YB:"Der kreative Analytiker",
+        GR:"Der entschlossene Vermittler", GY:"Der fürsorgliche Motivator", GG:"Der verlässliche Unterstützer", GB:"Der nachdenkliche Hüter",
+        BR:"Der rigorose Antreiber", BY:"Der neugierige Innovator", BG:"Der bedachte Kollaborateur", BB:"Der meisterhafte Analytiker"
+      },
+      it: {
+        RR:"Il decisore determinato", RY:"Il realizzatore energico", RG:"Il collaboratore trainante", RB:"Il realizzatore strategico",
+        YR:"L’attivatore ispiratore", YY:"L’entusiasta puro", YG:"Il connettore caloroso", YB:"L’analista creativo",
+        GR:"Il pacificatore determinato", GY:"Il motivatore premuroso", GG:"Il sostenitore costante", GB:"Il guardiano riflessivo",
+        BR:"Il trainatore rigoroso", BY:"L’innovatore curioso", BG:"Il collaboratore ponderato", BB:"L’analista magistrale"
+      },
+      pt: {
+        RR:"O impulsionador decisivo", RY:"O realizador energético", RG:"O colaborador movido", RB:"O realizador estratégico",
+        YR:"O ativador inspirador", YY:"O entusiasta puro", YG:"O conector caloroso", YB:"O analista criativo",
+        GR:"O conciliador determinado", GY:"O energizador cuidador", GG:"O apoio constante", GB:"O guardião ponderado",
+        BR:"O impulsionador rigoroso", BY:"O inovador curioso", BG:"O colaborador ponderado", BB:"O analista magistral"
+      },
+      nl: {
+        RR:"De daadkrachtige driver", RY:"De energieke presteerder", RG:"De gedreven samenwerker", RB:"De strategische presteerder",
+        YR:"De inspirerende aanjager", YY:"De pure enthousiasteling", YG:"De warme verbinder", YB:"De creatieve analist",
+        GR:"De vastberaden vredestichter", GY:"De zorgzame motivator", GG:"De standvastige ondersteuner", GB:"De bedachtzame bewaker",
+        BR:"De rigoureuze driver", BY:"De nieuwsgierige innovator", BG:"De zorgvuldige samenwerker", BB:"De meesterlijke analist"
+      },
+      pl: {
+        RR:"Zdecydowany napędzający", RY:"Energetyczny realizator", RG:"Zaangażowany współpracownik", RB:"Strategiczny realizator",
+        YR:"Inspirujący aktywator", YY:"Czysty entuzjasta", YG:"Ciepły łącznik", YB:"Kreatywny analityk",
+        GR:"Zdecydowany rozjemca", GY:"Opiekuńczy motywator", GG:"Niezawodny wspierający", GB:"Refleksyjny opiekun",
+        BR:"Rygorystyczny napędzający", BY:"Dociekliwy innowator", BG:"Rozważny współpracownik", BB:"Mistrzowski analityk"
+      },
+      tr: {
+        RR:"Kararlı itici güç", RY:"Enerjik başaran", RG:"İtici iş birliği kuran", RB:"Stratejik başaran",
+        YR:"İlham veren harekete geçirici", YY:"Saf coşkucu", YG:"Sıcak bağ kurucu", YB:"Yaratıcı analist",
+        GR:"Kararlı uzlaştırıcı", GY:"Besleyici motive edici", GG:"Sağlam destekçi", GB:"Düşünceli koruyucu",
+        BR:"Titiz itici güç", BY:"Meraklı yenilikçi", BG:"Ölçülü iş birlikçi", BB:"Usta analist"
+      },
+      ar: {
+        RR:"القائد الحاسم", RY:"المنجز المفعم بالطاقة", RG:"المتعاون الدافع", RB:"المنجز الاستراتيجي",
+        YR:"المحفز الملهم", YY:"المتحمس الصافي", YG:"الواصل الدافئ", YB:"المحلل الإبداعي",
+        GR:"صانع السلام الحازم", GY:"المحفز الراعي", GG:"الداعم الثابت", GB:"الحارس المتأمل",
+        BR:"الدافع المنضبط", BY:"المبتكر الفضولي", BG:"المتعاون المتزن", BB:"المحلل المتمكن"
+      }
+    };
+
+    const profileTexts = {
+      en: {
+        primary: {
+          R: {
+            overview: "{name}, you lead with strong Red energy. You are direct, decisive, and naturally focused on movement, ownership, and results.",
+            comm: "Your communication is usually clear, fast, and outcome-focused. People tend to know where they stand with you, and you often create momentum simply by acting."
+          },
+          Y: {
+            overview: "{name}, you lead with strong Yellow energy. You are expressive, optimistic, and naturally energising to the people around you.",
+            comm: "Your communication is warm, engaging, and persuasive. You often create momentum through enthusiasm, connection, and visible belief in what is possible."
+          },
+          G: {
+            overview: "{name}, you lead with strong Green energy. You are steady, caring, and naturally tuned into the emotional tone of a team.",
+            comm: "Your communication is calm, considerate, and supportive. People often trust you quickly because you create safety, consistency, and space for others."
+          },
+          B: {
+            overview: "{name}, you lead with strong Blue energy. You are thoughtful, precise, and naturally drawn to clarity, logic, and quality.",
+            comm: "Your communication is measured, careful, and evidence-based. People rely on you for thoughtful judgement, strong analysis, and a high standard of work."
+          }
+        },
+        secondary: {
+          R: "Your secondary Red energy adds urgency, competitiveness, and a stronger bias toward action.",
+          Y: "Your secondary Yellow energy adds enthusiasm, visibility, and a stronger ability to influence through energy and optimism.",
+          G: "Your secondary Green energy adds empathy, patience, and a stronger instinct to support people while moving forward.",
+          B: "Your secondary Blue energy adds structure, precision, and a stronger drive to get things right as well as get them done."
+        },
+        strengths: {
+          RR:["Moves quickly to decisions","Sets direction clearly","Thrives with ownership"],
+          RY:["Creates momentum fast","Combines drive with visibility","Persuades people into action"],
+          RG:["Balances challenge with care","Builds trust while moving forward","Leads firmly without losing people"],
+          RB:["Combines action with rigour","Makes sharp decisions","Focuses on both speed and quality"],
+          YR:["Inspires and mobilises quickly","Brings optimism with ambition","Raises energy around goals"],
+          YY:["Builds excitement naturally","Connects with people easily","Keeps energy high"],
+          YG:["Creates warm, inclusive energy","Builds rapport quickly","Encourages people naturally"],
+          YB:["Connects ideas creatively","Explains things in engaging ways","Balances curiosity with thoughtfulness"],
+          GR:["Supports people while staying firm","Builds commitment through trust","Handles sensitive situations with strength"],
+          GY:["Creates belonging and warmth","Lifts people gently","Keeps morale steady and positive"],
+          GG:["Builds deep trust","Offers reliable support","Creates steadiness and calm"],
+          GB:["Balances care with precision","Thinks carefully about impact","Builds dependable judgement"],
+          BR:["Holds high standards","Acts with logic and authority","Brings discipline to decisions"],
+          BY:["Combines depth with imagination","Brings fresh perspective","Makes complex ideas accessible"],
+          BG:["Thinks carefully and acts responsibly","Brings calm judgement","Protects quality and people"],
+          BB:["Analyses deeply","Protects standards","Brings consistency and accuracy"]
+        },
+        tips: {
+          RR:["Be concise and direct","Focus on results and timelines","Give autonomy with clear targets"],
+          RY:["Bring energy and pace","Connect work to visible wins","Avoid overloading with process"],
+          RG:["Be honest and respectful","Show how outcomes help people","Balance clarity with support"],
+          RB:["Arrive prepared","Use evidence and clear recommendations","Respect time and standards"],
+          YR:["Make it feel exciting","Link work to impact and momentum","Give room for visibility and initiative"],
+          YY:["Keep things positive and interactive","Recognise contributions openly","Avoid overly rigid structure"],
+          YG:["Be warm and inclusive","Show genuine interest","Make collaboration feel safe and meaningful"],
+          YB:["Engage curiosity","Mix inspiration with logic","Give space to think and explore"],
+          GR:["Build trust first","Be clear without being cold","Show purpose as well as expectations"],
+          GY:["Lead with kindness","Acknowledge effort and people impact","Avoid overly harsh delivery"],
+          GG:["Be patient and genuine","Give feedback carefully","Create stability and trust"],
+          GB:["Be thoughtful and prepared","Use written clarity when useful","Show both logic and human impact"],
+          BR:["Be precise and well prepared","Come with evidence","Keep discussions efficient"],
+          BY:["Bring interesting ideas","Allow exploration before closure","Back creativity with rationale"],
+          BG:["Respect thought time","Be calm and clear","Show how decisions affect people and quality"],
+          BB:["Be specific and organised","Use facts over emotion","Give time to process before deciding"]
+        }
+      }
+    };
+
+    function translateProfile(lang, type, name) {
+      const fallback = profileTexts.en;
+      const labels = colourLabels[lang] || colourLabels.en;
+      const texts = profileTexts.en;
+      const primary = type[0];
+      const secondary = type[1];
+      const tagline = (pairTaglines[lang] || pairTaglines.en)[type];
+      const overview = texts.primary[primary].overview.replace("{name}", name) + " " + texts.secondary[secondary];
+      const comm = texts.primary[primary].comm;
+      const strengths = texts.strengths[type];
+      const tips = texts.tips[type];
+      return {tagline, overview, comm, strengths, tips, labels};
+    }
+
+    function t(key) {
+      return (ui[currentLanguage] && ui[currentLanguage][key]) || ui.en[key] || key;
+    }
+
+    function fmt(str, vars) {
+      return str.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+    }
+
+    function qFor(question) {
+      return question[currentLanguage] || question.en;
+    }
+
+    const optionLetters = ["A","B","C","D"];
+    let currentLanguage = localStorage.getItem("colourInsightsLang") || "en";
+    let currentQuestion = 0;
+    let answers = [];
+    let participantName = "";
+
+    function applyDirection() {
+      const isRtl = RTL_LANGS.includes(currentLanguage);
+      document.documentElement.lang = currentLanguage;
+      document.documentElement.dir = isRtl ? "rtl" : "ltr";
+      document.body.classList.toggle("rtl", isRtl);
+    }
+
+    function populateLanguageSelect() {
+      const select = document.getElementById("languageSelect");
+      select.innerHTML = Object.entries(languages)
+        .map(([code, label]) => `<option value="${code}">${label}</option>`)
+        .join("");
+      if (!languages[currentLanguage]) currentLanguage = "en";
+      select.value = currentLanguage;
+      select.onchange = (e) => {
+        currentLanguage = e.target.value;
+        localStorage.setItem("colourInsightsLang", currentLanguage);
+        renderApp();
+      };
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function renderIntro() {
+      const labels = colourLabels[currentLanguage] || colourLabels.en;
+      document.getElementById("languageLabel").textContent = t("languageLabel");
+      document.getElementById("introEyebrow").textContent = t("introEyebrow");
+      document.getElementById("introTitle").textContent = t("introTitle");
+      document.getElementById("introSubtitle").textContent = t("introSubtitle");
+      document.getElementById("nameLabel").textContent = t("nameLabel");
+      document.getElementById("userName").placeholder = t("namePlaceholder");
+      document.getElementById("startBtn").textContent = t("startBtn");
+
+      document.getElementById("redName").textContent = labels.R.name;
+      document.getElementById("redTag").textContent = labels.R.tag;
+      document.getElementById("yellowName").textContent = labels.Y.name;
+      document.getElementById("yellowTag").textContent = labels.Y.tag;
+      document.getElementById("greenName").textContent = labels.G.name;
+      document.getElementById("greenTag").textContent = labels.G.tag;
+      document.getElementById("blueName").textContent = labels.B.name;
+      document.getElementById("blueTag").textContent = labels.B.tag;
+    }
+
+    function renderQuestion() {
+      const q = questionBank[currentQuestion];
+      const data = qFor(q);
+      const total = questionBank.length;
+      const pct = Math.round((currentQuestion / total) * 100);
+
+      document.getElementById("progressLabel").textContent = fmt(t("questionOf"), {n: currentQuestion + 1, total});
+      document.getElementById("progressPct").textContent = pct + "%";
+      document.getElementById("progressFill").style.width = pct + "%";
+      document.getElementById("questionNumber").textContent = fmt(t("qnum"), {n: String(currentQuestion + 1).padStart(2,"0"), total});
+      document.getElementById("questionText").textContent = data.q;
+
+      const options = document.getElementById("options");
+      options.innerHTML = "";
+      data.a.forEach((answerText, i) => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerHTML = `<strong style="display:inline-block;width:28px">${optionLetters[i]}</strong> ${answerText}`;
+        btn.onclick = () => {
+          answers.push(q.c[i]);
+          currentQuestion++;
+          if (currentQuestion >= questionBank.length) {
+            buildReport();
+          } else {
+            renderQuestion();
+          }
+        };
+        options.appendChild(btn);
+      });
+    }
+
+    function startQuiz() {
+      participantName = document.getElementById("userName").value.trim() || t("participant");
+      answers = [];
+      currentQuestion = 0;
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function computeScores() {
+      const counts = {R:0,Y:0,G:0,B:0};
+      answers.forEach(a => counts[a]++);
+      const total = answers.length || 1;
+      return {
+        counts,
+        pct: {
+          R: Math.round(counts.R / total * 100),
+          Y: Math.round(counts.Y / total * 100),
+          G: Math.round(counts.G / total * 100),
+          B: Math.round(counts.B / total * 100)
+        }
+      };
+    }
+
+    function buildReport() {
+      const {counts, pct} = computeScores();
+      const sorted = ["R","Y","G","B"].sort((a,b) => counts[b] - counts[a] || ["R","Y","G","B"].indexOf(a) - ["R","Y","G","B"].indexOf(b));
+      const type = sorted[0] + sorted[1];
+      const profile = translateProfile(currentLanguage, type, participantName);
+      const labels = profile.labels;
+
+      document.getElementById("reportEyebrow").textContent = t("reportEyebrow");
+      document.getElementById("reportName").textContent = participantName;
+      document.getElementById("reportType").textContent = labels[sorted[0]].name + " / " + labels[sorted[1]].name;
+      document.getElementById("reportTagline").textContent = profile.tagline;
+
+      const badge = document.getElementById("reportBadge");
+      const dot = document.getElementById("badgeDot");
+      dot.style.background = sorted[0] === "R" ? "var(--red)" : sorted[0] === "Y" ? "var(--yellow)" : sorted[0] === "G" ? "var(--green)" : "var(--blue)";
+      if (sorted[0] === "R") { badge.style.background = "var(--redSoft)"; badge.style.color = "var(--red)"; }
+      if (sorted[0] === "Y") { badge.style.background = "var(--yellowSoft)"; badge.style.color = "#946200"; }
+      if (sorted[0] === "G") { badge.style.background = "var(--greenSoft)"; badge.style.color = "var(--green)"; }
+      if (sorted[0] === "B") { badge.style.background = "var(--blueSoft)"; badge.style.color = "var(--blue)"; }
+
+      document.getElementById("breakdownTitle").textContent = t("breakdownTitle");
+      document.getElementById("overviewTitle").textContent = t("overviewTitle");
+      document.getElementById("communicationTitle").textContent = t("communicationTitle");
+      document.getElementById("strengthsTitle").textContent = t("strengthsTitle");
+      document.getElementById("tipsTitle").textContent = t("tipsTitle");
+      document.getElementById("restartBtn").textContent = t("restartBtn");
+
+      document.getElementById("labelR").textContent = labels.R.name;
+      document.getElementById("labelY").textContent = labels.Y.name;
+      document.getElementById("labelG").textContent = labels.G.name;
+      document.getElementById("labelB").textContent = labels.B.name;
+
+      document.getElementById("pctR").textContent = pct.R + "%";
+      document.getElementById("pctY").textContent = pct.Y + "%";
+      document.getElementById("pctG").textContent = pct.G + "%";
+      document.getElementById("pctB").textContent = pct.B + "%";
+
+      document.getElementById("barR").style.width = pct.R + "%";
+      document.getElementById("barY").style.width = pct.Y + "%";
+      document.getElementById("barG").style.width = pct.G + "%";
+      document.getElementById("barB").style.width = pct.B + "%";
+
+      document.getElementById("overviewText").textContent = profile.overview;
+      document.getElementById("communicationText").textContent = profile.comm;
+
+      const strengthsList = document.getElementById("strengthsList");
+      strengthsList.innerHTML = profile.strengths.map(item => `<li>${item}</li>`).join("");
+
+      const tipsList = document.getElementById("tipsList");
+      tipsList.innerHTML = profile.tips.map(item => `<li>${item}</li>`).join("");
+
+      showScreen("report");
+    }
+
+    function restart() {
+      showScreen("intro");
+      renderIntro();
+    }
+
+    function renderApp() {
+      applyDirection();
+      populateLanguageSelect();
+      renderIntro();
+
+      const active = document.querySelector(".screen.active")?.id;
+      if (active === "quiz") renderQuestion();
+      if (active === "report") buildReport();
+    }
+
+    renderApp();
+  </script>
 </body>
 </html>
