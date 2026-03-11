@@ -32,7 +32,7 @@
       color:var(--ink);
     }
     .page{
-      max-width:940px;
+      max-width:980px;
       margin:0 auto;
       padding:20px 18px 64px;
     }
@@ -159,6 +159,20 @@
       color:var(--ink2);
       border:1px solid #cbd5e1;
     }
+    .btn-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:none;
+      border-radius:12px;
+      padding:14px 20px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      text-decoration:none;
+    }
     .actions{
       display:flex;
       gap:10px;
@@ -269,6 +283,13 @@
     .rtl .toolbar{justify-content:flex-start}
     .rtl .bar-row{grid-template-columns:48px 1fr 160px}
     .rtl .list{padding-left:0;padding-right:18px}
+    .rtl .option{text-align:right}
+    @media print{
+      .toolbar{display:none !important;}
+      .no-print{display:none !important;}
+      body{background:#fff;}
+      .card{box-shadow:none;}
+    }
     @media (max-width:760px){
       .legend,.grid-2{grid-template-columns:1fr}
       .bar-row{grid-template-columns:1fr}
@@ -280,7 +301,7 @@
 </head>
 <body>
   <div class="page">
-    <div class="toolbar">
+    <div class="toolbar no-print">
       <div class="lang-wrap">
         <label class="lang-label" id="languageLabel" for="languageSelect">Language</label>
         <select id="languageSelect"></select>
@@ -397,17 +418,53 @@
 
       <div class="grid-2">
         <div class="card">
+          <h3 id="workStyleTitle"></h3>
+          <p id="workStyleText"></p>
+        </div>
+        <div class="card">
+          <h3 id="motivationTitle"></h3>
+          <p id="motivationText"></p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 id="decisionTitle"></h3>
+          <p id="decisionText"></p>
+        </div>
+        <div class="card">
+          <h3 id="misreadTitle"></h3>
+          <p id="misreadText"></p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
           <h3 id="strengthsTitle"></h3>
           <ul class="list" id="strengthsList"></ul>
         </div>
         <div class="card">
-          <h3 id="tipsTitle"></h3>
-          <ul class="list" id="tipsList"></ul>
+          <h3 id="watchoutsTitle"></h3>
+          <ul class="list" id="watchoutsList"></ul>
         </div>
       </div>
 
-      <div class="card">
+      <div class="grid-2">
+        <div class="card">
+          <h3 id="tipsTitle"></h3>
+          <ul class="list" id="tipsList"></ul>
+        </div>
+        <div class="card">
+          <h3 id="growthTitle"></h3>
+          <p id="growthText"></p>
+        </div>
+      </div>
+
+      <div class="card no-print">
         <div class="actions">
+          <a id="openReportBtn" class="btn-link" href="#" target="_blank" rel="noreferrer">
+            <span id="openReportText">Open full report</span>
+          </a>
           <button class="btn-secondary" onclick="restart()" id="restartBtn"></button>
         </div>
       </div>
@@ -443,9 +500,17 @@
         breakdownTitle: "Colour profile breakdown",
         overviewTitle: "Overview",
         communicationTitle: "Communication style",
+        workStyleTitle: "How you tend to work",
+        motivationTitle: "What motivates you",
+        decisionTitle: "How you make decisions",
+        misreadTitle: "How others may misread you",
         strengthsTitle: "Strengths",
+        watchoutsTitle: "Watch-outs under pressure",
         tipsTitle: "How to get the best from you",
+        growthTitle: "Your growth edge",
         restartBtn: "Start again",
+        openReportBtn: "Open full report",
+        printBtn: "Print / Save as PDF",
         questionOf: "Question {n} of {total}",
         qnum: "{n} / {total}",
         participant: "Participant"
@@ -462,9 +527,17 @@
         breakdownTitle: "Desglose del perfil de color",
         overviewTitle: "Resumen",
         communicationTitle: "Estilo de comunicación",
+        workStyleTitle: "Cómo sueles trabajar",
+        motivationTitle: "Qué te motiva",
+        decisionTitle: "Cómo tomas decisiones",
+        misreadTitle: "Cómo otros pueden malinterpretarte",
         strengthsTitle: "Fortalezas",
+        watchoutsTitle: "Puntos de atención bajo presión",
         tipsTitle: "Cómo sacar lo mejor de ti",
+        growthTitle: "Tu área de crecimiento",
         restartBtn: "Empezar de nuevo",
+        openReportBtn: "Abrir informe completo",
+        printBtn: "Imprimir / Guardar como PDF",
         questionOf: "Pregunta {n} de {total}",
         qnum: "{n} / {total}",
         participant: "Participante"
@@ -481,9 +554,17 @@
         breakdownTitle: "Répartition du profil couleur",
         overviewTitle: "Aperçu",
         communicationTitle: "Style de communication",
+        workStyleTitle: "Votre façon de travailler",
+        motivationTitle: "Ce qui vous motive",
+        decisionTitle: "Votre manière de décider",
+        misreadTitle: "Comment les autres peuvent vous mal interpréter",
         strengthsTitle: "Forces",
+        watchoutsTitle: "Points de vigilance sous pression",
         tipsTitle: "Comment donner le meilleur de vous-même",
+        growthTitle: "Votre axe de progression",
         restartBtn: "Recommencer",
+        openReportBtn: "Ouvrir le rapport complet",
+        printBtn: "Imprimer / Enregistrer en PDF",
         questionOf: "Question {n} sur {total}",
         qnum: "{n} / {total}",
         participant: "Participant"
@@ -500,9 +581,17 @@
         breakdownTitle: "Farbprofil-Aufschlüsselung",
         overviewTitle: "Überblick",
         communicationTitle: "Kommunikationsstil",
+        workStyleTitle: "Wie Sie typischerweise arbeiten",
+        motivationTitle: "Was Sie motiviert",
+        decisionTitle: "Wie Sie Entscheidungen treffen",
+        misreadTitle: "Wie andere Sie missverstehen könnten",
         strengthsTitle: "Stärken",
+        watchoutsTitle: "Achten Sie unter Druck auf",
         tipsTitle: "So holt man das Beste aus Ihnen heraus",
+        growthTitle: "Ihr Entwicklungsfeld",
         restartBtn: "Neu starten",
+        openReportBtn: "Vollständigen Bericht öffnen",
+        printBtn: "Drucken / Als PDF speichern",
         questionOf: "Frage {n} von {total}",
         qnum: "{n} / {total}",
         participant: "Teilnehmer"
@@ -519,9 +608,17 @@
         breakdownTitle: "Ripartizione del profilo colore",
         overviewTitle: "Panoramica",
         communicationTitle: "Stile di comunicazione",
+        workStyleTitle: "Come tendi a lavorare",
+        motivationTitle: "Cosa ti motiva",
+        decisionTitle: "Come prendi decisioni",
+        misreadTitle: "Come gli altri possono fraintenderti",
         strengthsTitle: "Punti di forza",
+        watchoutsTitle: "Punti di attenzione sotto pressione",
         tipsTitle: "Come ottenere il meglio da te",
+        growthTitle: "La tua area di crescita",
         restartBtn: "Ricomincia",
+        openReportBtn: "Apri report completo",
+        printBtn: "Stampa / Salva come PDF",
         questionOf: "Domanda {n} di {total}",
         qnum: "{n} / {total}",
         participant: "Partecipante"
@@ -538,9 +635,17 @@
         breakdownTitle: "Distribuição do perfil de cor",
         overviewTitle: "Visão geral",
         communicationTitle: "Estilo de comunicação",
+        workStyleTitle: "Como tende a trabalhar",
+        motivationTitle: "O que o motiva",
+        decisionTitle: "Como toma decisões",
+        misreadTitle: "Como os outros podem interpretá-lo mal",
         strengthsTitle: "Pontos fortes",
+        watchoutsTitle: "Pontos de atenção sob pressão",
         tipsTitle: "Como tirar o melhor de si",
+        growthTitle: "A sua margem de crescimento",
         restartBtn: "Começar de novo",
+        openReportBtn: "Abrir relatório completo",
+        printBtn: "Imprimir / Guardar como PDF",
         questionOf: "Pergunta {n} de {total}",
         qnum: "{n} / {total}",
         participant: "Participante"
@@ -557,9 +662,17 @@
         breakdownTitle: "Uitsplitsing van het kleurprofiel",
         overviewTitle: "Overzicht",
         communicationTitle: "Communicatiestijl",
+        workStyleTitle: "Hoe je meestal werkt",
+        motivationTitle: "Wat je motiveert",
+        decisionTitle: "Hoe je beslissingen neemt",
+        misreadTitle: "Hoe anderen je verkeerd kunnen lezen",
         strengthsTitle: "Sterktes",
+        watchoutsTitle: "Aandachtspunten onder druk",
         tipsTitle: "Hoe je het beste uit jou haalt",
+        growthTitle: "Jouw groeirichting",
         restartBtn: "Opnieuw beginnen",
+        openReportBtn: "Volledig rapport openen",
+        printBtn: "Afdrukken / Opslaan als PDF",
         questionOf: "Vraag {n} van {total}",
         qnum: "{n} / {total}",
         participant: "Deelnemer"
@@ -576,9 +689,17 @@
         breakdownTitle: "Rozkład profilu kolorów",
         overviewTitle: "Przegląd",
         communicationTitle: "Styl komunikacji",
+        workStyleTitle: "Jak zwykle pracujesz",
+        motivationTitle: "Co Cię motywuje",
+        decisionTitle: "Jak podejmujesz decyzje",
+        misreadTitle: "Jak inni mogą Cię błędnie odczytać",
         strengthsTitle: "Mocne strony",
+        watchoutsTitle: "Na co uważać pod presją",
         tipsTitle: "Jak wydobyć z Ciebie to, co najlepsze",
+        growthTitle: "Twój obszar rozwoju",
         restartBtn: "Zacznij od nowa",
+        openReportBtn: "Otwórz pełny raport",
+        printBtn: "Drukuj / Zapisz jako PDF",
         questionOf: "Pytanie {n} z {total}",
         qnum: "{n} / {total}",
         participant: "Uczestnik"
@@ -595,9 +716,17 @@
         breakdownTitle: "Renk profili dağılımı",
         overviewTitle: "Genel bakış",
         communicationTitle: "İletişim tarzı",
+        workStyleTitle: "Nasıl çalışmaya eğilimlisiniz",
+        motivationTitle: "Sizi ne motive eder",
+        decisionTitle: "Nasıl karar verirsiniz",
+        misreadTitle: "Başkaları sizi nasıl yanlış okuyabilir",
         strengthsTitle: "Güçlü yönler",
+        watchoutsTitle: "Baskı altındaki dikkat noktaları",
         tipsTitle: "Sizden en iyi verimi alma yolları",
+        growthTitle: "Gelişim alanınız",
         restartBtn: "Baştan başla",
+        openReportBtn: "Tam raporu aç",
+        printBtn: "Yazdır / PDF olarak kaydet",
         questionOf: "{total} sorudan {n}. soru",
         qnum: "{n} / {total}",
         participant: "Katılımcı"
@@ -614,9 +743,17 @@
         breakdownTitle: "توزيع ملف الألوان",
         overviewTitle: "نظرة عامة",
         communicationTitle: "أسلوب التواصل",
+        workStyleTitle: "كيف تميل إلى العمل",
+        motivationTitle: "ما الذي يحفزك",
+        decisionTitle: "كيف تتخذ القرارات",
+        misreadTitle: "كيف قد يسيء الآخرون فهمك",
         strengthsTitle: "نقاط القوة",
+        watchoutsTitle: "نقاط الانتباه تحت الضغط",
         tipsTitle: "كيف تحصل على أفضل ما لديك",
+        growthTitle: "مساحة النمو لديك",
         restartBtn: "ابدأ من جديد",
+        openReportBtn: "افتح التقرير الكامل",
+        printBtn: "طباعة / حفظ كملف PDF",
         questionOf: "السؤال {n} من {total}",
         qnum: "{n} / {total}",
         participant: "المشارك"
@@ -686,306 +823,107 @@
       }
     };
 
-    const questionBank = [
-      {
-        en:{q:"When you're given a new project, your first instinct is to…",a:["Dive straight in and figure it out as you go.","Gather everyone together and brainstorm ideas excitedly.","Check in with the team and make sure everyone is on board.","Research thoroughly and build a detailed plan first."]},
-        es:{q:"Cuando te asignan un nuevo proyecto, tu primer impulso es…",a:["Lanzarte de inmediato e ir resolviéndolo sobre la marcha.","Reunir a todos y hacer una lluvia de ideas con entusiasmo.","Hablar con el equipo y asegurarte de que todos estén alineados.","Investigar a fondo y crear primero un plan detallado."]},
-        fr:{q:"Lorsqu’on vous confie un nouveau projet, votre premier réflexe est de…",a:["Vous lancer tout de suite et improviser en avançant.","Réunir tout le monde et faire un brainstorming avec enthousiasme.","Consulter l’équipe et vérifier que tout le monde adhère.","Faire des recherches approfondies et établir d’abord un plan détaillé."]},
-        de:{q:"Wenn Sie ein neues Projekt bekommen, ist Ihr erster Impuls…",a:["Direkt loszulegen und es unterwegs herauszufinden.","Alle zusammenzubringen und begeistert Ideen zu sammeln.","Mit dem Team abzustimmen, ob alle mitgehen.","Zuerst gründlich zu recherchieren und einen detaillierten Plan zu erstellen."]},
-        it:{q:"Quando ti viene assegnato un nuovo progetto, il tuo primo istinto è…",a:["Buttarti subito e capire strada facendo.","Riunire tutti e fare brainstorming con entusiasmo.","Confrontarti con il team e assicurarti che tutti siano allineati.","Fare ricerca a fondo e costruire prima un piano dettagliato."]},
-        pt:{q:"Quando recebe um novo projeto, o seu primeiro impulso é…",a:["Começar logo e ir percebendo no processo.","Juntar toda a gente e fazer brainstorming com entusiasmo.","Falar com a equipa e garantir que todos estão alinhados.","Pesquisar bem e construir primeiro um plano detalhado."]},
-        nl:{q:"Wanneer je een nieuw project krijgt, is je eerste instinct om…",a:["Er meteen in te duiken en het onderweg uit te zoeken.","Iedereen samen te brengen en enthousiast te brainstormen.","Bij het team in te checken en te zorgen dat iedereen mee is.","Eerst grondig onderzoek te doen en een gedetailleerd plan te maken."]},
-        pl:{q:"Gdy dostajesz nowy projekt, Twój pierwszy odruch to…",a:["Od razu zacząć i ogarniać wszystko po drodze.","Zebrać wszystkich i z entuzjazmem zrobić burzę mózgów.","Sprawdzić z zespołem, czy wszyscy są na pokładzie.","Najpierw dokładnie zbadać temat i ułożyć szczegółowy plan."]},
-        tr:{q:"Yeni bir proje verildiğinde ilk içgüdünüz…",a:["Hemen dalmak ve giderken çözmek olur.","Herkesi bir araya getirip heyecanla fikir üretmek olur.","Ekiple konuşup herkesin aynı çizgide olduğundan emin olmak olur.","Önce detaylı araştırıp ayrıntılı bir plan oluşturmak olur."]},
-        ar:{q:"عندما يُسند إليك مشروع جديد، فإن أول رد فعل لديك هو…",a:["البدء فوراً ومعرفة التفاصيل أثناء التنفيذ.","جمع الجميع وإجراء عصف ذهني بحماس.","التواصل مع الفريق والتأكد من أن الجميع متفقون.","البحث جيداً ووضع خطة مفصلة أولاً."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"In a meeting, people would describe your communication style as…",a:["Direct and to the point.","Enthusiastic and expressive.","Warm and supportive.","Measured and precise."]},
-        es:{q:"En una reunión, la gente describiría tu estilo de comunicación como…",a:["Directo y al grano.","Entusiasta y expresivo.","Cálido y cercano.","Sereno y preciso."]},
-        fr:{q:"En réunion, les gens décriraient votre style de communication comme…",a:["Direct et concis.","Enthousiaste et expressif.","Chaleureux et soutenant.","Mesuré et précis."]},
-        de:{q:"In einem Meeting würden Menschen Ihren Kommunikationsstil so beschreiben…",a:["Direkt und auf den Punkt.","Begeistert und ausdrucksstark.","Warm und unterstützend.","Überlegt und präzise."]},
-        it:{q:"In una riunione, il tuo stile di comunicazione verrebbe descritto come…",a:["Diretto e concreto.","Entusiasta ed espressivo.","Caldo e di supporto.","Misurato e preciso."]},
-        pt:{q:"Numa reunião, o seu estilo de comunicação seria descrito como…",a:["Direto e objetivo.","Entusiástico e expressivo.","Caloroso e apoiador.","Ponderado e preciso."]},
-        nl:{q:"In een vergadering zouden mensen jouw communicatiestijl omschrijven als…",a:["Direct en to the point.","Enthousiast en expressief.","Warm en ondersteunend.","Afgewogen en precies."]},
-        pl:{q:"Na spotkaniu ludzie opisaliby Twój styl komunikacji jako…",a:["Bezpośredni i konkretny.","Entuzjastyczny i ekspresyjny.","Ciepły i wspierający.","Wyważony i precyzyjny."]},
-        tr:{q:"Bir toplantıda insanlar iletişim tarzınızı şöyle tanımlar…",a:["Doğrudan ve net.","Coşkulu ve ifade gücü yüksek.","Sıcak ve destekleyici.","Ölçülü ve hassas."]},
-        ar:{q:"في الاجتماع، سيصف الناس أسلوبك في التواصل بأنه…",a:["مباشر وواضح.","متحمس ومعبر.","دافئ وداعم.","متزن ودقيق."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When facing a conflict with a colleague, you tend to…",a:["Address it head-on and resolve it quickly.","Talk it through and keep the tone positive.","Understand all perspectives and restore harmony.","Think it through calmly and respond logically."]},
-        es:{q:"Cuando surge un conflicto con un compañero, tiendes a…",a:["Afrontarlo de frente y resolverlo rápido.","Hablarlo y mantener un tono positivo.","Entender todas las perspectivas y recuperar la armonía.","Pensarlo con calma y responder de forma lógica."]},
-        fr:{q:"En cas de conflit avec un collègue, vous avez tendance à…",a:["L’aborder de front et le régler rapidement.","En parler en gardant un ton positif.","Comprendre tous les points de vue et rétablir l’harmonie.","Réfléchir calmement et répondre avec logique."]},
-        de:{q:"Wenn es einen Konflikt mit einem Kollegen gibt, neigen Sie dazu…",a:["Ihn direkt anzusprechen und schnell zu lösen.","Darüber zu sprechen und positiv zu bleiben.","Alle Perspektiven zu verstehen und Harmonie wiederherzustellen.","Ruhig nachzudenken und logisch zu reagieren."]},
-        it:{q:"Quando affronti un conflitto con un collega, tendi a…",a:["Affrontarlo direttamente e risolverlo rapidamente.","Parlarne mantenendo un tono positivo.","Capire tutti i punti di vista e ristabilire armonia.","Riflettere con calma e rispondere in modo logico."]},
-        pt:{q:"Quando surge um conflito com um colega, tende a…",a:["Enfrentá-lo diretamente e resolvê-lo depressa.","Conversar e manter um tom positivo.","Compreender todas as perspetivas e restaurar a harmonia.","Pensar com calma e responder de forma lógica."]},
-        nl:{q:"Wanneer je een conflict met een collega hebt, ben je geneigd om…",a:["Het direct aan te pakken en snel op te lossen.","Het uit te praten en positief te blijven.","Alle perspectieven te begrijpen en harmonie te herstellen.","Rustig na te denken en logisch te reageren."]},
-        pl:{q:"Gdy pojawia się konflikt ze współpracownikiem, zwykle…",a:["Podchodzisz do niego bezpośrednio i szybko go rozwiązujesz.","Rozmawiasz o nim i utrzymujesz pozytywny ton.","Staram się zrozumieć wszystkie perspektywy i przywrócić harmonię.","Spokojnie to przemyślasz i odpowiadasz logicznie."]},
-        tr:{q:"Bir iş arkadaşınızla çatışma yaşadığınızda genelde…",a:["Doğrudan ele alır ve hızlıca çözersiniz.","Konuşarak çözmeye ve tonu olumlu tutmaya çalışırsınız.","Tüm bakış açılarını anlamaya ve uyumu geri getirmeye çalışırsınız.","Sakin şekilde düşünüp mantıklı yanıt verirsiniz."]},
-        ar:{q:"عند مواجهة خلاف مع زميل، فإنك تميل إلى…",a:["مواجهته مباشرة وحله بسرعة.","التحدث عنه مع الحفاظ على نبرة إيجابية.","فهم جميع وجهات النظر واستعادة الانسجام.","التفكير بهدوء والرد بشكل منطقي."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"Your colleagues come to you most often for…",a:["Quick decisions and cutting through ambiguity.","Creative ideas and high energy.","Support and thoughtful advice.","Accuracy and careful analysis."]},
-        es:{q:"Tus compañeros suelen acudir a ti por…",a:["Decisiones rápidas y claridad.","Ideas creativas y mucha energía.","Apoyo y consejos reflexivos.","Precisión y análisis cuidadoso."]},
-        fr:{q:"Vos collègues viennent le plus souvent vous voir pour…",a:["Des décisions rapides et de la clarté.","Des idées créatives et de l’énergie.","Du soutien et des conseils réfléchis.","La précision et une analyse soignée."]},
-        de:{q:"Ihre Kollegen kommen am häufigsten zu Ihnen wegen…",a:["Schneller Entscheidungen und Klarheit.","Kreativer Ideen und Energie.","Unterstützung und durchdachtem Rat.","Genauigkeit und sorgfältiger Analyse."]},
-        it:{q:"I colleghi si rivolgono più spesso a te per…",a:["Decisioni rapide e chiarezza.","Idee creative ed energia.","Supporto e consigli ponderati.","Precisione e analisi accurata."]},
-        pt:{q:"Os colegas recorrem mais a si para…",a:["Decisões rápidas e clareza.","Ideias criativas e energia.","Apoio e conselhos ponderados.","Precisão e análise cuidada."]},
-        nl:{q:"Collega’s komen meestal naar jou voor…",a:["Snelle beslissingen en duidelijkheid.","Creatieve ideeën en energie.","Steun en doordacht advies.","Nauwkeurigheid en zorgvuldige analyse."]},
-        pl:{q:"Współpracownicy najczęściej przychodzą do Ciebie po…",a:["Szybkie decyzje i jasność.","Kreatywne pomysły i energię.","Wsparcie i przemyślane rady.","Dokładność i uważną analizę."]},
-        tr:{q:"İş arkadaşlarınız size en çok şunun için gelir…",a:["Hızlı kararlar ve belirsizliği azaltmak.","Yaratıcı fikirler ve yüksek enerji.","Destek ve düşünülmüş tavsiyeler.","Doğruluk ve dikkatli analiz."]},
-        ar:{q:"غالباً ما يلجأ زملاؤك إليك من أجل…",a:["قرارات سريعة وإزالة الغموض.","أفكار إبداعية وطاقة عالية.","الدعم والنصيحة المتأنية.","الدقة والتحليل المتأني."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"How do you feel about following rules and processes?",a:["I follow them if they are efficient.","I prefer flexibility over rigid rules.","I respect them because they keep things fair.","I follow them carefully because they matter."]},
-        es:{q:"¿Cómo te sientes respecto a seguir reglas y procesos?",a:["Los sigo si son eficientes.","Prefiero la flexibilidad a las reglas rígidas.","Los respeto porque mantienen la equidad.","Los sigo con cuidado porque son importantes."]},
-        fr:{q:"Quel est votre rapport aux règles et aux processus ?",a:["Je les suis s’ils sont efficaces.","Je préfère la flexibilité aux règles rigides.","Je les respecte car ils garantissent l’équité.","Je les applique avec soin car ils comptent."]},
-        de:{q:"Wie stehen Sie zu Regeln und Prozessen?",a:["Ich folge ihnen, wenn sie effizient sind.","Ich bevorzuge Flexibilität statt starre Regeln.","Ich respektiere sie, weil sie Fairness schaffen.","Ich halte mich sorgfältig daran, weil sie wichtig sind."]},
-        it:{q:"Come vivi il rispetto di regole e processi?",a:["Li seguo se sono efficienti.","Preferisco la flessibilità alle regole rigide.","Li rispetto perché mantengono equità.","Li seguo con attenzione perché contano."]},
-        pt:{q:"Como vê regras e processos?",a:["Sigo-os se forem eficientes.","Prefiro flexibilidade a regras rígidas.","Respeito-os porque mantêm justiça.","Sigo-os com cuidado porque são importantes."]},
-        nl:{q:"Hoe kijk je aan tegen regels en processen?",a:["Ik volg ze als ze efficiënt zijn.","Ik geef de voorkeur aan flexibiliteit boven strakke regels.","Ik respecteer ze omdat ze eerlijkheid brengen.","Ik volg ze zorgvuldig omdat ze belangrijk zijn."]},
-        pl:{q:"Jak podchodzisz do zasad i procesów?",a:["Stosuję je, jeśli są efektywne.","Wolę elastyczność niż sztywne zasady.","Szanuję je, bo zapewniają sprawiedliwość.","Stosuję je uważnie, bo są ważne."]},
-        tr:{q:"Kurallar ve süreçler hakkında ne düşünürsünüz?",a:["Verimliyse uyarım.","Katı kurallardan çok esnekliği tercih ederim.","Adaleti sağladıkları için onlara saygı duyarım.","Önemli oldukları için dikkatle uyarım."]},
-        ar:{q:"ما شعورك تجاه اتباع القواعد والإجراءات؟",a:["أتبعها إذا كانت فعّالة.","أفضل المرونة على القواعد الصارمة.","أحترمها لأنها تحافظ على العدالة.","أتبعها بعناية لأنها مهمة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"What motivates you most at work?",a:["Winning and achieving results.","Recognition, excitement, and inspiration.","Helping the team and doing meaningful work.","Doing things well and learning deeply."]},
-        es:{q:"¿Qué te motiva más en el trabajo?",a:["Ganar y lograr resultados.","Reconocimiento, entusiasmo e inspiración.","Ayudar al equipo y hacer un trabajo con sentido.","Hacer las cosas bien y aprender a fondo."]},
-        fr:{q:"Qu’est-ce qui vous motive le plus au travail ?",a:["Gagner et obtenir des résultats.","La reconnaissance, l’enthousiasme et l’inspiration.","Aider l’équipe et faire un travail utile.","Bien faire les choses et apprendre en profondeur."]},
-        de:{q:"Was motiviert Sie bei der Arbeit am meisten?",a:["Gewinnen und Ergebnisse erzielen.","Anerkennung, Begeisterung und Inspiration.","Dem Team helfen und sinnvolle Arbeit leisten.","Dinge gut machen und tief lernen."]},
-        it:{q:"Cosa ti motiva di più sul lavoro?",a:["Vincere e ottenere risultati.","Riconoscimento, entusiasmo e ispirazione.","Aiutare il team e fare un lavoro significativo.","Fare bene le cose e imparare in profondità."]},
-        pt:{q:"O que mais o motiva no trabalho?",a:["Ganhar e alcançar resultados.","Reconhecimento, entusiasmo e inspiração.","Ajudar a equipa e fazer trabalho com significado.","Fazer bem as coisas e aprender em profundidade."]},
-        nl:{q:"Wat motiveert je het meest op het werk?",a:["Winnen en resultaten behalen.","Erkenning, enthousiasme en inspiratie.","Het team helpen en zinvol werk doen.","Dingen goed doen en diepgaand leren."]},
-        pl:{q:"Co najbardziej motywuje Cię w pracy?",a:["Wygrywanie i osiąganie wyników.","Uznanie, ekscytacja i inspiracja.","Pomaganie zespołowi i robienie czegoś wartościowego.","Robienie rzeczy dobrze i głębokie uczenie się."]},
-        tr:{q:"İş hayatında sizi en çok ne motive eder?",a:["Kazanmak ve sonuç almak.","Takdir, heyecan ve ilham.","Ekibe yardım etmek ve anlamlı işler yapmak.","İşleri iyi yapmak ve derinlemesine öğrenmek."]},
-        ar:{q:"ما الذي يحفزك أكثر في العمل؟",a:["الفوز وتحقيق النتائج.","التقدير والحماس والإلهام.","مساعدة الفريق والقيام بعمل له معنى.","إتقان العمل والتعلم بعمق."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When making an important decision, you rely most on…",a:["Your instinct and judgement.","Talking it through with people.","What feels right for everyone involved.","Data, evidence, and logic."]},
-        es:{q:"Al tomar una decisión importante, confías más en…",a:["Tu instinto y criterio.","Hablarlo con otras personas.","Lo que parece correcto para todos los implicados.","Datos, evidencia y lógica."]},
-        fr:{q:"Lorsque vous prenez une décision importante, vous vous appuyez surtout sur…",a:["Votre instinct et votre jugement.","Le fait d’en parler avec d’autres.","Ce qui semble juste pour toutes les personnes impliquées.","Les données, les preuves et la logique."]},
-        de:{q:"Wenn Sie eine wichtige Entscheidung treffen, verlassen Sie sich am meisten auf…",a:["Ihr Bauchgefühl und Urteil.","Das Gespräch mit anderen.","Das, was sich für alle Beteiligten richtig anfühlt.","Daten, Belege und Logik."]},
-        it:{q:"Quando prendi una decisione importante, fai più affidamento su…",a:["Istinto e giudizio.","Confrontarti con altre persone.","Ciò che sembra giusto per tutti i coinvolti.","Dati, evidenze e logica."]},
-        pt:{q:"Ao tomar uma decisão importante, confia mais em…",a:["O seu instinto e julgamento.","Conversar com outras pessoas.","O que parece certo para todos os envolvidos.","Dados, evidências e lógica."]},
-        nl:{q:"Wanneer je een belangrijke beslissing neemt, vertrouw je het meest op…",a:["Je instinct en oordeel.","Er met anderen over praten.","Wat voor iedereen goed voelt.","Data, bewijs en logica."]},
-        pl:{q:"Podejmując ważną decyzję, najbardziej polegasz na…",a:["Swojej intuicji i ocenie.","Przegadaniu tego z ludźmi.","Tym, co wydaje się właściwe dla wszystkich.","Danych, dowodach i logice."]},
-        tr:{q:"Önemli bir karar verirken en çok neye güvenirsiniz?",a:["İçgüdünüze ve yargınıza.","İnsanlarla konuşmaya.","Herkes için doğru hissettiren şeye.","Veri, kanıt ve mantığa."]},
-        ar:{q:"عند اتخاذ قرار مهم، فإنك تعتمد أكثر على…",a:["حدسك وحكمك الشخصي.","مناقشته مع الآخرين.","ما يبدو مناسباً لكل من له علاقة.","البيانات والأدلة والمنطق."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"In a fast-changing environment, you typically…",a:["Thrive and push even harder.","Adapt quickly and enjoy the pace.","Stay steady and help others stay grounded.","Need time to re-evaluate carefully."]},
-        es:{q:"En un entorno que cambia rápidamente, normalmente…",a:["Prosperas y aceleras aún más.","Te adaptas rápido y disfrutas el ritmo.","Te mantienes estable y ayudas a otros a centrarse.","Necesitas tiempo para reevaluar con cuidado."]},
-        fr:{q:"Dans un environnement qui change vite, vous avez tendance à…",a:["Vous épanouir et accélérer encore.","Vous adapter vite et apprécier le rythme.","Rester stable et aider les autres à garder les pieds sur terre.","Avoir besoin de temps pour réévaluer avec soin."]},
-        de:{q:"In einem sich schnell verändernden Umfeld…",a:["Blühen Sie auf und treiben noch stärker voran.","Passen Sie sich schnell an und mögen das Tempo.","Bleiben Sie stabil und helfen anderen, geerdet zu bleiben.","Brauchen Sie Zeit, um sorgfältig neu zu bewerten."]},
-        it:{q:"In un ambiente che cambia rapidamente, di solito…",a:["Dai il meglio e spingi ancora di più.","Ti adatti velocemente e ti piace il ritmo.","Rimani stabile e aiuti gli altri a restare centrati.","Hai bisogno di tempo per rivalutare con attenzione."]},
-        pt:{q:"Num ambiente de mudança rápida, normalmente…",a:["Prospera e acelera ainda mais.","Adapta-se rapidamente e gosta do ritmo.","Mantém-se estável e ajuda os outros a manter o foco.","Precisa de tempo para reavaliar com cuidado."]},
-        nl:{q:"In een snel veranderende omgeving…",a:["Gedij je en duw je nog harder.","Pas je je snel aan en geniet je van het tempo.","Blijf je stabiel en help je anderen gegrond te blijven.","Heb je tijd nodig om zorgvuldig opnieuw te beoordelen."]},
-        pl:{q:"W szybko zmieniającym się środowisku zazwyczaj…",a:["Rozwijasz się i przyspieszasz jeszcze bardziej.","Szybko się dostosowujesz i lubisz tempo.","Pozostajesz stabilny i pomagasz innym zachować spokój.","Potrzebujesz czasu, by uważnie wszystko ocenić na nowo."]},
-        tr:{q:"Hızla değişen bir ortamda genellikle…",a:["Parlar ve daha da çok zorlarsınız.","Hızlı uyum sağlar ve tempodan keyif alırsınız.","Dengede kalır ve başkalarının da dengede kalmasına yardımcı olursunuz.","Dikkatlice yeniden değerlendirmek için zamana ihtiyaç duyarsınız."]},
-        ar:{q:"في بيئة سريعة التغير، فإنك عادة…",a:["تزدهر وتدفع أكثر.","تتكيف بسرعة وتستمتع بالإيقاع.","تبقى ثابتاً وتساعد الآخرين على الثبات.","تحتاج إلى وقت لإعادة التقييم بعناية."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When under pressure, others might notice you become…",a:["More demanding and controlling.","More frantic or overly optimistic.","Too accommodating or hesitant to speak up.","More withdrawn or overly critical."]},
-        es:{q:"Bajo presión, los demás pueden notar que te vuelves…",a:["Más exigente y controlador.","Más agitado o demasiado optimista.","Demasiado complaciente o dudoso para hablar.","Más reservado o demasiado crítico."]},
-        fr:{q:"Sous pression, les autres peuvent remarquer que vous devenez…",a:["Plus exigeant et contrôlant.","Plus agité ou trop optimiste.","Trop accommodant ou hésitant à parler.","Plus réservé ou trop critique."]},
-        de:{q:"Unter Druck bemerken andere vielleicht, dass Sie…",a:["Anspruchsvoller und kontrollierender werden.","Hektischer oder zu optimistisch werden.","Zu nachgiebig werden oder sich nicht äußern.","Sich zurückziehen oder zu kritisch werden."]},
-        it:{q:"Sotto pressione, gli altri potrebbero notare che diventi…",a:["Più esigente e controllante.","Più agitato o troppo ottimista.","Troppo accomodante o restio a parlare.","Più chiuso o troppo critico."]},
-        pt:{q:"Sob pressão, os outros podem notar que fica…",a:["Mais exigente e controlador.","Mais agitado ou demasiado otimista.","Demasiado acomodado ou hesitante em falar.","Mais reservado ou demasiado crítico."]},
-        nl:{q:"Onder druk merken anderen misschien dat je…",a:["Veeleisender en controlerender wordt.","Onrustiger of té optimistisch wordt.","Te meegaand wordt of niet durft te spreken.","Meer teruggetrokken of te kritisch wordt."]},
-        pl:{q:"Pod presją inni mogą zauważyć, że stajesz się…",a:["Bardziej wymagający i kontrolujący.","Bardziej nerwowy lub zbyt optymistyczny.","Zbyt ugodowy albo niechętny do zabrania głosu.","Bardziej wycofany albo zbyt krytyczny."]},
-        tr:{q:"Baskı altındayken başkaları sizde şunu fark edebilir…",a:["Daha talepkâr ve kontrolcü olursunuz.","Daha telaşlı ya da aşırı iyimser olursunuz.","Fazla uyumlu ya da konuşmakta çekingen olursunuz.","Daha içine kapanık ya da aşırı eleştirel olursunuz."]},
-        ar:{q:"تحت الضغط، قد يلاحظ الآخرون أنك تصبح…",a:["أكثر طلباً وسيطرة.","أكثر ارتباكاً أو مفرط التفاؤل.","مسايراً أكثر من اللازم أو متردداً في التحدث.","أكثر انسحاباً أو انتقاداً."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"How do you prefer to receive feedback?",a:["Short, direct, and actionable.","Positive and encouraging first.","Gentle and considerate.","Specific and evidence-based."]},
-        es:{q:"¿Cómo prefieres recibir feedback?",a:["Breve, directo y accionable.","Primero positivo y alentador.","Suave y considerado.","Específico y basado en evidencias."]},
-        fr:{q:"Comment préférez-vous recevoir un retour ?",a:["Court, direct et exploitable.","Positif et encourageant d’abord.","Doux et attentionné.","Spécifique et fondé sur des preuves."]},
-        de:{q:"Wie möchten Sie Feedback am liebsten erhalten?",a:["Kurz, direkt und umsetzbar.","Zuerst positiv und ermutigend.","Sanft und rücksichtsvoll.","Spezifisch und belegbasiert."]},
-        it:{q:"Come preferisci ricevere feedback?",a:["Breve, diretto e operativo.","Prima positivo e incoraggiante.","Delicato e rispettoso.","Specifico e basato su evidenze."]},
-        pt:{q:"Como prefere receber feedback?",a:["Curto, direto e acionável.","Primeiro positivo e encorajador.","Suave e cuidadoso.","Específico e baseado em evidências."]},
-        nl:{q:"Hoe ontvang je het liefst feedback?",a:["Kort, direct en bruikbaar.","Eerst positief en bemoedigend.","Zacht en zorgvuldig.","Specifiek en op feiten gebaseerd."]},
-        pl:{q:"Jak wolisz otrzymywać informację zwrotną?",a:["Krótko, bezpośrednio i konkretnie.","Najpierw pozytywnie i zachęcająco.","Delikatnie i z wyczuciem.","Konkretnie i na podstawie faktów."]},
-        tr:{q:"Geri bildirimi nasıl almayı tercih edersiniz?",a:["Kısa, doğrudan ve uygulanabilir.","Önce olumlu ve teşvik edici.","Nazik ve düşünceli.","Spesifik ve kanıta dayalı."]},
-        ar:{q:"كيف تفضل تلقي الملاحظات؟",a:["قصيرة ومباشرة وقابلة للتنفيذ.","إيجابية ومشجعة أولاً.","بلطف ومراعاة.","بشكل محدد ومدعوم بالأدلة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When someone presents an idea, you mostly want to know…",a:["What outcome it will drive.","How exciting and inspiring it is.","How it affects people and the team.","What evidence supports it and what the risks are."]},
-        es:{q:"Cuando alguien presenta una idea, lo que más quieres saber es…",a:["Qué resultado va a generar.","Qué tan emocionante e inspiradora es.","Cómo afecta a las personas y al equipo.","Qué evidencia la respalda y cuáles son los riesgos."]},
-        fr:{q:"Quand quelqu’un présente une idée, vous voulez surtout savoir…",a:["Quel résultat elle produira.","À quel point elle est enthousiasmante.","Comment elle affecte les personnes et l’équipe.","Quelles preuves la soutiennent et quels sont les risques."]},
-        de:{q:"Wenn jemand eine Idee vorstellt, möchten Sie vor allem wissen…",a:["Welches Ergebnis sie bringt.","Wie spannend und inspirierend sie ist.","Wie sie sich auf Menschen und das Team auswirkt.","Welche Belege es gibt und welche Risiken bestehen."]},
-        it:{q:"Quando qualcuno presenta un’idea, vuoi soprattutto sapere…",a:["Quale risultato porterà.","Quanto sia stimolante e ispirante.","Come influirà sulle persone e sul team.","Quali prove la sostengono e quali rischi ci sono."]},
-        pt:{q:"Quando alguém apresenta uma ideia, quer sobretudo saber…",a:["Que resultado vai gerar.","Quão entusiasmante e inspiradora é.","Como afeta as pessoas e a equipa.","Que evidências a sustentam e quais são os riscos."]},
-        nl:{q:"Wanneer iemand een idee presenteert, wil je vooral weten…",a:["Welk resultaat het oplevert.","Hoe spannend en inspirerend het is.","Hoe het mensen en het team beïnvloedt.","Welk bewijs er is en wat de risico’s zijn."]},
-        pl:{q:"Gdy ktoś przedstawia pomysł, najbardziej chcesz wiedzieć…",a:["Jaki efekt przyniesie.","Na ile jest ekscytujący i inspirujący.","Jak wpłynie na ludzi i zespół.","Jakie są dowody i ryzyka."]},
-        tr:{q:"Biri bir fikir sunduğunda en çok şunu bilmek istersiniz…",a:["Hangi sonucu getireceğini.","Ne kadar heyecan verici ve ilham verici olduğunu.","İnsanları ve ekibi nasıl etkileyeceğini.","Hangi kanıtlarla desteklendiğini ve risklerin ne olduğunu."]},
-        ar:{q:"عندما يطرح شخص فكرة، فأكثر ما تريد معرفته هو…",a:["ما النتيجة التي ستقود إليها.","مدى حماسها وإلهامها.","كيف ستؤثر على الناس والفريق.","ما الأدلة التي تدعمها وما المخاطر."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"Your ideal working environment is…",a:["Competitive, fast, and results-driven.","Creative, social, and full of energy.","Collaborative, supportive, and calm.","Structured, quiet, and organised."]},
-        es:{q:"Tu entorno de trabajo ideal es…",a:["Competitivo, rápido y orientado a resultados.","Creativo, social y lleno de energía.","Colaborativo, de apoyo y tranquilo.","Estructurado, silencioso y organizado."]},
-        fr:{q:"Votre environnement de travail idéal est…",a:["Compétitif, rapide et axé résultats.","Créatif, social et plein d’énergie.","Collaboratif, soutenant et calme.","Structuré, calme et organisé."]},
-        de:{q:"Ihr ideales Arbeitsumfeld ist…",a:["Wettbewerbsorientiert, schnell und ergebnisfokussiert.","Kreativ, sozial und voller Energie.","Kollaborativ, unterstützend und ruhig.","Strukturiert, ruhig und organisiert."]},
-        it:{q:"Il tuo ambiente di lavoro ideale è…",a:["Competitivo, veloce e orientato ai risultati.","Creativo, sociale e pieno di energia.","Collaborativo, di supporto e tranquillo.","Strutturato, silenzioso e organizzato."]},
-        pt:{q:"O seu ambiente de trabalho ideal é…",a:["Competitivo, rápido e orientado a resultados.","Criativo, social e cheio de energia.","Colaborativo, apoiador e calmo.","Estruturado, silencioso e organizado."]},
-        nl:{q:"Je ideale werkomgeving is…",a:["Competitief, snel en resultaatgericht.","Creatief, sociaal en vol energie.","Samenwerkend, ondersteunend en rustig.","Gestructureerd, stil en georganiseerd."]},
-        pl:{q:"Twoje idealne środowisko pracy to…",a:["Konkurencyjne, szybkie i nastawione na wyniki.","Kreatywne, społeczne i pełne energii.","Współpracujące, wspierające i spokojne.","Uporządkowane, ciche i zorganizowane."]},
-        tr:{q:"İdeal çalışma ortamınız…",a:["Rekabetçi, hızlı ve sonuç odaklıdır.","Yaratıcı, sosyal ve enerji doludur.","İş birliğine açık, destekleyici ve sakindir.","Yapılandırılmış, sessiz ve düzenlidir."]},
-        ar:{q:"بيئة العمل المثالية بالنسبة لك هي…",a:["تنافسية وسريعة وموجهة نحو النتائج.","إبداعية واجتماعية ومليئة بالطاقة.","تعاونية وداعمة وهادئة.","منظمة وهادئة ومرتبة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"How do you build trust with people?",a:["By delivering and being reliable under pressure.","By being open, engaging, and enjoyable to work with.","By being genuine, consistent, and caring.","By being accurate, thorough, and dependable."]},
-        es:{q:"¿Cómo construyes confianza con los demás?",a:["Cumpliendo y siendo fiable bajo presión.","Siendo abierto, cercano y agradable para trabajar.","Siendo genuino, constante y cuidadoso.","Siendo preciso, minucioso y fiable."]},
-        fr:{q:"Comment créez-vous la confiance avec les autres ?",a:["En livrant et en étant fiable sous pression.","En étant ouvert, engageant et agréable.","En étant authentique, constant et bienveillant.","En étant précis, rigoureux et fiable."]},
-        de:{q:"Wie bauen Sie Vertrauen zu anderen auf?",a:["Indem Sie liefern und unter Druck verlässlich sind.","Indem Sie offen, zugänglich und angenehm sind.","Indem Sie authentisch, beständig und fürsorglich sind.","Indem Sie genau, gründlich und verlässlich sind."]},
-        it:{q:"Come costruisci fiducia con le persone?",a:["Consegnando risultati ed essendo affidabile sotto pressione.","Essendo aperto, coinvolgente e piacevole nel lavoro.","Essendo genuino, costante e attento.","Essendo preciso, accurato e affidabile."]},
-        pt:{q:"Como constrói confiança com as pessoas?",a:["Cumprindo e sendo fiável sob pressão.","Sendo aberto, envolvente e agradável de trabalhar.","Sendo genuíno, consistente e cuidadoso.","Sendo preciso, rigoroso e fiável."]},
-        nl:{q:"Hoe bouw je vertrouwen op met mensen?",a:["Door te leveren en betrouwbaar te zijn onder druk.","Door open, betrokken en prettig in de samenwerking te zijn.","Door oprecht, consistent en zorgzaam te zijn.","Door nauwkeurig, grondig en betrouwbaar te zijn."]},
-        pl:{q:"Jak budujesz zaufanie z ludźmi?",a:["Dowożąc wyniki i będąc niezawodnym pod presją.","Będąc otwartym, angażującym i przyjemnym we współpracy.","Będąc autentycznym, konsekwentnym i troskliwym.","Będąc dokładnym, rzetelnym i godnym zaufania."]},
-        tr:{q:"İnsanlarla güveni nasıl kurarsınız?",a:["Baskı altında sonuç getirerek ve güvenilir olarak.","Açık, ilgili ve birlikte çalışması keyifli olarak.","Samimi, tutarlı ve ilgili olarak.","Doğru, titiz ve güvenilir olarak."]},
-        ar:{q:"كيف تبني الثقة مع الآخرين؟",a:["من خلال الإنجاز والاعتمادية تحت الضغط.","من خلال الانفتاح والتفاعل وجعل العمل معك ممتعاً.","من خلال الأصالة والثبات والاهتمام.","من خلال الدقة والعمق والاعتمادية."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When working in a group, your natural role is usually…",a:["Driving things forward and keeping people accountable.","Generating ideas and lifting the mood.","Keeping the peace and making sure everyone is included.","Spotting issues and maintaining quality."]},
-        es:{q:"Cuando trabajas en grupo, tu rol natural suele ser…",a:["Impulsar el avance y exigir responsabilidad.","Generar ideas y levantar el ánimo.","Mantener la armonía e incluir a todos.","Detectar problemas y cuidar la calidad."]},
-        fr:{q:"Quand vous travaillez en groupe, votre rôle naturel est souvent…",a:["Faire avancer les choses et responsabiliser.","Générer des idées et remonter l’énergie.","Maintenir la paix et inclure tout le monde.","Repérer les problèmes et préserver la qualité."]},
-        de:{q:"Wenn Sie in einer Gruppe arbeiten, ist Ihre natürliche Rolle meist…",a:["Dinge voranzutreiben und Verantwortung einzufordern.","Ideen zu erzeugen und die Stimmung zu heben.","Frieden zu wahren und alle einzubeziehen.","Probleme zu erkennen und Qualität zu sichern."]},
-        it:{q:"Quando lavori in gruppo, il tuo ruolo naturale di solito è…",a:["Far avanzare le cose e tenere tutti responsabili.","Generare idee e sollevare il clima.","Mantenere armonia e includere tutti.","Individuare problemi e preservare qualità."]},
-        pt:{q:"Quando trabalha em grupo, o seu papel natural costuma ser…",a:["Fazer as coisas avançar e garantir responsabilidade.","Gerar ideias e elevar o ânimo.","Manter a paz e incluir toda a gente.","Detetar problemas e manter qualidade."]},
-        nl:{q:"Wanneer je in een groep werkt, is jouw natuurlijke rol meestal…",a:["Vooruitgang afdwingen en mensen verantwoordelijk houden.","Ideeën genereren en de sfeer verhogen.","De rust bewaren en iedereen meenemen.","Problemen signaleren en kwaliteit bewaken."]},
-        pl:{q:"Gdy pracujesz w grupie, Twoją naturalną rolą jest zwykle…",a:["Popychanie spraw do przodu i pilnowanie odpowiedzialności.","Tworzenie pomysłów i podnoszenie energii.","Utrzymywanie spokoju i dbanie, by wszyscy byli włączeni.","Wyłapywanie problemów i pilnowanie jakości."]},
-        tr:{q:"Bir grupta çalışırken doğal rolünüz genelde…",a:["İşleri ileri taşımak ve hesap verebilirliği sağlamak olur.","Fikir üretmek ve ortamın enerjisini yükseltmek olur.","Uyumu korumak ve herkesin dahil olmasını sağlamak olur.","Sorunları fark etmek ve kaliteyi korumak olur."]},
-        ar:{q:"عند العمل ضمن مجموعة، يكون دورك الطبيعي غالباً…",a:["دفع الأمور إلى الأمام ومحاسبة الآخرين.","توليد الأفكار ورفع المعنويات.","الحفاظ على الانسجام وضمان شمول الجميع.","رصد المشكلات والحفاظ على الجودة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"At the end of a challenging week, you feel most satisfied when…",a:["You hit targets and pushed through obstacles.","You had great conversations and brought energy.","Your team felt supported and things ran smoothly.","You produced something accurate and high quality."]},
-        es:{q:"Al final de una semana difícil, te sientes más satisfecho cuando…",a:["Cumpliste objetivos y superaste obstáculos.","Tuviste grandes conversaciones y aportaste energía.","Tu equipo se sintió apoyado y todo fluyó bien.","Produjiste algo preciso y de alta calidad."]},
-        fr:{q:"À la fin d’une semaine difficile, vous vous sentez le plus satisfait quand…",a:["Vous avez atteint vos objectifs et surmonté les obstacles.","Vous avez eu de bonnes conversations et apporté de l’énergie.","Votre équipe s’est sentie soutenue et tout a bien fonctionné.","Vous avez produit quelque chose de précis et de grande qualité."]},
-        de:{q:"Am Ende einer anspruchsvollen Woche sind Sie am zufriedensten, wenn…",a:["Sie Ziele erreicht und Hindernisse überwunden haben.","Sie gute Gespräche hatten und Energie eingebracht haben.","Ihr Team sich unterstützt fühlte und alles gut lief.","Sie etwas Präzises und Hochwertiges geliefert haben."]},
-        it:{q:"Alla fine di una settimana impegnativa, ti senti più soddisfatto quando…",a:["Hai raggiunto gli obiettivi e superato gli ostacoli.","Hai avuto ottime conversazioni e portato energia.","Il tuo team si è sentito supportato e tutto è andato bene.","Hai prodotto qualcosa di preciso e di alta qualità."]},
-        pt:{q:"No fim de uma semana exigente, sente-se mais satisfeito quando…",a:["Atingiu objetivos e ultrapassou obstáculos.","Teve boas conversas e trouxe energia.","A sua equipa sentiu-se apoiada e tudo correu bem.","Produziu algo preciso e de alta qualidade."]},
-        nl:{q:"Aan het einde van een uitdagende week voel je je het meest tevreden wanneer…",a:["Je doelen haalde en obstakels overwon.","Je goede gesprekken had en energie bracht.","Je team zich gesteund voelde en alles soepel liep.","Je iets nauwkeurigs en van hoge kwaliteit opleverde."]},
-        pl:{q:"Pod koniec trudnego tygodnia jesteś najbardziej zadowolony, gdy…",a:["Osiągnąłeś cele i przebiłeś się przez przeszkody.","Miałeś świetne rozmowy i wnosiłeś energię.","Twój zespół czuł wsparcie, a wszystko przebiegało płynnie.","Stworzyłeś coś dokładnego i wysokiej jakości."]},
-        tr:{q:"Zorlu bir haftanın sonunda en çok şu durumda tatmin olursunuz…",a:["Hedeflere ulaşıp engelleri aştığınızda.","İyi konuşmalar yapıp enerji kattığınızda.","Ekibiniz desteklendiğini hissettiğinde ve işler düzgün aktığında.","Doğru ve yüksek kaliteli bir iş ortaya koyduğunuzda."]},
-        ar:{q:"في نهاية أسبوع صعب، تشعر بأكبر قدر من الرضا عندما…",a:["تصل إلى الأهداف وتتجاوز العقبات.","تجري محادثات رائعة وتضيف طاقة.","يشعر فريقك بالدعم وتسير الأمور بسلاسة.","تنتج شيئاً دقيقاً وعالي الجودة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When you need to deliver difficult news, you…",a:["Say it clearly and quickly.","Try to keep it positive and future-focused.","Choose your words carefully and check in afterwards.","Prepare carefully and stick to the facts."]},
-        es:{q:"Cuando necesitas dar una noticia difícil, tú…",a:["La dices con claridad y rapidez.","Intentas mantenerla positiva y enfocada en el futuro.","Eliges bien las palabras y haces seguimiento después.","Te preparas con cuidado y te ciñes a los hechos."]},
-        fr:{q:"Lorsque vous devez annoncer une nouvelle difficile, vous…",a:["La dites clairement et rapidement.","Essayez de rester positif et tourné vers la suite.","Choisissez vos mots avec soin et reprenez contact ensuite.","Vous préparez soigneusement et vous en tenez aux faits."]},
-        de:{q:"Wenn Sie schlechte Nachrichten überbringen müssen, dann…",a:["Sagen Sie es klar und schnell.","Versuchen Sie, positiv und zukunftsorientiert zu bleiben.","Wählen Sie Ihre Worte sorgfältig und fragen später nach.","Bereiten Sie sich gründlich vor und bleiben bei den Fakten."]},
-        it:{q:"Quando devi dare una notizia difficile, tu…",a:["La dici chiaramente e subito.","Cerchi di mantenerla positiva e orientata al futuro.","Scegli con cura le parole e poi ricontrolli.","Ti prepari bene e rimani sui fatti."]},
-        pt:{q:"Quando precisa dar uma notícia difícil, você…",a:["Diz de forma clara e rápida.","Tenta manter um tom positivo e orientado para o futuro.","Escolhe as palavras com cuidado e volta a falar depois.","Prepara-se bem e fica pelos factos."]},
-        nl:{q:"Wanneer je moeilijk nieuws moet brengen, dan…",a:["Zeg je het duidelijk en snel.","Probeer je het positief en toekomstgericht te houden.","Kies je je woorden zorgvuldig en check je later nog eens in.","Bereid je je goed voor en houd je je aan de feiten."]},
-        pl:{q:"Gdy musisz przekazać trudną wiadomość, to…",a:["Mówisz ją jasno i szybko.","Starasz się zachować pozytywny i przyszłościowy ton.","Dobierasz słowa ostrożnie i wracasz do rozmowy później.","Przygotowujesz się dokładnie i trzymasz się faktów."]},
-        tr:{q:"Zor bir haberi iletmeniz gerektiğinde…",a:["Açık ve hızlı şekilde söylersiniz.","Olumlu ve geleceğe dönük tutmaya çalışırsınız.","Kelimelerinizi dikkatle seçer ve sonra tekrar yoklarsınız.","Dikkatle hazırlanır ve gerçeklere bağlı kalırsınız."]},
-        ar:{q:"عندما تحتاج إلى إيصال خبر صعب، فإنك…",a:["تقوله بوضوح وبسرعة.","تحاول الحفاظ على نبرة إيجابية وموجهة للمستقبل.","تختار كلماتك بعناية وتتابع لاحقاً.","تستعد جيداً وتلتزم بالحقائق."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"Friends would most likely describe you as…",a:["The one who gets things moving.","The fun, upbeat one.","The loyal one who is always there.","The thoughtful and prepared one."]},
-        es:{q:"Tus amigos probablemente te describirían como…",a:["La persona que hace que las cosas arranquen.","La persona divertida y positiva.","La persona leal que siempre está.","La persona reflexiva y preparada."]},
-        fr:{q:"Vos amis vous décriraient probablement comme…",a:["Celui ou celle qui fait bouger les choses.","La personne drôle et positive.","La personne loyale toujours présente.","La personne réfléchie et préparée."]},
-        de:{q:"Freunde würden Sie wahrscheinlich so beschreiben…",a:["Als die Person, die Dinge in Bewegung bringt.","Als die lustige und positive Person.","Als die loyale Person, die immer da ist.","Als die nachdenkliche und gut vorbereitete Person."]},
-        it:{q:"Gli amici probabilmente ti descriverebbero come…",a:["Quello o quella che fa partire le cose.","Quello o quella divertente e positiva.","Quello o quella leale che c’è sempre.","Quello o quella riflessiva e preparata."]},
-        pt:{q:"Os amigos provavelmente descrevê-lo-iam como…",a:["A pessoa que faz as coisas acontecerem.","A pessoa divertida e positiva.","A pessoa leal que está sempre presente.","A pessoa ponderada e preparada."]},
-        nl:{q:"Vrienden zouden jou waarschijnlijk omschrijven als…",a:["Degene die dingen in gang zet.","De leuke en positieve persoon.","De loyale persoon die er altijd is.","De bedachtzame en voorbereide persoon."]},
-        pl:{q:"Przyjaciele najpewniej opisaliby Cię jako…",a:["Tę osobę, która uruchamia działanie.","Tę zabawną i pozytywną osobę.","Tę lojalną osobę, która zawsze jest obok.","Tę refleksyjną i przygotowaną osobę."]},
-        tr:{q:"Arkadaşlarınız sizi büyük olasılıkla şöyle tanımlar…",a:["İşleri harekete geçiren kişi.","Eğlenceli ve pozitif kişi.","Her zaman yanında olan sadık kişi.","Düşünceli ve hazırlıklı kişi."]},
-        ar:{q:"من المرجح أن يصفك أصدقاؤك بأنك…",a:["الشخص الذي يجعل الأمور تتحرك.","الشخص المرح والإيجابي.","الشخص الوفي الذي يكون موجوداً دائماً.","الشخص المتأمل والمستعد دائماً."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When learning something new, you prefer to…",a:["Try it immediately and learn by doing.","Discuss it with others and explore aloud.","Take time and ask questions first.","Read, study, and understand it deeply before starting."]},
-        es:{q:"Cuando aprendes algo nuevo, prefieres…",a:["Probarlo de inmediato y aprender haciendo.","Hablarlo con otros y explorarlo en voz alta.","Tomarte tiempo y hacer preguntas primero.","Leer, estudiar y entenderlo a fondo antes de empezar."]},
-        fr:{q:"Quand vous apprenez quelque chose de nouveau, vous préférez…",a:["L’essayer immédiatement et apprendre en faisant.","En discuter avec d’autres et l’explorer à voix haute.","Prendre du temps et poser des questions d’abord.","Lire, étudier et bien comprendre avant de commencer."]},
-        de:{q:"Wenn Sie etwas Neues lernen, bevorzugen Sie…",a:["Es sofort auszuprobieren und durch Tun zu lernen.","Mit anderen darüber zu sprechen und laut zu erkunden.","Sich Zeit zu nehmen und zuerst Fragen zu stellen.","Zu lesen, zu studieren und es tief zu verstehen, bevor Sie beginnen."]},
-        it:{q:"Quando impari qualcosa di nuovo, preferisci…",a:["Provarlo subito e imparare facendo.","Discuterne con altri ed esplorarlo parlando.","Prenderti tempo e fare domande prima.","Leggere, studiare e capirlo a fondo prima di iniziare."]},
-        pt:{q:"Quando aprende algo novo, prefere…",a:["Experimentar logo e aprender fazendo.","Conversar com outros e explorar em voz alta.","Levar tempo e fazer perguntas primeiro.","Ler, estudar e compreender profundamente antes de começar."]},
-        nl:{q:"Wanneer je iets nieuws leert, doe je dat het liefst door…",a:["Het meteen te proberen en al doende te leren.","Er met anderen over te praten en het hardop te verkennen.","Eerst tijd te nemen en vragen te stellen.","Te lezen, te studeren en het diep te begrijpen voordat je begint."]},
-        pl:{q:"Kiedy uczysz się czegoś nowego, wolisz…",a:["Od razu spróbować i uczyć się przez działanie.","Omówić to z innymi i odkrywać na głos.","Najpierw poświęcić czas i zadawać pytania.","Czytać, studiować i dobrze to zrozumieć przed startem."]},
-        tr:{q:"Yeni bir şey öğrenirken şunu tercih edersiniz…",a:["Hemen denemek ve yaparak öğrenmek.","Başkalarıyla konuşup yüksek sesle keşfetmek.","Önce zaman ayırıp sorular sormak.","Başlamadan önce okuyup çalışmak ve derinlemesine anlamak."]},
-        ar:{q:"عند تعلم شيء جديد، فإنك تفضل…",a:["تجربته فوراً والتعلم بالممارسة.","مناقشته مع الآخرين واستكشافه بصوت عالٍ.","أخذ وقتك وطرح الأسئلة أولاً.","القراءة والدراسة وفهمه بعمق قبل البدء."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"Which phrase feels most like you?",a:["Just get it done.","Let’s make this fun.","Let’s make sure everyone is okay.","Let’s make sure we do it right."]},
-        es:{q:"¿Qué frase sientes más como tuya?",a:["Simplemente haz que ocurra.","Hagamos esto divertido.","Asegurémonos de que todos estén bien.","Asegurémonos de hacerlo bien."]},
-        fr:{q:"Quelle phrase vous ressemble le plus ?",a:["Faisons-le, tout simplement.","Rendons cela agréable.","Assurons-nous que tout le monde va bien.","Assurons-nous de bien le faire."]},
-        de:{q:"Welche Aussage passt am besten zu Ihnen?",a:["Einfach machen.","Lass uns das unterhaltsam machen.","Lass uns sicherstellen, dass es allen gut geht.","Lass uns sicherstellen, dass wir es richtig machen."]},
-        it:{q:"Quale frase ti rappresenta di più?",a:["Facciamolo e basta.","Rendiamo tutto questo divertente.","Assicuriamoci che tutti stiano bene.","Assicuriamoci di farlo bene."]},
-        pt:{q:"Que frase parece mais consigo?",a:["Basta fazer acontecer.","Vamos tornar isto divertido.","Vamos garantir que todos estão bem.","Vamos garantir que o fazemos corretamente."]},
-        nl:{q:"Welke zin past het meest bij jou?",a:["Gewoon doen.","Laten we dit leuk maken.","Laten we zorgen dat iedereen oké is.","Laten we zorgen dat we het goed doen."]},
-        pl:{q:"Które zdanie najbardziej do Ciebie pasuje?",a:["Po prostu zróbmy to.","Zróbmy z tego coś fajnego.","Upewnijmy się, że wszyscy mają się dobrze.","Upewnijmy się, że robimy to dobrze."]},
-        tr:{q:"Hangi ifade size en çok uyuyor?",a:["Hadi bunu bitirelim.","Bunu eğlenceli hale getirelim.","Herkesin iyi olduğundan emin olalım.","Bunu doğru yaptığımızdan emin olalım."]},
-        ar:{q:"أي عبارة تشبهك أكثر؟",a:["فقط أنجز الأمر.","لنجعل هذا ممتعاً.","لنتأكد أن الجميع بخير.","لنتأكد أننا نقوم به بالشكل الصحيح."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When a project you care about changes unexpectedly, you…",a:["Push back, make your view heard, then move on quickly.","Feel disappointed briefly, then look for the next exciting path.","Think first about how people are affected and check in.","Need to understand exactly why before accepting it."]},
-        es:{q:"Cuando un proyecto que te importa cambia inesperadamente, tú…",a:["Te opones, haces oír tu opinión y luego sigues rápido.","Te decepcionas un poco y luego buscas el siguiente camino interesante.","Piensas primero en cómo afecta a las personas y haces seguimiento.","Necesitas entender exactamente por qué antes de aceptarlo."]},
-        fr:{q:"Quand un projet important pour vous change de façon inattendue, vous…",a:["Résistez, faites entendre votre point de vue puis passez vite à la suite.","Êtes brièvement déçu puis cherchez la prochaine voie enthousiasmante.","Pensez d’abord à l’impact sur les personnes et reprenez contact.","Avez besoin de comprendre exactement pourquoi avant de l’accepter."]},
-        de:{q:"Wenn sich ein Projekt, das Ihnen wichtig ist, unerwartet ändert, dann…",a:["Wehren Sie sich, äußern Ihre Sicht und gehen dann schnell weiter.","Sind Sie kurz enttäuscht und suchen dann den nächsten spannenden Weg.","Denken Sie zuerst daran, wie Menschen betroffen sind, und fragen nach.","Müssen Sie genau verstehen, warum, bevor Sie es akzeptieren."]},
-        it:{q:"Quando un progetto a cui tieni cambia in modo imprevisto, tu…",a:["Ti opponi, fai sentire il tuo punto di vista e poi vai avanti rapidamente.","Ti senti deluso per poco e poi cerchi la prossima opportunità stimolante.","Pensi prima a come le persone siano coinvolte e fai follow-up.","Hai bisogno di capire esattamente perché prima di accettarlo."]},
-        pt:{q:"Quando um projeto importante para si muda inesperadamente, você…",a:["Resiste, faz ouvir a sua opinião e depois segue em frente rapidamente.","Fica brevemente desapontado e depois procura o próximo caminho entusiasmante.","Pensa primeiro no impacto nas pessoas e verifica como estão.","Precisa de perceber exatamente porquê antes de aceitar."]},
-        nl:{q:"Wanneer een project waar je om geeft onverwacht verandert, dan…",a:["Duw je terug, laat je mening horen en ga je snel verder.","Ben je even teleurgesteld en zoek je daarna een nieuwe interessante richting.","Denk je eerst aan de impact op mensen en check je bij hen in.","Moet je exact begrijpen waarom voordat je het accepteert."]},
-        pl:{q:"Gdy projekt, na którym Ci zależy, niespodziewanie się zmienia, to…",a:["Protestujesz, wyrażasz swoje zdanie, a potem szybko idziesz dalej.","Na chwilę się zniechęcasz, a potem szukasz kolejnej ciekawej drogi.","Najpierw myślisz o tym, jak wpływa to na ludzi, i sprawdzasz, jak się mają.","Musisz dokładnie zrozumieć dlaczego, zanim to zaakceptujesz."]},
-        tr:{q:"Önemsediğiniz bir proje beklenmedik şekilde değiştiğinde…",a:["İtiraz eder, görüşünüzü açıkça belirtir ve sonra hızlıca yolunuza devam edersiniz.","Kısa süreli hayal kırıklığı yaşar, sonra yeni heyecan verici yolu ararsınız.","Önce insanları nasıl etkilediğini düşünür ve yoklarsınız.","Kabul etmeden önce nedenini tam olarak anlamanız gerekir."]},
-        ar:{q:"عندما يتغير مشروع تهتم به بشكل غير متوقع، فإنك…",a:["تعترض، وتُسمع رأيك، ثم تمضي سريعاً.","تشعر بخيبة قصيرة ثم تبحث عن المسار المثير التالي.","تفكر أولاً في تأثيره على الناس وتطمئن عليهم.","تحتاج إلى فهم السبب بدقة قبل قبوله."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"Your natural leadership style is closest to…",a:["Set the goal, move fast, hold standards.","Inspire people and generate momentum.","Support people and build commitment.","Clarify the plan and reduce risk."]},
-        es:{q:"Tu estilo natural de liderazgo se parece más a…",a:["Marcar la meta, avanzar rápido y mantener el nivel.","Inspirar a las personas y generar impulso.","Apoyar a las personas y construir compromiso.","Aclarar el plan y reducir el riesgo."]},
-        fr:{q:"Votre style naturel de leadership ressemble le plus à…",a:["Fixer l’objectif, aller vite et maintenir le niveau.","Inspirer les gens et créer de l’élan.","Soutenir les gens et créer de l’engagement.","Clarifier le plan et réduire le risque."]},
-        de:{q:"Ihr natürlicher Führungsstil ist am ehesten…",a:["Ziel setzen, schnell vorangehen, Standards halten.","Menschen inspirieren und Schwung erzeugen.","Menschen unterstützen und Commitment aufbauen.","Den Plan klären und Risiken senken."]},
-        it:{q:"Il tuo stile naturale di leadership è più vicino a…",a:["Definire l’obiettivo, andare veloce e mantenere gli standard.","Ispirare le persone e creare slancio.","Supportare le persone e costruire coinvolgimento.","Chiarire il piano e ridurre il rischio."]},
-        pt:{q:"O seu estilo natural de liderança aproxima-se mais de…",a:["Definir o objetivo, avançar rápido e manter padrões.","Inspirar pessoas e gerar impulso.","Apoiar pessoas e criar compromisso.","Clarificar o plano e reduzir risco."]},
-        nl:{q:"Je natuurlijke leiderschapsstijl lijkt het meest op…",a:["Het doel zetten, snel vooruitgaan en standaarden bewaken.","Mensen inspireren en momentum creëren.","Mensen ondersteunen en betrokkenheid opbouwen.","Het plan verduidelijken en risico verminderen."]},
-        pl:{q:"Twój naturalny styl przywództwa jest najbliższy temu, by…",a:["Wyznaczać cel, działać szybko i trzymać standard.","Inspirować ludzi i budować impet.","Wspierać ludzi i budować zaangażowanie.","Wyjaśniać plan i ograniczać ryzyko."]},
-        tr:{q:"Doğal liderlik tarzınız en çok şuna benzer…",a:["Hedefi koymak, hızlı ilerlemek ve standardı korumak.","İnsanlara ilham vermek ve ivme yaratmak.","İnsanları desteklemek ve bağlılık oluşturmak.","Planı netleştirmek ve riski azaltmak."]},
-        ar:{q:"أسلوب قيادتك الطبيعي أقرب إلى…",a:["وضع الهدف والتحرك بسرعة والحفاظ على المعايير.","إلهام الناس وتوليد الزخم.","دعم الناس وبناء الالتزام.","توضيح الخطة وتقليل المخاطر."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"What drains you fastest at work?",a:["Slow decisions and lack of ownership.","Dry routines and low energy.","Tension, coldness, and conflict.","Chaos, vagueness, and poor quality."]},
-        es:{q:"¿Qué te desgasta más rápido en el trabajo?",a:["Las decisiones lentas y la falta de responsabilidad.","Las rutinas secas y la baja energía.","La tensión, la frialdad y el conflicto.","El caos, la vaguedad y la mala calidad."]},
-        fr:{q:"Qu’est-ce qui vous épuise le plus vite au travail ?",a:["Les décisions lentes et le manque de responsabilité.","Les routines fades et le manque d’énergie.","La tension, la froideur et le conflit.","Le chaos, le flou et la mauvaise qualité."]},
-        de:{q:"Was erschöpft Sie bei der Arbeit am schnellsten?",a:["Langsame Entscheidungen und fehlende Verantwortung.","Trockene Routinen und wenig Energie.","Spannung, Kälte und Konflikt.","Chaos, Unklarheit und schlechte Qualität."]},
-        it:{q:"Cosa ti drena più velocemente al lavoro?",a:["Decisioni lente e mancanza di responsabilità.","Routine spente e poca energia.","Tensione, freddezza e conflitto.","Caos, vaghezza e scarsa qualità."]},
-        pt:{q:"O que o desgasta mais depressa no trabalho?",a:["Decisões lentas e falta de responsabilidade.","Rotinas secas e pouca energia.","Tensão, frieza e conflito.","Caos, vagueza e fraca qualidade."]},
-        nl:{q:"Wat kost je op het werk het snelst energie?",a:["Trage beslissingen en gebrek aan eigenaarschap.","Saaie routines en lage energie.","Spanning, kilte en conflict.","Chaos, vaagheid en slechte kwaliteit."]},
-        pl:{q:"Co najszybciej odbiera Ci energię w pracy?",a:["Powolne decyzje i brak odpowiedzialności.","Suche rutyny i niski poziom energii.","Napięcie, chłód i konflikt.","Chaos, niejasność i słaba jakość."]},
-        tr:{q:"İş hayatında enerjinizi en hızlı ne düşürür?",a:["Yavaş kararlar ve sahiplenme eksikliği.","Kuru rutinler ve düşük enerji.","Gerilim, soğukluk ve çatışma.","Kaos, belirsizlik ve düşük kalite."]},
-        ar:{q:"ما الذي يستنزفك أسرع في العمل؟",a:["القرارات البطيئة وغياب تحمل المسؤولية.","الروتين الجاف والطاقة المنخفضة.","التوتر والبرود والصراع.","الفوضى والغموض وضعف الجودة."]},
-        c:["R","Y","G","B"]
-      },
-      {
-        en:{q:"When you are doing your best work, you are usually…",a:["Moving decisively toward a clear result.","Bringing enthusiasm and momentum to people.","Creating trust and steadiness around others.","Thinking clearly and improving quality."]},
-        es:{q:"Cuando estás trabajando en tu mejor nivel, normalmente estás…",a:["Avanzando con decisión hacia un resultado claro.","Aportando entusiasmo y energía a las personas.","Creando confianza y estabilidad a tu alrededor.","Pensando con claridad y elevando la calidad."]},
-        fr:{q:"Quand vous donnez le meilleur de vous-même, vous êtes généralement en train de…",a:["Avancer avec décision vers un résultat clair.","Apporter enthousiasme et énergie aux personnes.","Créer confiance et stabilité autour de vous.","Penser clairement et améliorer la qualité."]},
-        de:{q:"Wenn Sie Ihre beste Arbeit leisten, dann…",a:["Bewegen Sie sich entschlossen auf ein klares Ergebnis zu.","Bringen Sie Begeisterung und Schwung zu Menschen.","Schaffen Sie Vertrauen und Stabilität um andere herum.","Denken Sie klar und verbessern Qualität."]},
-        it:{q:"Quando dai il meglio di te, di solito stai…",a:["Avanzando con decisione verso un risultato chiaro.","Portando entusiasmo e slancio alle persone.","Creando fiducia e stabilità intorno agli altri.","Pensando con chiarezza e migliorando la qualità."]},
-        pt:{q:"Quando está no seu melhor, normalmente está a…",a:["Avançar com decisão para um resultado claro.","Trazer entusiasmo e impulso às pessoas.","Criar confiança e estabilidade à sua volta.","Pensar com clareza e melhorar a qualidade."]},
-        nl:{q:"Wanneer je op je best bent, ben je meestal…",a:["Besluitvaardig op weg naar een duidelijk resultaat.","Enthousiasme en momentum naar mensen aan het brengen.","Vertrouwen en stabiliteit rond anderen aan het creëren.","Helder aan het denken en kwaliteit aan het verbeteren."]},
-        pl:{q:"Kiedy pracujesz najlepiej, zwykle…",a:["Zdecydowanie zmierzasz do jasnego rezultatu.","Wnosisz entuzjazm i impet do ludzi.","Tworzysz zaufanie i stabilność wokół innych.","Myślisz jasno i podnosisz jakość."]},
-        tr:{q:"En iyi çalıştığınızda genelde…",a:["Net bir sonuca kararlı şekilde ilerlersiniz.","İnsanlara heyecan ve ivme katarsınız.","Çevrenizde güven ve denge yaratırsınız.","Net düşünür ve kaliteyi artırırsınız."]},
-        ar:{q:"عندما تكون في أفضل حالاتك في العمل، فإنك عادة…",a:["تتحرك بحسم نحو نتيجة واضحة.","تجلب الحماس والزخم للناس.","تصنع الثقة والثبات حول الآخرين.","تفكر بوضوح وترفع الجودة."]},
-        c:["R","Y","G","B"]
-      }
+    const originalQuestions = [
+      {text:"When you're given a new project, your first instinct is to…",options:[
+        {text:"Dive straight in — figure it out as you go.",c:'R'},
+        {text:"Gather everyone together and brainstorm ideas excitedly.",c:'Y'},
+        {text:"Check in with the team and make sure everyone's on board.",c:'G'},
+        {text:"Research thoroughly and build a detailed plan first.",c:'B'}]},
+      {text:"In a meeting, people would describe your communication style as…",options:[
+        {text:"Direct and to the point — you get to outcomes fast.",c:'R'},
+        {text:"Enthusiastic and expressive — you energise the room.",c:'Y'},
+        {text:"Warm and supportive — you make sure everyone's heard.",c:'G'},
+        {text:"Measured and precise — you ask the right questions.",c:'B'}]},
+      {text:"When facing a conflict with a colleague, you tend to…",options:[
+        {text:"Address it head-on and resolve it quickly.",c:'R'},
+        {text:"Talk it through and look for a positive spin.",c:'Y'},
+        {text:"Try to understand all perspectives and find harmony.",c:'G'},
+        {text:"Think it through calmly and approach it logically.",c:'B'}]},
+      {text:"Your colleagues come to you most often for…",options:[
+        {text:"Quick decisions and cutting through ambiguity.",c:'R'},
+        {text:"Creative ideas and keeping morale high.",c:'Y'},
+        {text:"Emotional support and thoughtful advice.",c:'G'},
+        {text:"Accurate information and careful analysis.",c:'B'}]},
+      {text:"How do you feel about following rules and processes?",options:[
+        {text:"I'll follow them if they're efficient — otherwise I challenge them.",c:'R'},
+        {text:"I like flexibility — rigid rules stifle creativity.",c:'Y'},
+        {text:"I respect them; they keep things fair for everyone.",c:'G'},
+        {text:"I follow them carefully — they exist for good reason.",c:'B'}]},
+      {text:"What motivates you most at work?",options:[
+        {text:"Winning, achieving results, and being number one.",c:'R'},
+        {text:"Being recognised, having fun, and inspiring others.",c:'Y'},
+        {text:"Contributing to something meaningful and helping the team.",c:'G'},
+        {text:"Getting things right, learning, and doing quality work.",c:'B'}]},
+      {text:"When making an important decision, you rely most on…",options:[
+        {text:"Your gut instinct — you trust your own judgement.",c:'R'},
+        {text:"Talking to others and reading the energy in the room.",c:'Y'},
+        {text:"Consensus — what feels right for everyone involved.",c:'G'},
+        {text:"Data, evidence, and logical reasoning.",c:'B'}]},
+      {text:"In a fast-changing environment, you typically…",options:[
+        {text:"Thrive — you love the pace and push even harder.",c:'R'},
+        {text:"Adapt quickly and find it exciting.",c:'Y'},
+        {text:"Stay steady and focus on keeping the team grounded.",c:'G'},
+        {text:"Need time to re-evaluate — change needs careful thought.",c:'B'}]},
+      {text:"When under pressure, others might notice you become…",options:[
+        {text:"More demanding and controlling.",c:'R'},
+        {text:"Frantic or over-optimistic.",c:'Y'},
+        {text:"Over-accommodating or reluctant to speak up.",c:'G'},
+        {text:"Withdrawn and overly critical.",c:'B'}]},
+      {text:"How do you prefer to receive feedback?",options:[
+        {text:"Short, direct, and actionable — no sugar-coating.",c:'R'},
+        {text:"Positive first, framed encouragingly.",c:'Y'},
+        {text:"Gently and with care for how it lands.",c:'G'},
+        {text:"Specific, evidence-based, and well-thought-out.",c:'B'}]},
+      {text:"When someone presents an idea to you, you mostly want to know…",options:[
+        {text:"What's the outcome? Is it worth my time?",c:'R'},
+        {text:"How exciting is this? What's the big picture?",c:'Y'},
+        {text:"How does this affect the team? Is everyone considered?",c:'G'},
+        {text:"What's the evidence? What are the risks?",c:'B'}]},
+      {text:"Your ideal working environment is…",options:[
+        {text:"Competitive, fast, and results-driven.",c:'R'},
+        {text:"Creative, social, and full of energy.",c:'Y'},
+        {text:"Collaborative, supportive, and harmonious.",c:'G'},
+        {text:"Structured, quiet, and organised.",c:'B'}]},
+      {text:"How do you build trust with people?",options:[
+        {text:"By delivering on promises and being reliable under pressure.",c:'R'},
+        {text:"By being open, likeable, and making things enjoyable.",c:'Y'},
+        {text:"By being genuine, consistent, and showing I care.",c:'G'},
+        {text:"By being accurate, thorough, and following through.",c:'B'}]},
+      {text:"When working in a group, your natural role is usually…",options:[
+        {text:"The one who drives things forward and keeps people accountable.",c:'R'},
+        {text:"The one who generates ideas and keeps spirits up.",c:'Y'},
+        {text:"The one who keeps the peace and makes sure everyone's included.",c:'G'},
+        {text:"The one who spots problems and ensures quality.",c:'B'}]},
+      {text:"At the end of a challenging week, you feel most satisfied when…",options:[
+        {text:"You hit your targets and pushed through obstacles.",c:'R'},
+        {text:"You had great conversations and made things fun for people.",c:'Y'},
+        {text:"Your team felt supported and things ran smoothly.",c:'G'},
+        {text:"You produced something accurate, thorough, and high quality.",c:'B'}]},
+      {text:"When you have to give someone difficult news, you…",options:[
+        {text:"Deliver it clearly and immediately — waiting only makes it worse.",c:'R'},
+        {text:"Try to frame it as positively as possible and focus on what comes next.",c:'Y'},
+        {text:"Find a quiet moment, choose your words carefully, and check in after.",c:'G'},
+        {text:"Prepare exactly what you want to say, anticipate questions, and stick to the facts.",c:'B'}]},
+      {text:"In your personal life, friends would most likely describe you as…",options:[
+        {text:"The one who makes things happen and gets everyone off the sofa.",c:'R'},
+        {text:"The fun one — always up for something and full of energy.",c:'Y'},
+        {text:"The loyal one — always there when it matters, without being asked.",c:'G'},
+        {text:"The thoughtful one — considered, reliable, and always well-prepared.",c:'B'}]},
+      {text:"When you're learning something new, you prefer to…",options:[
+        {text:"Try it straight away and learn by doing, even if you make mistakes.",c:'R'},
+        {text:"Discuss it with others, share ideas, and explore it together.",c:'Y'},
+        {text:"Take your time, ask questions, and make sure you fully understand before moving on.",c:'G'},
+        {text:"Read the manual, study the detail, and build a thorough understanding first.",c:'B'}]},
+      {text:"Which of these phrases feels most like you?",options:[
+        {text:"Just get it done.",c:'R'},
+        {text:"Let's make this fun.",c:'Y'},
+        {text:"Let's make sure everyone's okay.",c:'G'},
+        {text:"Let's make sure we're doing it right.",c:'B'}]},
+      {text:"When a project you care about gets cancelled or changed without warning, you…",options:[
+        {text:"Push back hard and make sure your objections are heard — then move on fast.",c:'R'},
+        {text:"Feel deflated briefly, then start looking for the next exciting opportunity.",c:'Y'},
+        {text:"Worry most about how the people involved are feeling and check in with them.",c:'G'},
+        {text:"Want to understand exactly why the decision was made before you can accept it.",c:'B'}]}
     ];
 
     const pairTaglines = {
@@ -1052,82 +990,200 @@
     };
 
     const profileTexts = {
-      en: {
-        primary: {
-          R: {
-            overview: "{name}, you lead with strong Red energy. You are direct, decisive, and naturally focused on movement, ownership, and results.",
-            comm: "Your communication is usually clear, fast, and outcome-focused. People tend to know where they stand with you, and you often create momentum simply by acting."
-          },
-          Y: {
-            overview: "{name}, you lead with strong Yellow energy. You are expressive, optimistic, and naturally energising to the people around you.",
-            comm: "Your communication is warm, engaging, and persuasive. You often create momentum through enthusiasm, connection, and visible belief in what is possible."
-          },
-          G: {
-            overview: "{name}, you lead with strong Green energy. You are steady, caring, and naturally tuned into the emotional tone of a team.",
-            comm: "Your communication is calm, considerate, and supportive. People often trust you quickly because you create safety, consistency, and space for others."
-          },
-          B: {
-            overview: "{name}, you lead with strong Blue energy. You are thoughtful, precise, and naturally drawn to clarity, logic, and quality.",
-            comm: "Your communication is measured, careful, and evidence-based. People rely on you for thoughtful judgement, strong analysis, and a high standard of work."
-          }
+      primary: {
+        R: {
+          overview: "{name}, you lead with strong Red energy. You are direct, decisive, and naturally focused on movement, ownership, and results.",
+          comm: "Your communication style is fast, clear, and outcome-focused. You tend to value honesty over diplomacy and momentum over delay. People often experience you as confident, straightforward, and willing to make a call when others are still discussing possibilities.",
+          workStyle: "At your best, you like clarity, autonomy, speed, and visible progress. You naturally push work forward, challenge ambiguity, and keep attention on what matters most. You are usually most effective when expectations are high and ownership is clear.",
+          motivation: "You are most motivated by achievement, progress, challenge, responsibility, and the ability to influence outcomes. Stagnation, indecision, and unnecessary delay tend to drain your energy quickly.",
+          decisions: "You make decisions quickly and are comfortable acting before everything is perfectly known. You tend to trust judgement, pattern recognition, and momentum. This makes you strong in fast-moving environments, although others may sometimes want more explanation than you think is necessary.",
+          misread: "Others may sometimes read your clarity as harshness, your speed as impatience, or your confidence as pressure. In reality, you are often trying to be efficient, decisive, and useful rather than difficult.",
+          watchouts: [
+            "Can become impatient with slower thinkers or more cautious colleagues",
+            "May push ahead before others feel included or aligned",
+            "Can sound sharper than intended when under pressure"
+          ],
+          growth: "Your growth edge is learning that pace and clarity are even more powerful when paired with context, empathy, and patience. You do not need to become softer in a vague sense — you need to become more intentional about helping others travel with you."
         },
-        secondary: {
-          R: "Your secondary Red energy adds urgency, competitiveness, and a stronger bias toward action.",
-          Y: "Your secondary Yellow energy adds enthusiasm, visibility, and a stronger ability to influence through energy and optimism.",
-          G: "Your secondary Green energy adds empathy, patience, and a stronger instinct to support people while moving forward.",
-          B: "Your secondary Blue energy adds structure, precision, and a stronger drive to get things right as well as get them done."
+        Y: {
+          overview: "{name}, you lead with strong Yellow energy. You are expressive, optimistic, and naturally energising to the people around you.",
+          comm: "Your communication style is warm, engaging, and persuasive. You often create momentum through enthusiasm, possibility, and connection. People are drawn to your energy and usually feel lifted by your presence.",
+          workStyle: "At your best, you thrive in environments that are dynamic, collaborative, and full of possibility. You enjoy generating ideas, connecting people, and bringing spirit into work that might otherwise feel dry or procedural.",
+          motivation: "You are most motivated by energy, recognition, freedom, variety, meaningful interaction, and visible excitement around what is being built. Flatness, excessive rigidity, and emotionally cold environments tend to drain you.",
+          decisions: "You often make decisions by sensing energy, potential, and how something feels in the wider human context. You can move quickly when something feels promising and often help others believe in a direction before the full path is visible.",
+          misread: "Others may sometimes assume you are less serious or less structured than you really are. Your warmth and spontaneity can hide the fact that you often read people very quickly and influence outcomes in subtle but powerful ways.",
+          watchouts: [
+            "May over-commit in moments of enthusiasm",
+            "Can lose interest when work becomes repetitive or heavily detailed",
+            "May avoid difficult conversations for too long"
+          ],
+          growth: "Your growth edge is adding consistency and disciplined follow-through to your natural charisma. You already bring people with you easily; the next step is showing that your energy is matched by endurance and delivery."
         },
-        strengths: {
-          RR:["Moves quickly to decisions","Sets direction clearly","Thrives with ownership"],
-          RY:["Creates momentum fast","Combines drive with visibility","Persuades people into action"],
-          RG:["Balances challenge with care","Builds trust while moving forward","Leads firmly without losing people"],
-          RB:["Combines action with rigour","Makes sharp decisions","Focuses on both speed and quality"],
-          YR:["Inspires and mobilises quickly","Brings optimism with ambition","Raises energy around goals"],
-          YY:["Builds excitement naturally","Connects with people easily","Keeps energy high"],
-          YG:["Creates warm, inclusive energy","Builds rapport quickly","Encourages people naturally"],
-          YB:["Connects ideas creatively","Explains things in engaging ways","Balances curiosity with thoughtfulness"],
-          GR:["Supports people while staying firm","Builds commitment through trust","Handles sensitive situations with strength"],
-          GY:["Creates belonging and warmth","Lifts people gently","Keeps morale steady and positive"],
-          GG:["Builds deep trust","Offers reliable support","Creates steadiness and calm"],
-          GB:["Balances care with precision","Thinks carefully about impact","Builds dependable judgement"],
-          BR:["Holds high standards","Acts with logic and authority","Brings discipline to decisions"],
-          BY:["Combines depth with imagination","Brings fresh perspective","Makes complex ideas accessible"],
-          BG:["Thinks carefully and acts responsibly","Brings calm judgement","Protects quality and people"],
-          BB:["Analyses deeply","Protects standards","Brings consistency and accuracy"]
+        G: {
+          overview: "{name}, you lead with strong Green energy. You are steady, caring, and naturally tuned into the emotional tone of a team.",
+          comm: "Your communication style is calm, considerate, and supportive. People often trust you quickly because you create safety, consistency, and space for others. You rarely force your presence, but your effect on people is often deep and lasting.",
+          workStyle: "At your best, you work with care, reliability, and thoughtfulness. You tend to value relationships, trust, and steady progress. You help others feel grounded, and you often hold teams together more than people realise.",
+          motivation: "You are most motivated by meaningful contribution, trust, stability, supportive relationships, and knowing that your work has a positive effect on other people. Environments that feel aggressive, chaotic, or cold can drain you quickly.",
+          decisions: "You often make decisions by weighing impact on people, long-term consequences, and whether something feels sustainable. You tend not to rush important choices, especially when they affect others.",
+          misread: "Others may sometimes interpret your calmness as passivity or your patience as lack of ambition. In reality, you often have strong convictions — you simply do not feel the need to express them loudly.",
+          watchouts: [
+            "May stay quiet too long when stronger voices dominate",
+            "Can over-accommodate to preserve harmony",
+            "May carry emotional labour without naming it"
+          ],
+          growth: "Your growth edge is finding more comfort with directness, boundaries, and visibility. Your care is already a strength; the next step is making sure your voice has the same presence as your support."
         },
-        tips: {
-          RR:["Be concise and direct","Focus on results and timelines","Give autonomy with clear targets"],
-          RY:["Bring energy and pace","Connect work to visible wins","Avoid overloading with process"],
-          RG:["Be honest and respectful","Show how outcomes help people","Balance clarity with support"],
-          RB:["Arrive prepared","Use evidence and clear recommendations","Respect time and standards"],
-          YR:["Make it feel exciting","Link work to impact and momentum","Give room for visibility and initiative"],
-          YY:["Keep things positive and interactive","Recognise contributions openly","Avoid overly rigid structure"],
-          YG:["Be warm and inclusive","Show genuine interest","Make collaboration feel safe and meaningful"],
-          YB:["Engage curiosity","Mix inspiration with logic","Give space to think and explore"],
-          GR:["Build trust first","Be clear without being cold","Show purpose as well as expectations"],
-          GY:["Lead with kindness","Acknowledge effort and people impact","Avoid overly harsh delivery"],
-          GG:["Be patient and genuine","Give feedback carefully","Create stability and trust"],
-          GB:["Be thoughtful and prepared","Use written clarity when useful","Show both logic and human impact"],
-          BR:["Be precise and well prepared","Come with evidence","Keep discussions efficient"],
-          BY:["Bring interesting ideas","Allow exploration before closure","Back creativity with rationale"],
-          BG:["Respect thought time","Be calm and clear","Show how decisions affect people and quality"],
-          BB:["Be specific and organised","Use facts over emotion","Give time to process before deciding"]
+        B: {
+          overview: "{name}, you lead with strong Blue energy. You are thoughtful, precise, and naturally drawn to clarity, logic, and quality.",
+          comm: "Your communication style is measured, careful, and evidence-based. People rely on you for thoughtful judgement, strong analysis, and a high standard of work. You often bring depth and structure into conversations that might otherwise remain superficial.",
+          workStyle: "At your best, you prefer environments where expectations are clear, quality matters, and there is enough space to think properly. You are often the person improving standards, spotting weak logic, or making something more robust.",
+          motivation: "You are most motivated by quality, mastery, competence, sound reasoning, and the satisfaction of doing something properly. Vagueness, sloppiness, and rushed decisions can drain you very quickly.",
+          decisions: "You tend to make decisions through evidence, logic, careful comparison, and risk awareness. You rarely want to move without enough understanding, and your judgement is often strongest when others are being careless or reactive.",
+          misread: "Others may sometimes experience you as distant, overly critical, or hard to read. In reality, you are often being careful, thoughtful, and responsible rather than detached.",
+          watchouts: [
+            "May overthink before acting",
+            "Can appear reserved when others expect emotional expressiveness",
+            "May hold work too long in pursuit of a higher standard"
+          ],
+          growth: "Your growth edge is becoming more comfortable with action before perfect certainty. Your standards are a strength; the next step is learning when enough clarity is truly enough."
         }
+      },
+
+      secondary: {
+        R: {
+          addition: "Your secondary Red energy adds urgency, competitiveness, and a stronger bias toward action.",
+          blendWork: "This makes you more willing to challenge, decide, and push momentum than someone with your primary colour alone.",
+          blendRisk: "Under stress, this can show up as impatience, bluntness, or a need to take control."
+        },
+        Y: {
+          addition: "Your secondary Yellow energy adds enthusiasm, visibility, and a stronger ability to influence through energy and optimism.",
+          blendWork: "This often makes you more expressive, engaging, and comfortable building buy-in with people.",
+          blendRisk: "Under stress, this can show up as over-promising, distraction, or avoiding depth for too long."
+        },
+        G: {
+          addition: "Your secondary Green energy adds empathy, steadiness, and a stronger instinct to support people while moving forward.",
+          blendWork: "This often makes you more relational, trusted, and aware of emotional impact than people expect at first glance.",
+          blendRisk: "Under stress, this can show up as over-accommodation, carrying too much for others, or softening your true view."
+        },
+        B: {
+          addition: "Your secondary Blue energy adds structure, precision, and a stronger drive to get things right as well as get them done.",
+          blendWork: "This often gives you more discipline, analysis, and quality-control than people initially notice.",
+          blendRisk: "Under stress, this can show up as over-analysis, caution, or being harder to satisfy."
+        }
+      },
+
+      strengths: {
+        RR:["Moves quickly to decisions","Sets direction clearly","Thrives with ownership","Pushes work forward decisively","Keeps attention on outcomes"],
+        RY:["Creates momentum fast","Combines drive with visibility","Persuades people into action","Makes ambition feel exciting","Raises the energy around goals"],
+        RG:["Balances challenge with care","Builds trust while moving forward","Leads firmly without losing people","Can be direct without being cold","Supports performance and relationships together"],
+        RB:["Combines action with rigour","Makes sharp decisions","Focuses on both speed and quality","Cuts through noise with logic","Brings strong performance standards"],
+        YR:["Inspires and mobilises quickly","Brings optimism with ambition","Raises energy around goals","Makes ideas feel alive and urgent","Encourages action through enthusiasm"],
+        YY:["Builds excitement naturally","Connects with people easily","Keeps energy high","Creates positive momentum","Helps people feel engaged and included"],
+        YG:["Creates warm, inclusive energy","Builds rapport quickly","Encourages people naturally","Makes collaboration feel safe","Brings care and positivity together"],
+        YB:["Connects ideas creatively","Explains things in engaging ways","Balances curiosity with thoughtfulness","Makes complex things accessible","Combines imagination with reflection"],
+        GR:["Supports people while staying firm","Builds commitment through trust","Handles sensitive situations with strength","Creates safety without losing direction","Keeps relationships steady under pressure"],
+        GY:["Creates belonging and warmth","Lifts people gently","Keeps morale steady and positive","Supports culture and connection","Helps people feel seen and valued"],
+        GG:["Builds deep trust","Offers reliable support","Creates steadiness and calm","Listens carefully","Strengthens cohesion quietly but powerfully"],
+        GB:["Balances care with precision","Thinks carefully about impact","Builds dependable judgement","Supports people responsibly","Combines empathy with thoughtfulness"],
+        BR:["Holds high standards","Acts with logic and authority","Brings discipline to decisions","Protects quality under pressure","Sees weaknesses before others do"],
+        BY:["Combines depth with imagination","Brings fresh perspective","Makes complex ideas accessible","Thinks creatively without losing logic","Links insight with originality"],
+        BG:["Thinks carefully and acts responsibly","Brings calm judgement","Protects quality and people","Sees both risk and relationship impact","Builds trust through thoughtful standards"],
+        BB:["Analyses deeply","Protects standards","Brings consistency and accuracy","Thinks ahead carefully","Improves quality through rigour"]
+      },
+
+      watchouts: {
+        RR:["May become too forceful when things move slowly","Can overlook emotional impact in pursuit of speed","May expect others to operate at the same intensity"],
+        RY:["Can over-promise or move too fast","May dominate discussion with pace and energy","Can lose patience with detail-heavy execution"],
+        RG:["May feel tension between harmony and directness","Can take on too much responsibility for people outcomes","May soften hard truths more than is useful"],
+        RB:["Can become demanding when standards slip","May expect others to process as quickly and rigorously as you do","Can appear intimidating even when simply being clear"],
+        YR:["May chase momentum before enough structure exists","Can say yes too quickly","May struggle when energy drops and discipline is required"],
+        YY:["Can lose focus when novelty fades","May avoid friction or hard accountability","Can underestimate the importance of follow-through"],
+        YG:["May over-prioritise relationships over clarity","Can hesitate to challenge others directly","May absorb too much emotional responsibility"],
+        YB:["Can stay in ideas longer than action needs","May sound clear externally while still feeling internally undecided","Can drift between inspiration and over-analysis"],
+        GR:["May stay patient past the point where directness is needed","Can carry people too far instead of letting them own outcomes","May avoid visible conflict even when necessary"],
+        GY:["Can hide disappointment behind warmth","May struggle to state needs clearly","Can become over-committed to keeping everyone comfortable"],
+        GG:["May stay too quiet in high-voice environments","Can delay difficult conversations","May understate the value of your own view"],
+        GB:["Can over-process before speaking or deciding","May seem more distant than intended","Can hold back until thinking feels complete"],
+        BR:["Can become overly exacting under pressure","May not realise how much intensity others feel from you","Can prefer being right to being relational"],
+        BY:["Can get pulled between imagination and caution","Can delay commitment while exploring options","May undervalue simple execution"],
+        BG:["Can overweigh risk and responsibility","May keep too much internal rather than sharing earlier","Can struggle to act before all variables feel understood"],
+        BB:["Can overthink or over-perfect","May appear colder than intended","Can become overly critical when standards are not met"]
+      },
+
+      tips: {
+        RR:["Be concise and direct","Focus on results and timelines","Give autonomy with clear targets","Do not over-explain unless asked"],
+        RY:["Bring energy and pace","Connect work to visible wins","Avoid overloading with process","Let them influence and drive momentum"],
+        RG:["Be honest and respectful","Show how outcomes help people","Balance clarity with support","Acknowledge both results and relationships"],
+        RB:["Arrive prepared","Use evidence and clear recommendations","Respect time and standards","Show both commercial and quality logic"],
+        YR:["Make it feel exciting","Link work to impact and momentum","Give room for visibility and initiative","Keep things moving without becoming heavy"],
+        YY:["Keep things positive and interactive","Recognise contributions openly","Avoid overly rigid structure","Use energy, not just process"],
+        YG:["Be warm and inclusive","Show genuine interest","Make collaboration feel safe and meaningful","Give feedback kindly but clearly"],
+        YB:["Engage curiosity","Mix inspiration with logic","Give space to think and explore","Use examples, not just abstractions"],
+        GR:["Build trust first","Be clear without being cold","Show purpose as well as expectations","Respect their care for people"],
+        GY:["Lead with kindness","Acknowledge effort and people impact","Avoid overly harsh delivery","Create safety before challenge"],
+        GG:["Be patient and genuine","Give feedback carefully","Create stability and trust","Avoid forcing rushed responses"],
+        GB:["Be thoughtful and prepared","Use written clarity when useful","Show both logic and human impact","Allow time to think before deciding"],
+        BR:["Be precise and well prepared","Come with evidence","Keep discussions efficient","Do not confuse warmth with vagueness"],
+        BY:["Bring interesting ideas","Allow exploration before closure","Back creativity with rationale","Invite thought, then agree action"],
+        BG:["Respect thought time","Be calm and clear","Show how decisions affect people and quality","Do not rush complexity unnecessarily"],
+        BB:["Be specific and organised","Use facts over emotion","Give time to process before deciding","Keep requests clear and well structured"]
       }
     };
 
     function translateProfile(lang, type, name) {
-      const fallback = profileTexts.en;
       const labels = colourLabels[lang] || colourLabels.en;
-      const texts = profileTexts.en;
       const primary = type[0];
       const secondary = type[1];
       const tagline = (pairTaglines[lang] || pairTaglines.en)[type];
-      const overview = texts.primary[primary].overview.replace("{name}", name) + " " + texts.secondary[secondary];
-      const comm = texts.primary[primary].comm;
-      const strengths = texts.strengths[type];
-      const tips = texts.tips[type];
-      return {tagline, overview, comm, strengths, tips, labels};
+
+      const primaryBlock = profileTexts.primary[primary];
+      const secondaryBlock = profileTexts.secondary[secondary];
+
+      const overview =
+        primaryBlock.overview.replace("{name}", name) + " " +
+        secondaryBlock.addition + " " +
+        secondaryBlock.blendWork;
+
+      const comm =
+        primaryBlock.comm + " " +
+        secondaryBlock.addition;
+
+      const workStyle =
+        primaryBlock.workStyle + " " +
+        secondaryBlock.blendWork;
+
+      const motivation =
+        primaryBlock.motivation;
+
+      const decisions =
+        primaryBlock.decisions + " " +
+        secondaryBlock.blendWork;
+
+      const misread =
+        primaryBlock.misread;
+
+      const growth =
+        primaryBlock.growth + " " +
+        secondaryBlock.blendRisk;
+
+      const strengths = profileTexts.strengths[type];
+      const watchouts = profileTexts.watchouts[type];
+      const tips = profileTexts.tips[type];
+
+      return {
+        tagline,
+        overview,
+        comm,
+        workStyle,
+        motivation,
+        decisions,
+        misread,
+        growth,
+        strengths,
+        watchouts,
+        tips,
+        labels
+      };
     }
 
     function t(key) {
@@ -1138,8 +1194,13 @@
       return str.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
     }
 
-    function qFor(question) {
-      return question[currentLanguage] || question.en;
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
     const optionLetters = ["A","B","C","D"];
@@ -1147,6 +1208,7 @@
     let currentQuestion = 0;
     let answers = [];
     let participantName = "";
+    let shuffledQuestions = [];
 
     function applyDirection() {
       const isRtl = RTL_LANGS.includes(currentLanguage);
@@ -1157,6 +1219,7 @@
 
     function populateLanguageSelect() {
       const select = document.getElementById("languageSelect");
+      if (!select) return;
       select.innerHTML = Object.entries(languages)
         .map(([code, label]) => `<option value="${code}">${label}</option>`)
         .join("");
@@ -1171,13 +1234,15 @@
 
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
+      const el = document.getElementById(id);
+      if (el) el.classList.add("active");
       window.scrollTo({top:0,behavior:"smooth"});
     }
 
     function renderIntro() {
       const labels = colourLabels[currentLanguage] || colourLabels.en;
-      document.getElementById("languageLabel").textContent = t("languageLabel");
+      const languageLabel = document.getElementById("languageLabel");
+      if (languageLabel) languageLabel.textContent = t("languageLabel");
       document.getElementById("introEyebrow").textContent = t("introEyebrow");
       document.getElementById("introTitle").textContent = t("introTitle");
       document.getElementById("introSubtitle").textContent = t("introSubtitle");
@@ -1195,28 +1260,46 @@
       document.getElementById("blueTag").textContent = labels.B.tag;
     }
 
+    function startQuiz() {
+      participantName = document.getElementById("userName").value.trim() || t("participant");
+      answers = [];
+      currentQuestion = 0;
+
+      shuffledQuestions = shuffleArray(
+        originalQuestions.map(q => ({
+          text: q.text,
+          options: shuffleArray(q.options.map(opt => ({...opt})))
+        }))
+      );
+
+      showScreen("quiz");
+      renderQuestion();
+    }
+
     function renderQuestion() {
-      const q = questionBank[currentQuestion];
-      const data = qFor(q);
-      const total = questionBank.length;
+      const q = shuffledQuestions[currentQuestion];
+      const total = shuffledQuestions.length;
       const pct = Math.round((currentQuestion / total) * 100);
 
       document.getElementById("progressLabel").textContent = fmt(t("questionOf"), {n: currentQuestion + 1, total});
       document.getElementById("progressPct").textContent = pct + "%";
       document.getElementById("progressFill").style.width = pct + "%";
-      document.getElementById("questionNumber").textContent = fmt(t("qnum"), {n: String(currentQuestion + 1).padStart(2,"0"), total});
-      document.getElementById("questionText").textContent = data.q;
+      document.getElementById("questionNumber").textContent = fmt(t("qnum"), {
+        n: String(currentQuestion + 1).padStart(2, "0"),
+        total
+      });
+      document.getElementById("questionText").textContent = q.text;
 
       const options = document.getElementById("options");
       options.innerHTML = "";
-      data.a.forEach((answerText, i) => {
+      q.options.forEach((opt, idx) => {
         const btn = document.createElement("button");
         btn.className = "option";
-        btn.innerHTML = `<strong style="display:inline-block;width:28px">${optionLetters[i]}</strong> ${answerText}`;
+        btn.innerHTML = `<strong style="display:inline-block;width:28px">${optionLetters[idx]}</strong> ${opt.text}`;
         btn.onclick = () => {
-          answers.push(q.c[i]);
+          answers.push(opt.c);
           currentQuestion++;
-          if (currentQuestion >= questionBank.length) {
+          if (currentQuestion >= shuffledQuestions.length) {
             buildReport();
           } else {
             renderQuestion();
@@ -1224,14 +1307,6 @@
         };
         options.appendChild(btn);
       });
-    }
-
-    function startQuiz() {
-      participantName = document.getElementById("userName").value.trim() || t("participant");
-      answers = [];
-      currentQuestion = 0;
-      showScreen("quiz");
-      renderQuestion();
     }
 
     function computeScores() {
@@ -1249,9 +1324,38 @@
       };
     }
 
+    function buildReportUrl(type, sorted, pct) {
+      const params = new URLSearchParams({
+        report: "1",
+        lang: currentLanguage,
+        name: participantName,
+        type: type,
+        primary: sorted[0],
+        secondary: sorted[1],
+        R: String(pct.R),
+        Y: String(pct.Y),
+        G: String(pct.G),
+        B: String(pct.B)
+      });
+      const url = new URL(window.location.href);
+      url.search = params.toString();
+      url.hash = "";
+      return url.toString();
+    }
+
+    function setOpenReportLink(type, sorted, pct) {
+      const btn = document.getElementById("openReportBtn");
+      const text = document.getElementById("openReportText");
+      if (!btn || !text) return;
+      btn.href = buildReportUrl(type, sorted, pct);
+      text.textContent = t("openReportBtn");
+    }
+
     function buildReport() {
-      const {counts, pct} = computeScores();
-      const sorted = ["R","Y","G","B"].sort((a,b) => counts[b] - counts[a] || ["R","Y","G","B"].indexOf(a) - ["R","Y","G","B"].indexOf(b));
+      const { counts, pct } = computeScores();
+      const sorted = ["R","Y","G","B"].sort(
+        (a,b) => counts[b] - counts[a] || ["R","Y","G","B"].indexOf(a) - ["R","Y","G","B"].indexOf(b)
+      );
       const type = sorted[0] + sorted[1];
       const profile = translateProfile(currentLanguage, type, participantName);
       const labels = profile.labels;
@@ -1263,7 +1367,11 @@
 
       const badge = document.getElementById("reportBadge");
       const dot = document.getElementById("badgeDot");
-      dot.style.background = sorted[0] === "R" ? "var(--red)" : sorted[0] === "Y" ? "var(--yellow)" : sorted[0] === "G" ? "var(--green)" : "var(--blue)";
+      dot.style.background =
+        sorted[0] === "R" ? "var(--red)" :
+        sorted[0] === "Y" ? "var(--yellow)" :
+        sorted[0] === "G" ? "var(--green)" : "var(--blue)";
+
       if (sorted[0] === "R") { badge.style.background = "var(--redSoft)"; badge.style.color = "var(--red)"; }
       if (sorted[0] === "Y") { badge.style.background = "var(--yellowSoft)"; badge.style.color = "#946200"; }
       if (sorted[0] === "G") { badge.style.background = "var(--greenSoft)"; badge.style.color = "var(--green)"; }
@@ -1272,8 +1380,14 @@
       document.getElementById("breakdownTitle").textContent = t("breakdownTitle");
       document.getElementById("overviewTitle").textContent = t("overviewTitle");
       document.getElementById("communicationTitle").textContent = t("communicationTitle");
+      document.getElementById("workStyleTitle").textContent = t("workStyleTitle");
+      document.getElementById("motivationTitle").textContent = t("motivationTitle");
+      document.getElementById("decisionTitle").textContent = t("decisionTitle");
+      document.getElementById("misreadTitle").textContent = t("misreadTitle");
       document.getElementById("strengthsTitle").textContent = t("strengthsTitle");
+      document.getElementById("watchoutsTitle").textContent = t("watchoutsTitle");
       document.getElementById("tipsTitle").textContent = t("tipsTitle");
+      document.getElementById("growthTitle").textContent = t("growthTitle");
       document.getElementById("restartBtn").textContent = t("restartBtn");
 
       document.getElementById("labelR").textContent = labels.R.name;
@@ -1293,28 +1407,168 @@
 
       document.getElementById("overviewText").textContent = profile.overview;
       document.getElementById("communicationText").textContent = profile.comm;
+      document.getElementById("workStyleText").textContent = profile.workStyle;
+      document.getElementById("motivationText").textContent = profile.motivation;
+      document.getElementById("decisionText").textContent = profile.decisions;
+      document.getElementById("misreadText").textContent = profile.misread;
+      document.getElementById("growthText").textContent = profile.growth;
 
-      const strengthsList = document.getElementById("strengthsList");
-      strengthsList.innerHTML = profile.strengths.map(item => `<li>${item}</li>`).join("");
+      document.getElementById("strengthsList").innerHTML =
+        profile.strengths.map(item => `<li>${item}</li>`).join("");
 
-      const tipsList = document.getElementById("tipsList");
-      tipsList.innerHTML = profile.tips.map(item => `<li>${item}</li>`).join("");
+      document.getElementById("watchoutsList").innerHTML =
+        profile.watchouts.map(item => `<li>${item}</li>`).join("");
 
+      document.getElementById("tipsList").innerHTML =
+        profile.tips.map(item => `<li>${item}</li>`).join("");
+
+      setOpenReportLink(type, sorted, pct);
       showScreen("report");
     }
 
+    function renderStandaloneReportFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("report") !== "1") return false;
+
+      currentLanguage = params.get("lang") || currentLanguage;
+      participantName = params.get("name") || t("participant");
+
+      applyDirection();
+
+      const type = params.get("type") || "RY";
+      const primary = params.get("primary") || type[0];
+      const secondary = params.get("secondary") || type[1];
+      const pct = {
+        R: parseInt(params.get("R") || "0", 10),
+        Y: parseInt(params.get("Y") || "0", 10),
+        G: parseInt(params.get("G") || "0", 10),
+        B: parseInt(params.get("B") || "0", 10)
+      };
+
+      const profile = translateProfile(currentLanguage, type, participantName);
+      const labels = profile.labels;
+
+      document.querySelector(".page").innerHTML = `
+        <div class="card">
+          <div class="eyebrow">${t("reportEyebrow")}</div>
+          <h1>${participantName}</h1>
+          <div class="badge" style="
+            background:${primary === "R" ? "var(--redSoft)" : primary === "Y" ? "var(--yellowSoft)" : primary === "G" ? "var(--greenSoft)" : "var(--blueSoft)"};
+            color:${primary === "R" ? "var(--red)" : primary === "Y" ? "#946200" : primary === "G" ? "var(--green)" : "var(--blue)"};
+          ">
+            <span class="badge-dot" style="background:${primary === "R" ? "var(--red)" : primary === "Y" ? "var(--yellow)" : primary === "G" ? "var(--green)" : "var(--blue)"}"></span>
+            <span>${labels[primary].name} / ${labels[secondary].name}</span>
+          </div>
+          <p>${profile.tagline}</p>
+        </div>
+
+        <div class="card">
+          <h3>${t("breakdownTitle")}</h3>
+          <div class="bars">
+            <div class="bar-row">
+              <div>${labels.R.name}</div>
+              <div class="bar-track"><div class="bar-fill" style="background:var(--red);width:${pct.R}%"></div></div>
+              <div>${pct.R}%</div>
+            </div>
+            <div class="bar-row">
+              <div>${labels.Y.name}</div>
+              <div class="bar-track"><div class="bar-fill" style="background:var(--yellow);width:${pct.Y}%"></div></div>
+              <div>${pct.Y}%</div>
+            </div>
+            <div class="bar-row">
+              <div>${labels.G.name}</div>
+              <div class="bar-track"><div class="bar-fill" style="background:var(--green);width:${pct.G}%"></div></div>
+              <div>${pct.G}%</div>
+            </div>
+            <div class="bar-row">
+              <div>${labels.B.name}</div>
+              <div class="bar-track"><div class="bar-fill" style="background:var(--blue);width:${pct.B}%"></div></div>
+              <div>${pct.B}%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>${t("overviewTitle")}</h3>
+          <p>${profile.overview}</p>
+        </div>
+
+        <div class="card">
+          <h3>${t("communicationTitle")}</h3>
+          <p>${profile.comm}</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>${t("workStyleTitle")}</h3>
+            <p>${profile.workStyle}</p>
+          </div>
+          <div class="card">
+            <h3>${t("motivationTitle")}</h3>
+            <p>${profile.motivation}</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>${t("decisionTitle")}</h3>
+            <p>${profile.decisions}</p>
+          </div>
+          <div class="card">
+            <h3>${t("misreadTitle")}</h3>
+            <p>${profile.misread}</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>${t("strengthsTitle")}</h3>
+            <ul class="list">${profile.strengths.map(item => `<li>${item}</li>`).join("")}</ul>
+          </div>
+          <div class="card">
+            <h3>${t("watchoutsTitle")}</h3>
+            <ul class="list">${profile.watchouts.map(item => `<li>${item}</li>`).join("")}</ul>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>${t("tipsTitle")}</h3>
+            <ul class="list">${profile.tips.map(item => `<li>${item}</li>`).join("")}</ul>
+          </div>
+          <div class="card">
+            <h3>${t("growthTitle")}</h3>
+            <p>${profile.growth}</p>
+          </div>
+        </div>
+
+        <div class="card no-print" style="text-align:center">
+          <button class="btn-primary" onclick="window.print()">${t("printBtn")}</button>
+        </div>
+      `;
+      return true;
+    }
+
     function restart() {
+      answers = [];
+      currentQuestion = 0;
+      shuffledQuestions = [];
       showScreen("intro");
       renderIntro();
     }
 
     function renderApp() {
       applyDirection();
+
+      if (renderStandaloneReportFromUrl()) {
+        return;
+      }
+
       populateLanguageSelect();
       renderIntro();
 
       const active = document.querySelector(".screen.active")?.id;
-      if (active === "quiz") renderQuestion();
+      if (active === "quiz" && shuffledQuestions.length) renderQuestion();
       if (active === "report") buildReport();
     }
 
